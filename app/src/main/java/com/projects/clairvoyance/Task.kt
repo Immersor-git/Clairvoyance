@@ -11,7 +11,7 @@ class Task (
     var startTime: LocalTime?,
     var endTime: LocalTime?,
     var dueTime: LocalTime?,
-    var date: LocalDate?,
+    var dueDate: LocalDate?,
     var completedDate: LocalDate?,
     var id: UUID = UUID.randomUUID()
 ) {
