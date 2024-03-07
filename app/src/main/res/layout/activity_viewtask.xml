@@ -8,5 +8,8 @@
         android:layout_width="370dp"
         android:layout_height="66dp"
         android:textSize="30sp"
+        android:layout_gravity="bottom"
         android:text="TestView" />
+
+    <menu></menu>
 </FrameLayout>
