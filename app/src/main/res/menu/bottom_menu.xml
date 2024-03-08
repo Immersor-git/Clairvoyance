@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/bottom_help"
+            android:icon="@drawable/checklist_icon"
+            android:title="Checklist"/>
+
+        <item
+            android:title=""
+            android:enabled="true"/>
+
+        <item
+            android:id="@+id/bottom_settings"
+            android:icon="@drawable/calendar_icon"
+            android:title="Calendar"/>
+</menu>
