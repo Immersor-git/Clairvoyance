@@ -11,15 +11,15 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.projects.clairvoyance.databinding.ActivtyMainBinding
+import com.projects.clairvoyance.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var binding: ActivtyMainBinding
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivtyMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
