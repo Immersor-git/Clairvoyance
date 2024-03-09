@@ -15,7 +15,7 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
-    private var dueTime: LocalTime? = null
+    private var endTime: LocalTime? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,8 +28,8 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
             binding.name.text = editable.newEditable(task!!.name)
             binding.desc.text = editable.newEditable(task!!.desc)
 
-            if (task!!.dueTime != null) {
-                dueTime = task!!.dueTime
+            if (task!!.endTime != null) {
+                endTime = task!!.endTime
                 updateTimeButtonText()
             }
         } else {
@@ -48,21 +48,21 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
     }
 
     private fun openTimePicker() {
-        if (dueTime == null)
-            dueTime = LocalTime.now()
+        if (endTime == null)
+            endTime = LocalTime.now()
 
         val listener = TimePickerDialog.OnTimeSetListener{_, selectedHour, selectedMinute ->
-            dueTime = LocalTime.of(selectedHour, selectedMinute)
+            endTime = LocalTime.of(selectedHour, selectedMinute)
             updateTimeButtonText()
         }
 
-        val dialog = TimePickerDialog(activity, listener, dueTime!!.hour, dueTime!!.minute, false)
+        val dialog = TimePickerDialog(activity, listener, endTime!!.hour, endTime!!.minute, false)
         dialog.setTitle("Task Due Time")
         dialog.show()
     }
 
     private fun updateTimeButtonText() {
-        binding.timePickerButton.text = String.format("%02d:%02d", dueTime!!.hour, dueTime!!.minute)
+        binding.timePickerButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,10 +75,10 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
         val desc = binding.desc.text.toString()
 
         if (task == null) {
-            val newTask = Task(name, desc, null, null, dueTime, null, null)
+            val newTask = Task(name, desc, null, endTime, null, null)
             taskViewModel.addTask(newTask)
         } else {
-            taskViewModel.updateTask(task!!.id, name, desc, null, null, dueTime, null)
+            taskViewModel.updateTask(task!!.id, name, desc, null, endTime, null)
         }
 
         binding.name.setText("")

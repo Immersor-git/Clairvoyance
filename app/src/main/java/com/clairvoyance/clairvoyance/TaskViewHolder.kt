@@ -19,7 +19,7 @@ class TaskViewHolder(
         // Puts strike through text on a task and its due time when marked as done
         if (task.isCompleted()) {
             binding.name.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            binding.dueTime.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            binding.endTime.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
 
         binding.completeButton.setImageResource(task.imageResource())
@@ -34,10 +34,10 @@ class TaskViewHolder(
             clickListener.editTask(task)
         }
 
-        // Checks to see if task due time is set
-        if (task.dueTime != null)
-            binding.dueTime.text = timeFormat.format(task.dueTime)
+        // Checks to see if task end time is set
+        if (task.endTime != null)
+            binding.endTime.text = timeFormat.format(task.endTime)
         else
-            binding.dueTime.text = ""
+            binding.endTime.text = ""
     }
 }

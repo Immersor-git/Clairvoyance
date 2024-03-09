@@ -10,12 +10,11 @@ import java.util.UUID
 // Creates a task item
 class Task (
     // Data fields, only required fields are name and description
-    // Description can be left blank
     var name: String,
     var desc: String,
     var startTime: LocalTime?,
     var endTime: LocalTime?,
-    var dueTime: LocalTime?,
+    //var dueTime: LocalTime?,
     var date: LocalDate?,
     var completedDate: LocalDate?,
     var id: UUID = UUID.randomUUID()

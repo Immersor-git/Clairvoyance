@@ -22,12 +22,11 @@ class TaskViewModel : ViewModel()
     }
 
     // Updates a task
-    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, dueTime: LocalTime?, date: LocalDate?) {
+    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?) {
         val list = tasks.value
         val task = list!!.find {it.id == id}!!
         task.name = name
         task.desc = desc
-        task.dueTime = dueTime
         task.startTime = startTime
         task.endTime = endTime
         task.date = date
