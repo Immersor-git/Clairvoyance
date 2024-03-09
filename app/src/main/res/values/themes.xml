@@ -1,9 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Clairvoyance" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Light" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name = "colorOnPrimary">@color/colorOnPrimary</item>
+        <item name = "colorOnPrimaryFixedVariant">@color/colorOnPrimaryFixedVariant</item>
+        <item name = "colorOnSecondary">@color/colorOnSecondary</item>
+        <item name = "colorAccent">@color/colorAccent</item>
+        <item name = "android:textColorSecondary">@color/textColorSecondary</item>
+        <item name = "android:textColorPrimary">@color/textColorPrimary</item>
+        <item name = "android:background">@color/colorOnSecondary</item>
     </style>
-
-    <style name="Theme.Clairvoyance" parent="Base.Theme.Clairvoyance" />
 </resources>
