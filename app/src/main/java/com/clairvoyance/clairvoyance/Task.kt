@@ -2,22 +2,21 @@ package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import com.clairvoyance.clairvoyance.R
+import androidx.lifecycle.MutableLiveData
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
 
-// Creates a task item
 class Task (
-    // Data fields, only required fields are name and description
     var name: String,
     var desc: String,
     var startTime: LocalTime?,
     var endTime: LocalTime?,
-    //var dueTime: LocalTime?,
     var date: LocalDate?,
     var completedDate: LocalDate?,
-    var id: UUID = UUID.randomUUID()
+    var id: UUID = UUID.randomUUID(),
+    var parents: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>(),
+    var children: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>()
 ) {
     fun isCompleted() = completedDate != null
     fun imageResource(): Int = if (isCompleted()) R.drawable.checked else R.drawable.unchecked
