@@ -3,7 +3,7 @@ package com.clairvoyance.clairvoyance
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.clairvoyance.clairvoyance.databinding.TaskItemCellBinding
+import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 
 class TaskAdapter(
     private val tasks: List<Task>,
@@ -11,7 +11,7 @@ class TaskAdapter(
 ) : RecyclerView.Adapter<TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val from = LayoutInflater.from(parent.context)
-        val binding = TaskItemCellBinding.inflate(from, parent, false)
+        val binding = TaskItemBinding.inflate(from, parent, false)
         return TaskViewHolder(parent.context, binding, clickListener)
     }
 

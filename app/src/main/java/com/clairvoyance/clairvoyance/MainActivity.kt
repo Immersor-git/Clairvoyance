@@ -2,6 +2,8 @@ package com.clairvoyance.clairvoyance
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
@@ -17,16 +19,15 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
         binding.newTaskButton.setOnClickListener {
-            NewTaskSheet(null).show(supportFragmentManager, "newTaskTag")
+            TaskSheet(null).show(supportFragmentManager, "newTaskTag")
         }
 
         // Checks for today's date and sets it in the main task list
         val formatter = DateTimeFormatter.ofPattern("MMMM dd")
         val todaysDate = LocalDate.now()
         val formattedDate = todaysDate.format(formatter)
-
         binding.dailyDate.text = formattedDate
 
         setRecyclerView()
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
     }
 
     override fun editTask(task: Task) {
-        NewTaskSheet(task).show(supportFragmentManager, "newTaskTag")
+        TaskSheet(task).show(supportFragmentManager, "newTaskTag")
     }
 
     override fun completeTask(task: Task) {

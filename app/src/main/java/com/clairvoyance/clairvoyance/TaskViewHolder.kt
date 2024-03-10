@@ -3,17 +3,17 @@ package com.clairvoyance.clairvoyance
 import android.content.Context
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
-import com.clairvoyance.clairvoyance.databinding.TaskItemCellBinding
+import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 import java.time.format.DateTimeFormatter
 
 class TaskViewHolder(
     private val context: Context,
-    private val binding: TaskItemCellBinding,
+    private val binding: TaskItemBinding,
     private val clickListener: TaskClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
     fun bindTask(task: Task) {
+       val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
        binding.name.text = task.name
 
         // Puts strike through text on a task and its due time when marked as done
@@ -22,8 +22,10 @@ class TaskViewHolder(
             binding.endTime.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
 
+        // Changes task image and color when being marked as complete
         binding.completeButton.setImageResource(task.imageResource())
         binding.completeButton.setColorFilter(task.imageColor(context))
+        binding.taskCellContainer.setCardBackgroundColor(task.backgroundColor(context))
 
         // Setting click listeners for editing and marking a task as done
         binding.completeButton.setOnClickListener {

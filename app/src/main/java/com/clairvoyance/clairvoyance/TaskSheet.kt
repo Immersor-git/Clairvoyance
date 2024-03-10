@@ -6,12 +6,14 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import com.clairvoyance.clairvoyance.databinding.FragmentNewTaskSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalTime
 
-class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
+class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickListener {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
@@ -86,6 +88,11 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewTaskSheetBinding.inflate(inflater, container, false)
+
+        val dataFieldList = resources.getStringArray(R.array.datafields)
+        val arrayAdapter = ArrayAdapter(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dataFieldList)
+        binding.dataFieldSpinner.adapter = arrayAdapter
+
         return binding.root
     }
 
@@ -104,5 +111,13 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
         binding.desc.setText("")
 
         dismiss()
+    }
+
+    override fun editDataField(task: Task) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeDataField(task: Task) {
+        TODO("Not yet implemented")
     }
 }

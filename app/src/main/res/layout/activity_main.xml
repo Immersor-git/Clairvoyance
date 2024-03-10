@@ -27,12 +27,16 @@
         android:layout_below="@id/dailyTaskTitle"
         style="@style/TextAppearance.Material3.ActionBar.Subtitle"/>
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/dailyDate"
         android:id="@+id/taskListRecylerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="@color/design_default_color_background" />
+
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
