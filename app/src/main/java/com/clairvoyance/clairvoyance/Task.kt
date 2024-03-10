@@ -13,13 +13,15 @@ class Task (
     var startTime: LocalTime?,
     var endTime: LocalTime?,
     var date: LocalDate?,
+
     var completedDate: LocalDate?,
+    var completed: Boolean = false,
     var id: UUID = UUID.randomUUID(),
     var parents: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>(),
     var children: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>()
 ) {
-    fun isCompleted() = completedDate != null
-    fun imageResource(): Int = if (isCompleted()) R.drawable.checked else R.drawable.unchecked
+    fun isCompleted() = completed
+    fun imageResource(): Int = if (this.completed) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete
     fun imageColor(context: Context): Int = if(isCompleted()) purple(context) else black(context)
 
     // Color functions for checkbox

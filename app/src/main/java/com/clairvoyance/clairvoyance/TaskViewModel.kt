@@ -37,8 +37,8 @@ class TaskViewModel : ViewModel()
     fun setCompleted(task: Task) {
         val list = tasks.value
         val currTask = list!!.find {it.id == task.id}!!
-        if (currTask.completedDate == null)
-            currTask.completedDate = LocalDate.now()
+        currTask.completed = !currTask.completed
+        currTask.completedDate = LocalDate.now()
         tasks.postValue(list)
     }
 }

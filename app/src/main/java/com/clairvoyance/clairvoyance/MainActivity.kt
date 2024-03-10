@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
             NewTaskSheet(null).show(supportFragmentManager, "newTaskTag")
         }
 
-        // Checks for todays date and sets it in the main task list
-        val formatter = DateTimeFormatter.ofPattern("MMMM-dd")
+        // Checks for today's date and sets it in the main task list
+        val formatter = DateTimeFormatter.ofPattern("MMMM dd")
         val todaysDate = LocalDate.now()
         val formattedDate = todaysDate.format(formatter)
 

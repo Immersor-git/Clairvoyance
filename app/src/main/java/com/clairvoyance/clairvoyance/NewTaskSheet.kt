@@ -16,53 +16,72 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
     private var endTime: LocalTime? = null
+    private var startTime: LocalTime? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = requireActivity()
 
         if (task != null) {
-            binding.taskTitle.text = "Edit Task"
-
             val editable = Editable.Factory.getInstance()
+
+            binding.taskTitle.text = "Edit Task"
             binding.name.text = editable.newEditable(task!!.name)
             binding.desc.text = editable.newEditable(task!!.desc)
 
             if (task!!.endTime != null) {
                 endTime = task!!.endTime
-                updateTimeButtonText()
+                binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
             }
+
+            if (task!!.startTime != null) {
+                startTime = task!!.startTime
+                binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
+            }
+
         } else {
-            binding.taskTitle.text = "New task"
+            binding.taskTitle.text = "New Task"
         }
 
-        taskViewModel = ViewModelProvider(activity).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(activity)[TaskViewModel::class.java]
 
         binding.saveButton.setOnClickListener {
             saveAction()
         }
 
-        binding.timePickerButton.setOnClickListener {
-            openTimePicker()
+        binding.startTimeButton.setOnClickListener {
+            openStartTimePicker()
+        }
+
+        binding.endTimeButton.setOnClickListener {
+            openEndTimePicker()
         }
     }
 
-    private fun openTimePicker() {
-        if (endTime == null)
-            endTime = LocalTime.now()
+    private fun openStartTimePicker() {
+        if (startTime == null) startTime = LocalTime.now()
 
-        val listener = TimePickerDialog.OnTimeSetListener{_, selectedHour, selectedMinute ->
-            endTime = LocalTime.of(selectedHour, selectedMinute)
-            updateTimeButtonText()
+        val listener = TimePickerDialog.OnTimeSetListener {_, selectedHour, selectedMinute ->
+            startTime = LocalTime.of(selectedHour, selectedMinute)
+            binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
         }
 
-        val dialog = TimePickerDialog(activity, listener, endTime!!.hour, endTime!!.minute, false)
-        dialog.setTitle("Task Due Time")
+        val dialog = TimePickerDialog(activity, listener, startTime!!.hour, startTime!!.minute, false)
+        dialog.setTitle("Select a time:")
         dialog.show()
     }
 
-    private fun updateTimeButtonText() {
-        binding.timePickerButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
+    private fun openEndTimePicker() {
+        if (endTime == null) endTime = LocalTime.now()
+
+        val listener = TimePickerDialog.OnTimeSetListener {_, selectedHour, selectedMinute ->
+            endTime = LocalTime.of(selectedHour, selectedMinute)
+            binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
+        }
+
+        val dialog = TimePickerDialog(activity, listener, endTime!!.hour, endTime!!.minute, false)
+        dialog.setTitle("Select a time:")
+        dialog.show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,10 +94,10 @@ class NewTaskSheet(var task : Task?) : BottomSheetDialogFragment() {
         val desc = binding.desc.text.toString()
 
         if (task == null) {
-            val newTask = Task(name, desc, null, endTime, null, null)
+            val newTask = Task(name, desc, startTime, endTime, null, null)
             taskViewModel.addTask(newTask)
         } else {
-            taskViewModel.updateTask(task!!.id, name, desc, null, endTime, null)
+            taskViewModel.updateTask(task!!.id, name, desc, startTime, endTime, null)
         }
 
         binding.name.setText("")

@@ -25,7 +25,7 @@
         android:textSize="15sp"
         android:layout_marginStart="20dp"
         android:layout_below="@id/dailyTaskTitle"
-        style="@style/TextAppearance.AppCompat.Title"/>
+        style="@style/TextAppearance.Material3.ActionBar.Subtitle"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/dailyDate"
