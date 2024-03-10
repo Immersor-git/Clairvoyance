@@ -5,10 +5,10 @@
     <string name="checkbox">CheckBox</string>
     <string name="new_task">New Task</string>
     <string-array name="datafields">
-        <item>Text</item>
-        <item>Date</item>
-        <item>Number</item>
-        <item>Image</item>
-        <item>Audio</item>
+        <item>TEXT</item>
+        <item>DATE</item>
+        <item>NUMBER</item>
+        <item>IMAGE</item>
+        <item>AUDIO</item>
     </string-array>
 </resources>

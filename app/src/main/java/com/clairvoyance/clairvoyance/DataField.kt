@@ -1,8 +1,11 @@
 package com.clairvoyance.clairvoyance
 
-data class DataField<T>(
+import java.util.UUID
+
+data class DataField<T> (
     val dataType: DataType,
-    var data: T
+    var data: Any?,
+    var id: UUID = UUID.randomUUID(),
 ) {
 
 }

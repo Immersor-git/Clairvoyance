@@ -1,6 +1,6 @@
 package com.clairvoyance.clairvoyance
 
 interface DataFieldClickListener {
-    fun editDataField(task: Task)
-    fun removeDataField(task: Task)
+    fun <T> editDataField(dataField: DataField<T>)
+    fun <T> removeDataField(dataField: DataField<T>)
 }

@@ -9,14 +9,17 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clairvoyance.clairvoyance.databinding.FragmentNewTaskSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.time.LocalDate
 import java.time.LocalTime
 
 class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickListener {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
+    private lateinit var dataFieldViewModel: DataFieldViewModel
     private var endTime: LocalTime? = null
     private var startTime: LocalTime? = null
 
@@ -46,6 +49,9 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         }
 
         taskViewModel = ViewModelProvider(activity)[TaskViewModel::class.java]
+        dataFieldViewModel = ViewModelProvider(this)[DataFieldViewModel::class.java]
+
+        setRecyclerView()
 
         binding.saveButton.setOnClickListener {
             saveAction()
@@ -58,6 +64,11 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         binding.endTimeButton.setOnClickListener {
             openEndTimePicker()
         }
+
+        binding.addDataFieldButton.setOnClickListener {
+            saveDataField()
+        }
+
     }
 
     private fun openStartTimePicker() {
@@ -113,11 +124,49 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         dismiss()
     }
 
-    override fun editDataField(task: Task) {
+    private fun saveDataField() {
+        val typeString = binding.dataFieldSpinner.selectedItem.toString()
+
+        lateinit var dataType: DataType
+        lateinit var dataField: DataField<*>
+
+        when (typeString) {
+            "TEXT" -> {
+                dataType = DataType.TEXT
+                dataField = DataField<String>(dataType, null)
+                dataFieldViewModel.addDataField(dataField)
+            }
+            "NUMBER" -> {
+                dataType = DataType.NUMBER
+                dataField = DataField<Int>(dataType, null)
+                dataFieldViewModel.addDataField(dataField)
+            }
+            "DATE" -> {
+                dataType = DataType.DATE
+                dataField = DataField<LocalDate>(dataType, null)
+                dataFieldViewModel.addDataField(dataField)
+            }
+            else -> {
+                println("Unsupported data type")
+            }
+        }
+    }
+
+    private fun setRecyclerView() {
+        val clickListener = this
+        dataFieldViewModel.dataFields.observe(this) {
+            binding.dataFieldsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = DataFieldAdapter(it, clickListener)
+            }
+        }
+    }
+
+    override fun <T> editDataField(dataField: DataField<T>) {
         TODO("Not yet implemented")
     }
 
-    override fun removeDataField(task: Task) {
+    override fun <T> removeDataField(dataField: DataField<T>) {
         TODO("Not yet implemented")
     }
 }

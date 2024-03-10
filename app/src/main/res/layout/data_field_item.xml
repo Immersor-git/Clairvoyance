@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
-    android:layout_margin="5dp"
+    android:layout_margin="0dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="20dp">
+        android:layout_marginHorizontal="0dp">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="10dp">
+            android:layout_marginHorizontal="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/data"
@@ -39,7 +39,7 @@
             android:padding="5dp"
             android:scaleY="1"
             android:scaleX="1"
-            android:layout_marginHorizontal="15dp"
+            android:layout_marginHorizontal="5dpdp"
             android:src="@drawable/remove"
             android:backgroundTint="@android:color/transparent"/>
 
