@@ -22,12 +22,23 @@
     <color name="md_theme_dark_onSurface">#E6E1E5</color>
     <color name="md_theme_dark_surfaceVariant">#49454F</color>
 
-    <color name="colorOnPrimary">#A1B5D8</color>
-    <color name="colorOnPrimaryFixedVariant">#91A3C2</color>
-    <color name="colorOnSecondary">#A1B5D8</color>
-    <color name="colorAccent">#5B986A</color>
-    <color name="textColorSecondary">#322C36</color>
-    <color name="textColorPrimary">#322C36</color>
+    <color name="colorPrimary">#4440D5</color>
+    <color name="colorPrimaryVariant">#3430A5</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorSecondary">#8195D8</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorSurface">#A1B5D8</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnBackground">#000000</color>
+
+    <color name="darkcolorPrimary">#FF6200EE</color>
+    <color name="darkcolorPrimaryVariant">#3430A5</color>
+    <color name="darkcolorOnPrimary">#FFFFFF</color>
+    <color name="darkcolorSecondary">#FF3700B3</color>
+    <color name="darkcolorOnSecondary">#FFFFFF</color>
+    <color name="darkcolorSurface">#000000</color>
+    <color name="darkcolorOnSurface">#FFFFFF</color>
+    <color name="darkcolorOnBackground">#FFFFFF</color>
 
 
     <color name="darkColorOnPrimary">#541C56</color>

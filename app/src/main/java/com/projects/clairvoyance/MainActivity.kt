@@ -1,33 +1,49 @@
 package com.projects.clairvoyance
 
-import android.content.Intent
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
-import androidx.activity.addCallback
-import androidx.appcompat.app.ActionBarDrawerToggle
 import com.projects.clairvoyance.databinding.ActivityMainBinding
 
-class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding
-    private var currentTheme : Int = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        currentTheme = loadTheme()
-        selectTheme(currentTheme)
+    private var currentTheme : Int = 2
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+    override fun getLayoutInflater(): LayoutInflater {
+        val inflater = super.getLayoutInflater()
+        val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
+            applicationContext,
+            getCustomTheme()
+        )
+        return inflater.cloneInContext(contextThemeWrapper)
+        //return super.getLayoutInflater()
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
+            applicationContext,
+            getCustomTheme()
+        )
+        val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
+        binding = ActivityMainBinding.inflate(newLayoutInflater)
+
         setContentView(binding.root)
+        super.onCreate(savedInstanceState)
 
         setSupportActionBar(binding.toolbar)
 
@@ -55,6 +71,11 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 finish()
             }
         }
+
+        if (getFlag("changingTheme") == 1) {
+            setFlag("changingTheme", 0)
+            fragmentNavigation(R.id.nav_settings)
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -69,7 +90,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_account -> openFragment(AccountFragment())
             R.id.nav_archive -> openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
-            R.id.nav_settings-> openFragment(SettingsFragment(this, currentTheme))
+            R.id.nav_settings-> openFragment(SettingsFragment())
 
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -81,29 +102,48 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
     }
-
-    fun selectTheme(themeIndex : Int) {
-        val themeOptions = resources.getStringArray(R.array.theme_settings)
-        currentTheme = themeIndex
-        saveTheme(themeIndex)
-
-        when(themeIndex){
-            0 -> setTheme(R.style.Base_Theme_Dark)
-            1 -> setTheme(R.style.Base_Theme_Light)
-        }
-
-        Log.d("Main Activity", "Set Theme: "+themeIndex)
+    val themes = arrayOf<Int>(R.style.DarkTheme,R.style.LightTheme)
+    fun getCustomTheme() : Int {
+        return themes[loadTheme()]
     }
+    fun selectTheme(themeIndex : Int) {
+        val previousTheme = loadTheme()
+        if (themeIndex != previousTheme) {
+            val themeOptions = resources.getStringArray(R.array.theme_settings)
+            saveTheme(themeIndex)
+            setFlag("changingTheme", 1)
+            refresh()
+        }
+        //this.theme = "@style/"+themeOptions[themeIndex]
+        /*when(themeIndex){
+            0 -> applicationContext.setTheme(themes[themeIndex])
+            1 -> applicationContext.setTheme(themes[themeIndex])
+        }*/
+        Log.d("Main Activity", "Set Theme: "+getCustomTheme())
 
+    }
     fun saveTheme(themeIndex : Int) {
         val preferences : SharedPreferences = getSharedPreferences("PREFERENCE_AppTheme",MODE_PRIVATE)
         val editor : SharedPreferences.Editor = preferences.edit()
         editor.putInt("themeIndex", themeIndex)
         editor.apply()
     }
-
     fun loadTheme() : Int {
         val preferences : SharedPreferences = getSharedPreferences("PREFERENCE_AppTheme",MODE_PRIVATE)
         return preferences.getInt("themeIndex", 0)
+    }
+    fun setFlag(flag: String,flagValue : Int ) {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = preferences.edit()
+        editor.putInt(flag,flagValue)
+        editor.apply()
+    }
+    fun getFlag(flag: String) : Int {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        return preferences.getInt(flag, 0)
+    }
+
+    fun refresh() {
+        recreate()
     }
 }

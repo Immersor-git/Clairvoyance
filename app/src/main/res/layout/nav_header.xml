@@ -5,7 +5,7 @@
     android:layout_height="176dp"
     android:gravity="top"
     android:padding="16dp"
-    android:background="@color/md_theme_dark_onPrimary"
+    android:background="?colorSurface"
     android:theme="@style/Theme.AppCompat">
 
     <ImageView

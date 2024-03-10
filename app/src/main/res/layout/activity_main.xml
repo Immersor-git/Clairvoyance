@@ -6,7 +6,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="MainActivity">
+    android:background = "?colorSurface"
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,8 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:id="@+id/toolbar"
-            android:background="@color/md_theme_dark_onPrimary"
-            android:elevation="4dp"/>
+            android:elevation="4dp"
+            android:background = "?colorPrimary"
+            />
+        <!--android:background="@color/md_theme_dark_onPrimary"-->
 
         <FrameLayout
             android:id="@+id/fragment_container"
@@ -36,12 +39,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/bottomAppBar"
+                android:layout_gravity="bottom"
+                app:fabCradleMargin="10dp"
+                app:fabCradleRoundedCornerRadius="50dp"
+                app:popupTheme="@style/LightTheme"
+                android:theme="@style/LightTheme"
+                android:backgroundTint="?colorPrimary"
+                >
+                <!--
                 android:theme="@style/Theme.MaterialComponents"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_gravity="bottom"
-                android:backgroundTint="@color/md_theme_dark_primaryContainer"
-                app:fabCradleMargin="10dp"
-                app:fabCradleRoundedCornerRadius="50dp">
+                -->
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_navigation"
@@ -56,7 +64,7 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:backgroundTint="@color/design_default_color_primary"
+                android:backgroundTint="?colorPrimary"
                 app:borderWidth="0dp"
                 android:src="@drawable/plus_icon"
                 app:layout_anchorGravity="center"
@@ -71,8 +79,9 @@
         android:layout_height="match_parent"
         android:id="@+id/navigation_drawer"
         android:layout_gravity="start"
-        app:itemIconTint="@color/md_theme_dark_primary"
-        app:itemTextColor="@color/md_theme_dark_primary"
+
+        android:background="?attr/colorSecondary"
+
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

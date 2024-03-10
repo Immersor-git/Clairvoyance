@@ -2,31 +2,37 @@
 <menu
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-tools:showIn = "navigation_view">
+tools:showIn = "navigation_view"
+xmlns:app="http://schemas.android.com/apk/res-auto">
 <group
     android:checkableBehavior="single">
     <item
         android:id="@+id/nav_home"
         android:title="Home"
+        app:tint = "?colorOnPrimary"
         android:icon="@drawable/checklist_icon" />
 
     <item
         android:id="@+id/nav_account"
         android:title="Account"
+        app:tint = "?colorOnPrimary"
         android:icon="@drawable/outline_account_circle_24" />
     <item
         android:id="@+id/nav_archive"
         android:title="Task Archive"
+        app:tint = "?colorOnPrimary"
         android:icon="@drawable/archive_icon" />
 
     <item
         android:id="@+id/nav_help"
         android:title="Help"
+        app:tint = "?colorOnPrimary"
         android:icon="@drawable/baseline_accessibility_new_24" />
 
     <item
         android:id="@+id/nav_settings"
         android:title="Settings"
+        app:tint = "?colorOnPrimary"
         android:icon="@drawable/outline_app_settings_alt_24" />
 </group>
 </menu>
