@@ -40,11 +40,11 @@ class SettingsFragment() : Fragment() {
 
     private fun createSettingsSpinner(view: View) {
         spinnerThemeOptions = view.findViewById(R.id.spinnerText)
-        val themeOptionsRaw = resources.getStringArray(R.array.theme_settings)
-        val themeOptions = listOf(themeOptionsRaw[mainActivity.loadTheme()]) + themeOptionsRaw
+        val themeOptions = resources.getStringArray(R.array.theme_settings)
+        //val themeOptions = listOf(themeOptionsRaw[mainActivity.loadTheme()]) + themeOptionsRaw
         var adapter = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, themeOptions)
         spinnerThemeOptions.setAdapter(adapter)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item) //simple_spinner_dropdown_item
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) //simple_spinner_dropdown_item
         spinnerThemeOptions.setSelection(mainActivity.loadTheme())
         var firstCall = 0;
         spinnerThemeOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -59,10 +59,10 @@ class SettingsFragment() : Fragment() {
                     return
                 }
                 Log.d("Settings Buttons","Pressed" + themeOptions[position])
-                if (position == 0) {
-                    return
-                }
-                mainActivity.selectTheme(position-1)
+                //if (position == 0) {
+                //    return
+                //}
+                mainActivity.selectTheme(position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -43,19 +43,26 @@
     </style>
     <style name="textLight" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item>
+        <item name="android:textColorSecondary">@color/colorOnPrimary</item>
     </style>
-    <style name="spinnerLight">
+    <style name="spinnerLight" parent="@android:style/Widget.TextView.SpinnerItem">
         <item name="android:textColor">@color/colorOnPrimary</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
     </style>
-
     <style name="textDark" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/darkcolorOnPrimary</item>
+        <item name="android:textColorPrimary">@color/darkcolorOnPrimary</item>
+        <item name="android:textColorSecondary">@color/darkcolorOnPrimary</item>
     </style>
 
-    <style name="spinnerDark">
+    <style name="spinnerDark" parent="@android:style/Widget.TextView.SpinnerItem">
         <item name="android:textColor">@color/darkcolorOnPrimary</item>
-        <item name="android:background">@color/darkcolorPrimary</item>
+        <item name="android:background">@color/darkcolorSurface</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
 </resources>
