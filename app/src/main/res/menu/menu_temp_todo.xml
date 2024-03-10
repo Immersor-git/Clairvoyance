@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/LightTheme"
+    android:background="?colorSurface">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/task_task1"
+            android:title="Work zoom meeting"
+            app:tint = "?colorOnPrimary"
+            android:icon="@drawable/checklist_icon" />
+
+        <item
+            android:id="@+id/task_task2"
+            android:title="Work review 2"
+            app:tint = "?colorOnPrimary"
+            android:icon="@drawable/outline_account_circle_24" />
+        <item
+            android:id="@+id/task_task3"
+            android:title="Go to gym"
+            app:tint = "?colorOnPrimary"
+            android:icon="@drawable/archive_icon" />
+    </group>
+</menu>

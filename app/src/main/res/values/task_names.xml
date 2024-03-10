@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_list">
+        <item>Work zoom meeting</item>
+        <item>Work review 2</item>
+        <item>Go to gym</item>
+    </string-array>
+</resources>

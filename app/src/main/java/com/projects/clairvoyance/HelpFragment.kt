@@ -10,7 +10,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 
 class HelpFragment : Fragment() {
     lateinit var mainActivity : MainActivity;
-    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater { //Loads current theme based on app state
         val inflater = super.onGetLayoutInflater(savedInstanceState)
         mainActivity = getActivity() as MainActivity
 

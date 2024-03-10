@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 
-
+//Handles the settings menu
 class SettingsFragment() : Fragment() {
     lateinit var spinnerThemeOptions : Spinner
     lateinit var mainActivity : MainActivity;
@@ -38,7 +38,7 @@ class SettingsFragment() : Fragment() {
         return view
     }
 
-    private fun createSettingsSpinner(view: View) {
+    private fun createSettingsSpinner(view: View) { //Creates a dropdown menu for selecting a theme.
         spinnerThemeOptions = view.findViewById(R.id.spinnerText)
         val themeOptions = resources.getStringArray(R.array.theme_settings)
         //val themeOptions = listOf(themeOptionsRaw[mainActivity.loadTheme()]) + themeOptionsRaw
@@ -54,7 +54,7 @@ class SettingsFragment() : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                if (firstCall == 0) {
+                if (firstCall == 0) { //Ignores first click call (happens when menu loads)
                     firstCall += 1
                     return
                 }
@@ -62,7 +62,7 @@ class SettingsFragment() : Fragment() {
                 //if (position == 0) {
                 //    return
                 //}
-                mainActivity.selectTheme(position)
+                mainActivity.selectTheme(position) //Sets the theme in the main activity
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

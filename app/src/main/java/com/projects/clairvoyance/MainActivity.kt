@@ -22,10 +22,11 @@ import com.projects.clairvoyance.databinding.ActivityMainBinding
 
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding;
     private var currentTheme : Int = 2
+    private var currentTask: Int = 0;
 
-    override fun getLayoutInflater(): LayoutInflater {
+    override fun getLayoutInflater(): LayoutInflater {  //Overwrites theme on generation of layout
         val inflater = super.getLayoutInflater()
         val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
             applicationContext,
@@ -45,7 +46,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar) //Creates top navbar
 
         val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.app_name, R.string.app_name)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -53,7 +54,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
 
-        binding.bottomNavigation.background = null
+        //binding.bottomNavigation.background = null //Handles clicks on menu
         binding.bottomNavigation.setOnItemSelectedListener { item: MenuItem ->
             onNavigationItemSelected(item)
             true
@@ -82,7 +83,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return fragmentNavigation(item.itemId)
     }
 
-    fun fragmentNavigation(item : Int): Boolean {
+    fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
             R.id.bottom_todo -> openFragment(ToDoFragment())
             R.id.bottom_calendar -> openFragment(CalendarFragment())
@@ -97,7 +98,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return true
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) { //Opens fragment
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
@@ -145,5 +146,21 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     fun refresh() {
         recreate()
+    }
+
+    fun getCurrentTask() : String {
+        when (currentTask) {
+            0 -> return "task1"
+            1 -> return "task2"
+            2 -> return "task3"
+        }
+        return "task2";
+    }
+
+    fun setCurrentTask(taskNum : Int) {
+        currentTask = taskNum
+    }
+    fun openTaskFragment() {
+        openFragment(ViewTask())
     }
 }
