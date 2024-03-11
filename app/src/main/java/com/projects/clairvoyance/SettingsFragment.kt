@@ -31,7 +31,6 @@ class SettingsFragment() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mainActivity = getActivity() as MainActivity
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         createSettingsSpinner(view)
@@ -59,9 +58,6 @@ class SettingsFragment() : Fragment() {
                     return
                 }
                 Log.d("Settings Buttons","Pressed" + themeOptions[position])
-                //if (position == 0) {
-                //    return
-                //}
                 mainActivity.selectTheme(position) //Sets the theme in the main activity
             }
 
