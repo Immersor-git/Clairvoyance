@@ -2,15 +2,12 @@ package com.clairvoyance.clairvoyance
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
-class DataFieldViewModel : ViewModel(){
-    var dataFields = MutableLiveData<MutableList<DataField<*>>>()
-
+class DataFieldViewModel(var dataFields : MutableLiveData<MutableList<DataField<*>>>
+) : ViewModel() {
     init {
-        dataFields.value = mutableListOf()
+        if(dataFields.value == null) dataFields.value = mutableListOf()
     }
 
     // Adds a data field to the list

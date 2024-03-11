@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.DataFieldItemBinding
-import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 
 class DataFieldAdapter(
     private val dataFields: List<DataField<*>>,

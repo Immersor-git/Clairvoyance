@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clairvoyance.clairvoyance.databinding.FragmentNewTaskSheetBinding
@@ -15,11 +15,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickListener {
+class TaskSheet(private var task : Task?) : BottomSheetDialogFragment(), DataFieldClickListener {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
     private lateinit var dataFieldViewModel: DataFieldViewModel
+    private lateinit var dataFieldViewModelFactory: DataFieldViewModelFactory
+    private lateinit var dataFields : MutableLiveData<MutableList<DataField<*>>>
     private var endTime: LocalTime? = null
     private var startTime: LocalTime? = null
 
@@ -28,6 +30,7 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         val activity = requireActivity()
 
         if (task != null) {
+            dataFields = task!!.dataFields
             val editable = Editable.Factory.getInstance()
 
             binding.taskTitle.text = "Edit Task"
@@ -46,15 +49,19 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
 
         } else {
             binding.taskTitle.text = "New Task"
+            dataFields = MutableLiveData<MutableList<DataField<*>>>()
+            dataFields.value = mutableListOf()
         }
 
         taskViewModel = ViewModelProvider(activity)[TaskViewModel::class.java]
-        dataFieldViewModel = ViewModelProvider(this)[DataFieldViewModel::class.java]
+        dataFieldViewModelFactory = DataFieldViewModelFactory(dataFields)
+        dataFieldViewModel = ViewModelProvider(this, dataFieldViewModelFactory)[DataFieldViewModel::class.java]
 
         setRecyclerView()
 
         binding.saveButton.setOnClickListener {
             saveAction()
+            addDataField()
         }
 
         binding.startTimeButton.setOnClickListener {
@@ -66,7 +73,7 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         }
 
         binding.addDataFieldButton.setOnClickListener {
-            saveDataField()
+            addDataField()
         }
 
     }
@@ -97,7 +104,7 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         dialog.show()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNewTaskSheetBinding.inflate(inflater, container, false)
 
         val dataFieldList = resources.getStringArray(R.array.datafields)
@@ -113,9 +120,10 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
 
         if (task == null) {
             val newTask = Task(name, desc, startTime, endTime, null, null)
+            newTask.addDataFields(dataFields)
             taskViewModel.addTask(newTask)
         } else {
-            taskViewModel.updateTask(task!!.id, name, desc, startTime, endTime, null)
+            taskViewModel.updateTask(task!!.id, name, desc, startTime, endTime, null, dataFields)
         }
 
         binding.name.setText("")
@@ -124,7 +132,7 @@ class TaskSheet(var task : Task?) : BottomSheetDialogFragment(), DataFieldClickL
         dismiss()
     }
 
-    private fun saveDataField() {
+    private fun addDataField() {
         val typeString = binding.dataFieldSpinner.selectedItem.toString()
 
         lateinit var dataType: DataType

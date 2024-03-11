@@ -1,6 +1,8 @@
 package com.clairvoyance.clairvoyance
 
 import android.text.Editable
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.DataFieldItemBinding
 import java.time.LocalDate
@@ -14,9 +16,10 @@ class DataFieldViewHolder(
     fun <T> bindDataField(dataField: DataField<T>) {
         // Handle data differently based on their data types
         if (dataField.data != null) {
+            val editable = Editable.Factory.getInstance()
             when (dataField.dataType) {
                 DataType.TEXT -> {
-                    binding.data.setText(dataField.data as String)
+                    binding.data.text = editable.newEditable(dataField.data as String)
                 }
                 DataType.NUMBER -> {
                     binding.data.setText(dataField.data as Int)

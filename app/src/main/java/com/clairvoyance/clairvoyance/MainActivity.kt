@@ -2,8 +2,6 @@ package com.clairvoyance.clairvoyance
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding

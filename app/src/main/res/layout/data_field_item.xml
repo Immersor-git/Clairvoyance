@@ -39,7 +39,7 @@
             android:padding="5dp"
             android:scaleY="1"
             android:scaleX="1"
-            android:layout_marginHorizontal="5dpdp"
+            android:layout_marginHorizontal="5dp"
             android:src="@drawable/remove"
             android:backgroundTint="@android:color/transparent"/>
 

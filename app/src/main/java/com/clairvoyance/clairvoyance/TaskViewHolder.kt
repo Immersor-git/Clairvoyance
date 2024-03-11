@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 import java.time.format.DateTimeFormatter
 
+// Holds view for task in the to-do list
 class TaskViewHolder(
     private val context: Context,
     private val binding: TaskItemBinding,

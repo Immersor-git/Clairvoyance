@@ -22,7 +22,7 @@ class TaskViewModel : ViewModel()
     }
 
     // Updates a task
-    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?) {
+    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?, dataFields: MutableLiveData<MutableList<DataField<*>>>) {
         val list = tasks.value
         val task = list!!.find {it.id == id}!!
         task.name = name
@@ -30,6 +30,8 @@ class TaskViewModel : ViewModel()
         task.startTime = startTime
         task.endTime = endTime
         task.date = date
+        task.dataFields.value = dataFields.value
+        println(task.dataFields.value!!.size)
         tasks.postValue(list)
     }
 
