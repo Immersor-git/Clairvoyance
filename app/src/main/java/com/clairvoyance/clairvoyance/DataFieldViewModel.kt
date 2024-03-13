@@ -7,7 +7,7 @@ import java.util.UUID
 class DataFieldViewModel(var dataFields : MutableLiveData<MutableList<DataField<*>>>
 ) : ViewModel() {
     init {
-        if(dataFields.value == null) dataFields.value = mutableListOf()
+        if (dataFields.value == null) dataFields.value = mutableListOf()
     }
 
     // Adds a data field to the list

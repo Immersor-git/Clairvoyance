@@ -14,18 +14,18 @@ data class Task (
     var endTime: LocalTime?,
     var date: LocalDate?,
     var completedDate: LocalDate?,
+    var children: ArrayList<Task>,
 
+    var expanded: Boolean = false,
     var completed: Boolean = false,
     var id: UUID = UUID.randomUUID(),
     var dataFields: MutableLiveData<MutableList<DataField<*>>> = MutableLiveData<MutableList<DataField<*>>>(),
     var parents: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>(),
-    var children: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>()
 ) {
 
     init {
         dataFields.value = mutableListOf()
         parents.value = mutableListOf()
-        children.value = mutableListOf()
     }
     fun isCompleted() = completed
     fun imageResource(): Int = if (this.isCompleted()) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete

@@ -7,7 +7,7 @@ import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 
 class TaskAdapter(
     private val tasks: List<Task>,
-    private val clickListener: TaskClickListener
+    private val clickListener: TaskClickListener,
 ) : RecyclerView.Adapter<TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val from = LayoutInflater.from(parent.context)
@@ -21,5 +21,8 @@ class TaskAdapter(
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bindTask(tasks[position])
+
+        val childAdapter = TaskAdapter(tasks[position].children, clickListener)
+        holder.subTaskRecyclerView.adapter = childAdapter
     }
 }

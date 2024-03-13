@@ -43,4 +43,11 @@ class TaskViewModel : ViewModel()
         currTask.completedDate = LocalDate.now()
         tasks.postValue(list)
     }
+
+    fun expandTask(task: Task) {
+        val list = tasks.value
+        val currTask = list!!.find{it.id == task.id}!!
+        currTask.expanded = !currTask.expanded
+        tasks.postValue(list)
+    }
 }

@@ -15,7 +15,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TaskSheet(private var task : Task?) : BottomSheetDialogFragment(), DataFieldClickListener {
+class TaskSheet(
+    private var task : Task?,
+    private val parent : Task?
+) : BottomSheetDialogFragment(), DataFieldClickListener {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private lateinit var taskViewModel : TaskViewModel
@@ -119,8 +122,18 @@ class TaskSheet(private var task : Task?) : BottomSheetDialogFragment(), DataFie
         val desc = binding.desc.text.toString()
 
         if (task == null) {
-            val newTask = Task(name, desc, startTime, endTime, null, null)
+            val newTask = Task(name, desc, startTime, endTime, null,null, ArrayList<Task>())
             newTask.addDataFields(dataFields)
+
+
+//            if (parent != null) {
+//                //val subTaskViewModel = ViewModelProvider(requireActivity())[TaskViewModel::class.java]
+//                //subTaskViewModel.addTask(newTask)
+//                //parent.children.add(newTask);
+//            }
+//            else {
+//                taskViewModel.addTask(newTask)
+//            }
             taskViewModel.addTask(newTask)
         } else {
             taskViewModel.updateTask(task!!.id, name, desc, startTime, endTime, null, dataFields)
