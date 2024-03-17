@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
         val formatter = DateTimeFormatter.ofPattern("MMMM dd")
         val todaysDate = LocalDate.now()
         val formattedDate = todaysDate.format(formatter)
-        binding.dailyDate.text = "March 09"
+        binding.dailyDate.text = formattedDate
 
         setRecyclerView()
     }
