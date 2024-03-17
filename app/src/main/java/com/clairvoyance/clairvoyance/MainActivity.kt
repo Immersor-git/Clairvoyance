@@ -66,8 +66,6 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         fragmentManager = supportFragmentManager
         openFragment(ToDoFragmentNew())
 
-        //binding.fab.setOnClickListener()
-
         onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.START)

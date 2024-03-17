@@ -1,8 +1,6 @@
 package com.clairvoyance.clairvoyance
 
 import android.text.Editable
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.DataFieldItemBinding
 import java.time.LocalDate

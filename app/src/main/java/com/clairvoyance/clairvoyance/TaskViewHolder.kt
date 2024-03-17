@@ -3,7 +3,6 @@ package com.clairvoyance.clairvoyance
 import android.content.Context
 import android.graphics.Paint
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.TaskItemBinding
 import java.time.format.DateTimeFormatter
