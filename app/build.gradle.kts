@@ -4,17 +4,21 @@ plugins {
 }
 
 android {
-    namespace = "com.projects.clairvoyance"
+    namespace = "com.clairvoyance.clairvoyance"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.projects.clairvoyance"
-        minSdk = 24
+        applicationId = "com.clairvoyance.clairvoyance"
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
