@@ -32,13 +32,15 @@ data class Task (
     fun imageColor(context: Context): Int {
         return ContextCompat.getColor(
             context,
-            if (this.isCompleted()) R.color.purple_500 else R.color.black)
+            if (this.isCompleted()) R.color.purple_500 else R.color.black
+        )
     }
 
     fun backgroundColor(context: Context): Int {
         return ContextCompat.getColor(
             context,
-            if (this.isCompleted()) androidx.appcompat.R.color.material_grey_100 else R.color.white)
+            if (this.isCompleted()) androidx.appcompat.R.color.material_grey_100 else R.color.white
+        )
     }
 
     fun addDataFields(dataFields: MutableLiveData<MutableList<DataField<*>>>) {

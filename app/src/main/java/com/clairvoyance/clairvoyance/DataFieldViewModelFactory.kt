@@ -3,7 +3,6 @@ package com.clairvoyance.clairvoyance
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 
 class DataFieldViewModelFactory(
     private val list: MutableLiveData<MutableList<DataField<*>>>

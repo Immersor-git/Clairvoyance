@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
         binding.dailyDate.text = "March 09"
 
         setRecyclerView()
+
+
+
     }
 
     private fun setRecyclerView() {
