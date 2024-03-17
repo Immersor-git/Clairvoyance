@@ -16,11 +16,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables{
+            useSupportLibrary = true
+        }
     }
 
     buildFeatures{
         viewBinding = true
         dataBinding = true
+        compose = true
     }
 
     buildTypes {
@@ -39,9 +43,22 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        dataBinding = true
-        viewBinding = true
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    configurations {
+        all {
+            //exclude("androidx.compose.ui")
+            exclude("androidx.compose.ui:ui-desktop")
+        }
     }
 }
 
@@ -53,9 +70,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.compose.ui:ui-graphics-android:1.6.3")
     implementation("androidx.compose.foundation:foundation-android:1.6.3")
-    implementation("androidx.compose.ui:ui-desktop:1.6.3")
+    implementation("androidx.compose.compiler:compiler:1.5.10")
+    //implementation("androidx.compose.ui:ui-desktop:1.6.3")
     implementation("androidx.compose.material3:material3-android:1.2.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.3")
 }
