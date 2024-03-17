@@ -1,4 +1,4 @@
-package com.projects.clairvoyance
+package com.clairvoyance.clairvoyance
 
 import org.junit.Test
 
