@@ -10,3 +10,11 @@
         <item name="android:timePickerMode">spinner</item>
     </style>
 </resources>
+<!--
+<color name="darkColorOnPrimary">#541C56</color>
+<color name="darkColorOnPrimaryVariant">#131A2C</color>
+<color name="darkColorOnSecondary">#1B1B3E</color>
+<color name="darkColorOnProgress">#3430A5</color>
+<color name="darkColorOnTextMinor">#ADADAD</color>
+<color name="darkColorOnTextMajor">#E0E0E0</color>
+-->

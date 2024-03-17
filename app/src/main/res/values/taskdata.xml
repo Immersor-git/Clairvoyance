@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task1">
+        <item>Work zoom meeting</item>
+        <item>Work>Meetings</item>
+        <item>March 3, 4:00pm - 5:00pm</item>
+        <item>Reminder at 3:00pm (1 hour early)</item>
+        <item>Not a checklist item</item>
+    </string-array>
+    <string-array name="task2">
+        <item>Work review 2</item>
+        <item>College>CECS 491B</item>
+        <item>March 9, 11:59pm</item>
+        <item>Reminder at 6:59pm (5 hours early)</item>
+        <item>Checklist item</item>
+    </string-array>
+    <string-array name="task3">
+        <item>Go to gym</item>
+        <item>Training</item>
+        <item>March 10, 10:00am</item>
+        <item>No reminder set</item>
+        <item>Checklist item</item>
+    </string-array>
+</resources>

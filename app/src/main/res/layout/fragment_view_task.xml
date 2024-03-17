@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorSurface"
+    tools:context=".ViewTask"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTaskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:textAlignment="center"
+            android:text="Zoom meeting" />
+        <TextView
+            android:id="@+id/tvTaskCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:text="Work>Meetings" />
+        <TextView
+            android:id="@+id/tvTaskTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textColor="?colorOnSecondary"
+            android:paddingLeft="10dp"
+            android:paddingVertical="10dp"
+            android:drawableStart = "@drawable/baseline_access_alarm_24"
+            android:drawableTint = "?colorOnSecondary"
+            android:drawablePadding="0dp"
+            android:text="March 3, 4:00pm - 5:00pm"
+            />
+        <TextView
+            android:id="@+id/tvTaskReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="?colorOnSecondary"
+            android:paddingLeft="10dp"
+            android:paddingVertical="10dp"
+            android:drawableStart = "@drawable/outline_circle_checked"
+            android:drawableTint = "?colorOnSecondary"
+            android:drawablePadding="0dp"
+            android:text="Reminder at 3:00pm (2 hours early)"
+            />
+        <TextView
+            android:id="@+id/tvTaskIsChecklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="?colorOnSecondary"
+            android:paddingLeft="10dp"
+            android:paddingVertical="10dp"
+            android:drawableStart = "@drawable/outline_circle_unchecked"
+            android:drawableTint = "?colorOnSecondary"
+            android:drawablePadding="0dp"
+            android:text="Not a checklist item"
+            />
+    </LinearLayout>
+</FrameLayout>

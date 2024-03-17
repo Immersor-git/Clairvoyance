@@ -1,60 +1,166 @@
-package com.clairvoyance.clairvoyance
+package com.projects.clairvoyance
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources.Theme
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import android.util.Log
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
+import android.view.MenuItem
+import androidx.activity.addCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.navigation.NavigationView
+import com.projects.clairvoyance.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), TaskClickListener {
 
-    private lateinit var binding : ActivityMainBinding
-    private lateinit var taskViewModel: TaskViewModel
+class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var binding: ActivityMainBinding;
+    private var currentTheme : Int = 2
+    private var currentTask: Int = 0;
 
+    override fun getLayoutInflater(): LayoutInflater {  //Overwrites theme on generation of layout
+        val inflater = super.getLayoutInflater()
+        val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
+            applicationContext,
+            getCustomTheme()
+        )
+        return inflater.cloneInContext(contextThemeWrapper)
+        //return super.getLayoutInflater()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+        val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
+            applicationContext,
+            getCustomTheme()
+        )
+        val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
+        binding = ActivityMainBinding.inflate(newLayoutInflater)
 
-        binding.newTaskButton.setOnClickListener {
-            TaskSheet(null, null).show(supportFragmentManager, "newTaskTag")
+        setContentView(binding.root)
+        super.onCreate(savedInstanceState)
+
+        setSupportActionBar(binding.toolbar) //Creates top navbar
+
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.app_name, R.string.app_name)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        binding.navigationDrawer.setNavigationItemSelectedListener(this)
+
+        //binding.bottomNavigation.background = null //Handles clicks on menu
+        binding.bottomNavigation.setOnItemSelectedListener { item: MenuItem ->
+            onNavigationItemSelected(item)
+            true
         }
 
-        // Checks for today's date and sets it in the main task list
-        val formatter = DateTimeFormatter.ofPattern("MMMM dd")
-        val todaysDate = LocalDate.now()
-        val formattedDate = todaysDate.format(formatter)
-        binding.dailyDate.text = formattedDate
+        fragmentManager = supportFragmentManager
+        openFragment(ToDoFragment())
 
-        setRecyclerView()
-    }
+        //binding.fab.setOnClickListener()
 
-    private fun setRecyclerView() {
-        val mainActivity = this
-        taskViewModel.tasks.observe(this) {
-            binding.taskListRecylerView.apply {
-                layoutManager = LinearLayoutManager(applicationContext)
-                adapter = TaskAdapter(it, mainActivity)
+        onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                finish()
             }
         }
+
+        if (getFlag("changingTheme") == 1) {
+            setFlag("changingTheme", 0)
+            fragmentNavigation(R.id.nav_settings)
+        }
     }
 
-    override fun editTask(task: Task) {
-        TaskSheet(task, null).show(supportFragmentManager, "newTaskTag")
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        return fragmentNavigation(item.itemId)
     }
 
-    override fun completeTask(task: Task) {
-        taskViewModel.setCompleted(task)
+    fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
+        when(item){
+            R.id.bottom_todo -> openFragment(ToDoFragment())
+            R.id.bottom_calendar -> openFragment(CalendarFragment())
+            R.id.nav_home -> openFragment(ToDoFragment())
+            R.id.nav_account -> openFragment(AccountFragment())
+            R.id.nav_archive -> openFragment(ArchiveFragment())
+            R.id.nav_help -> openFragment(HelpFragment())
+            R.id.nav_settings-> openFragment(SettingsFragment())
+
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
-    override fun expandTask(task: Task) {
-        taskViewModel.expandTask(task)
+    private fun openFragment(fragment: Fragment) { //Opens fragment
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.commit()
+    }
+    val themes = arrayOf<Int>(R.style.DarkTheme,R.style.LightTheme)
+    fun getCustomTheme() : Int {
+        return themes[loadTheme()]
+    }
+    fun selectTheme(themeIndex : Int) {
+        val previousTheme = loadTheme()
+        if (themeIndex != previousTheme) {
+            val themeOptions = resources.getStringArray(R.array.theme_settings)
+            saveTheme(themeIndex)
+            setFlag("changingTheme", 1)
+            refresh()
+        }
+        //this.theme = "@style/"+themeOptions[themeIndex]
+        /*when(themeIndex){
+            0 -> applicationContext.setTheme(themes[themeIndex])
+            1 -> applicationContext.setTheme(themes[themeIndex])
+        }*/
+        Log.d("Main Activity", "Set Theme: "+getCustomTheme())
+
+    }
+    fun saveTheme(themeIndex : Int) {
+        val preferences : SharedPreferences = getSharedPreferences("PREFERENCE_AppTheme",MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = preferences.edit()
+        editor.putInt("themeIndex", themeIndex)
+        editor.apply()
+    }
+    fun loadTheme() : Int {
+        val preferences : SharedPreferences = getSharedPreferences("PREFERENCE_AppTheme",MODE_PRIVATE)
+        return preferences.getInt("themeIndex", 0)
+    }
+    fun setFlag(flag: String,flagValue : Int ) {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = preferences.edit()
+        editor.putInt(flag,flagValue)
+        editor.apply()
+    }
+    fun getFlag(flag: String) : Int {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        return preferences.getInt(flag, 0)
     }
 
-    override fun newSubTask(parent: Task) {
-        TaskSheet(null, parent).show(supportFragmentManager, "newTaskTag")
+    fun refresh() {
+        recreate()
+    }
+
+    fun getCurrentTask() : String {
+        when (currentTask) {
+            0 -> return "task1"
+            1 -> return "task2"
+            2 -> return "task3"
+        }
+        return "task2";
+    }
+
+    fun setCurrentTask(taskNum : Int) {
+        currentTask = taskNum
+    }
+    fun openTaskFragment() {
+        openFragment(ViewTask())
     }
 }

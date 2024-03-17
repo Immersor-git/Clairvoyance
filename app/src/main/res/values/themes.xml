@@ -1,14 +1,88 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+    </style>
+
+    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textAppearance">@style/textLight</item>
+        <item name="android:textViewStyle">@style/textLight</item>
+        <item name="android:spinnerItemStyle">@style/spinnerLight</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="android:textAppearance">@style/textDark</item>
+        <item name="android:textViewStyle">@style/textDark</item>
+        <item name="android:spinnerItemStyle">@style/spinnerDark</item>
+        <item name="colorPrimary">@color/darkcolorPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkcolorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/darkcolorOnPrimary</item>
+        <item name="colorSecondary">@color/darkcolorSecondary</item>
+        <item name="colorOnSecondary">@color/darkcolorOnSecondary</item>
+        <item name="colorSurface">@color/darkcolorSurface</item>
+        <item name="colorOnSurface">@color/darkcolorOnSurface</item>
+        <item name="colorOnBackground">@color/darkcolorOnBackground</item>
+    </style>
+    <style name="textLight" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item>
+        <item name="android:textColorSecondary">@color/colorOnPrimary</item>
+    </style>
+    <style name="spinnerLight" parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="textDark" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/darkcolorOnPrimary</item>
+        <item name="android:textColorPrimary">@color/darkcolorOnPrimary</item>
+        <item name="android:textColorSecondary">@color/darkcolorOnPrimary</item>
+    </style>
+
+    <style name="spinnerDark" parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/darkcolorOnPrimary</item>
+        <item name="android:background">@color/darkcolorSurface</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
     <style name="Base.Theme.Clairvoyance" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:timePickerStyle">@style/MyTimePickerStyle</item>
     </style>
-
     <style name="MyTimePickerStyle" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
     </style>
 
-    <style name="Theme.Clairvoyance" parent="Base.Theme.Clairvoyance" />
 </resources>
+
+<!--
+    <item name="android:textAppearance">@style/textLight</item>
+    <item name="android:textAppearance">@style/textLight</item>
+    <style name="textLight" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="textDark" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/darkcolorOnPrimary</item>
+    </style>
+-->
