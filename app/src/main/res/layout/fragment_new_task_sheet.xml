@@ -18,7 +18,7 @@
         style="@style/TextAppearance.AppCompat.Title"/>
     
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
@@ -33,7 +33,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
@@ -59,13 +59,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addDataFieldButton"
             android:layout_width="0dp"
             android:layout_weight="0.7"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="Add Data Field" />
+            android:text="Add Data Field"
+            android:contentDescription="TODO" />
 
         <Spinner
             android:id="@+id/dataFieldSpinner"
@@ -82,7 +83,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/startTimeButton"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -90,7 +91,7 @@
             android:layout_marginHorizontal="20dp"
             android:text="Select Start Time" />
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/endTimeButton"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -100,7 +101,7 @@
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

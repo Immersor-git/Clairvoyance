@@ -64,7 +64,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
 
         fragmentManager = supportFragmentManager
-        openFragment(ToDoFragment())
+        openFragment(ToDoFragmentNew())
 
         //binding.fab.setOnClickListener()
 
@@ -88,9 +88,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
-            R.id.bottom_todo -> openFragment(ToDoFragment())
+            R.id.bottom_todo -> openFragment(ToDoFragmentNew())
             R.id.bottom_calendar -> openFragment(CalendarFragment())
-            R.id.nav_home -> openFragment(ToDoFragment())
+            R.id.nav_home -> openFragment(ToDoFragmentNew())
             R.id.nav_account -> openFragment(AccountFragment())
             R.id.nav_archive -> openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())

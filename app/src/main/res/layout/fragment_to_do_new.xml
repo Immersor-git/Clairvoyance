@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layout_marginBottom="100dp">
 
     <TextView
         android:id="@+id/dailyTaskTitle"
@@ -14,8 +15,9 @@
         android:text="Today's Tasks"
         android:textSize="30sp"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        style="@style/TextAppearance.AppCompat.Title"/>
+        android:layout_marginStart="20dp"/>
+<!--        style="@style/TextAppearance.AppCompat.Title"-->
+
 
     <TextView
         android:id="@+id/dailyDate"
@@ -24,8 +26,8 @@
         android:text="Today's Date"
         android:textSize="15sp"
         android:layout_marginStart="20dp"
-        android:layout_below="@id/dailyTaskTitle"
-        style="@style/TextAppearance.Material3.ActionBar.Subtitle"/>
+        android:layout_below="@id/dailyTaskTitle" />
+<!--        style="@style/TextAppearance.Material3.ActionBar.Subtitle"-->
 
 
 
@@ -36,20 +38,31 @@
         android:layout_height="match_parent"
         android:backgroundTint="@color/design_default_color_background" />
 
-
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:theme="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:text="@string/new_task"
         android:id="@+id/newTaskButton"
-        android:backgroundTint="?attr/colorPrimary"
-        android:textColor="?colorOnPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:padding="5dp"
         android:layout_margin="20dp"
-        app:icon="@drawable/add"
-        app:iconTint="?colorOnPrimary"/>
+        android:contentDescription="my button" />
+
+
+<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/new_task"-->
+<!--        android:id="@+id/newTaskButton"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:padding="5dp"-->
+<!--        android:layout_margin="20dp" />-->
+<!--        android:backgroundTint="?attr/colorPrimary"-->
+<!--        android:textColor="?colorOnPrimary"-->
+<!--        app:icon="@drawable/add" />-->
+<!--        app:iconTint="?colorOnPrimary"/>-->
 
 </RelativeLayout>

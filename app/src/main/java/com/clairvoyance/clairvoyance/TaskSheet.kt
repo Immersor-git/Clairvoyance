@@ -42,12 +42,12 @@ class TaskSheet(
 
             if (task!!.endTime != null) {
                 endTime = task!!.endTime
-                binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
+//                binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
             }
 
             if (task!!.startTime != null) {
                 startTime = task!!.startTime
-                binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
+//                binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
             }
 
         } else {
@@ -86,7 +86,7 @@ class TaskSheet(
 
         val listener = TimePickerDialog.OnTimeSetListener {_, selectedHour, selectedMinute ->
             startTime = LocalTime.of(selectedHour, selectedMinute)
-            binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
+//            binding.startTimeButton.text = String.format("%02d:%02d", startTime!!.hour, startTime!!.minute)
         }
 
         val dialog = TimePickerDialog(activity, listener, startTime!!.hour, startTime!!.minute, false)
@@ -99,7 +99,7 @@ class TaskSheet(
 
         val listener = TimePickerDialog.OnTimeSetListener {_, selectedHour, selectedMinute ->
             endTime = LocalTime.of(selectedHour, selectedMinute)
-            binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
+//            binding.endTimeButton.text = String.format("%02d:%02d", endTime!!.hour, endTime!!.minute)
         }
 
         val dialog = TimePickerDialog(activity, listener, endTime!!.hour, endTime!!.minute, false)
