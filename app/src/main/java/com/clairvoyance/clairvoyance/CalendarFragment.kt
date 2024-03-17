@@ -1,4 +1,4 @@
-package com.projects.clairvoyance
+package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import android.os.Bundle

@@ -1,24 +1,27 @@
-package com.projects.clairvoyance
+package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.clairvoyance.clairvoyance.AccountFragment
+import com.clairvoyance.clairvoyance.ArchiveFragment
+import com.clairvoyance.clairvoyance.CalendarFragment
+import com.clairvoyance.clairvoyance.HelpFragment
+import com.clairvoyance.clairvoyance.SettingsFragment
+import com.clairvoyance.clairvoyance.ToDoFragment
+import com.clairvoyance.clairvoyance.ViewTask
+import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
-import com.projects.clairvoyance.databinding.ActivityMainBinding
-
 
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager

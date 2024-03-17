@@ -1,7 +1,6 @@
-package com.projects.clairvoyance
+package com.clairvoyance.clairvoyance
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
 
 //Handles the settings menu
 class SettingsFragment() : Fragment() {

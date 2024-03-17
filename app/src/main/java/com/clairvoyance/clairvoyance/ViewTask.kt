@@ -1,4 +1,4 @@
-package com.projects.clairvoyance
+package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
+
 //Displays task based on current state of app
 class ViewTask : Fragment() {
     lateinit var mainActivity : MainActivity;
