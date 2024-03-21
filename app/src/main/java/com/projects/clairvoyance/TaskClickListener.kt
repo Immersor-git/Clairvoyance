@@ -1,4 +1,6 @@
-package com.clairvoyance.clairvoyance
+package com.projects.clairvoyance
+
+import com.clairvoyance.clairvoyance.Task
 
 interface TaskClickListener {
     fun editTask(task: Task)

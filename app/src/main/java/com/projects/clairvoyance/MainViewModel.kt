@@ -1,4 +1,4 @@
-package com.clairvoyance.clairvoyance
+package com.projects.clairvoyance
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
