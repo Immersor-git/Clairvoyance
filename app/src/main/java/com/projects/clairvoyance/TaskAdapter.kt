@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.TaskItemCellBinding
+import com.projects.clairvoyance.TaskClickListener
 
 class TaskAdapter(
     private val tasks: List<Task>,

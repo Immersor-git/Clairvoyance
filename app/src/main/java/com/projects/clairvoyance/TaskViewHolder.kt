@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.clairvoyance.clairvoyance.databinding.TaskItemCellBinding
+import com.projects.clairvoyance.TaskClickListener
 import java.time.format.DateTimeFormatter
 
 class TaskViewHolder(

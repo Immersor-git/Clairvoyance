@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
+import com.projects.clairvoyance.TaskClickListener
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
