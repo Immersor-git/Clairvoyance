@@ -26,8 +26,15 @@ class TaskViewModel : ViewModel()
     fun updateTaskItem(task: Task) {
         taskList.update {
             taskList.value.toMutableList().apply {
+                // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
-                currTask.name = "hoopla"
+                val copy = currTask.copy()
+
+                // Edit fields
+                copy.name = "hoopla"
+
+                // Replace task with updated copy to trigger recomposition
+                this[indexOf(currTask)] = copy
             }
         }
     }
@@ -35,8 +42,15 @@ class TaskViewModel : ViewModel()
     fun setComplete(task: Task) {
         taskList.update {
             taskList.value.toMutableList().apply {
+                // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
-                currTask.isCompleted = !currTask.isCompleted
+                val copy = currTask.copy()
+
+                // Edit fields
+                copy.isCompleted = !currTask.isCompleted
+
+                // Replace task with updated copy to trigger recomposition
+                this[indexOf(currTask)] = copy
             }
         }
     }

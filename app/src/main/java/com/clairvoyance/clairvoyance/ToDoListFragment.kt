@@ -33,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -57,7 +58,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -89,8 +92,10 @@ class ToDoListFragment : Fragment() {
     fun MainContent(
         taskViewModel: TaskViewModel = viewModel()
     ) {
-        val taskList = taskViewModel.taskList.collectAsState()
+        val taskList = taskViewModel.taskList.collectAsStateWithLifecycle()
+
         Box{
+            // List of tasks
             TaskList(taskList = taskList.value, taskViewModel = taskViewModel)
             Button(
                 modifier = Modifier
@@ -122,8 +127,10 @@ class ToDoListFragment : Fragment() {
     }
 
     @Composable
-    fun TaskCard(task: Task, taskViewModel: TaskViewModel) {
-        val context = LocalContext.current
+    fun TaskCard(
+        task: Task,
+        taskViewModel: TaskViewModel
+    ) {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             modifier = Modifier
