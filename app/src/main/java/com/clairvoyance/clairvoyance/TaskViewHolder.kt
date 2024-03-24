@@ -21,7 +21,7 @@ class TaskViewHolder(
         subTaskRecyclerView = itemView.findViewById(R.id.subTaskRecyclerView)
         binding.name.text = task.name
 
-        if (task.expanded) {
+        if (task.isExpanded) {
             binding.subTaskList.visibility = View.VISIBLE
 //            binding.dropupButton.visibility = View.VISIBLE
 //            binding.dropdownButton.visibility = View.GONE
@@ -32,7 +32,7 @@ class TaskViewHolder(
         }
 
         // Puts strike through text on a task and its due time when marked as done
-        if (task.isCompleted()) {
+        if (task.isCompleted) {
             binding.name.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             binding.endTime.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }

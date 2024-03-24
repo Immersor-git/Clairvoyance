@@ -16,8 +16,8 @@ data class Task (
     var completedDate: LocalDate?,
     var children: ArrayList<Task>,
 
-    var expanded: Boolean = false,
-    var completed: Boolean = false,
+    var isExpanded: Boolean = false,
+    var isCompleted: Boolean = false,
     var id: UUID = UUID.randomUUID(),
     var dataFields: MutableLiveData<MutableList<DataField<*>>> = MutableLiveData<MutableList<DataField<*>>>(),
     var parents: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>(),
@@ -27,19 +27,21 @@ data class Task (
         dataFields.value = mutableListOf()
         parents.value = mutableListOf()
     }
-    fun isCompleted() = completed
-    fun imageResource(): Int = if (this.isCompleted()) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete
+
+    // Empty constructor
+    constructor(name: String) : this(name, "", null, null, null, null, ArrayList<Task>())
+    fun imageResource(): Int = if (this.isCompleted) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete
     fun imageColor(context: Context): Int {
         return ContextCompat.getColor(
             context,
-            if (this.isCompleted()) R.color.purple_500 else R.color.black
+            if (this.isCompleted) R.color.purple_500 else R.color.black
         )
     }
 
     fun backgroundColor(context: Context): Int {
         return ContextCompat.getColor(
             context,
-            if (this.isCompleted()) androidx.appcompat.R.color.material_grey_100 else R.color.white
+            if (this.isCompleted) androidx.appcompat.R.color.material_grey_100 else R.color.white
         )
     }
 

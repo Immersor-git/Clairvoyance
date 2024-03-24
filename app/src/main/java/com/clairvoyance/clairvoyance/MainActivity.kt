@@ -20,6 +20,7 @@ import com.clairvoyance.clairvoyance.HelpFragment
 import com.clairvoyance.clairvoyance.SettingsFragment
 import com.clairvoyance.clairvoyance.ToDoFragment
 import com.clairvoyance.clairvoyance.ViewTask
+import com.clairvoyance.clairvoyance.ToDoListFragment
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
@@ -64,7 +65,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
 
         fragmentManager = supportFragmentManager
-        openFragment(ToDoFragmentNew())
+        openFragment(ToDoListFragment())
 
         onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -86,9 +87,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
-            R.id.bottom_todo -> openFragment(ToDoFragmentNew())
+            R.id.bottom_todo -> openFragment(ToDoListFragment())
             R.id.bottom_calendar -> openFragment(DailyView())
-            R.id.nav_home -> openFragment(ToDoFragmentNew())
+            R.id.nav_home -> openFragment(ToDoListFragment())
             R.id.nav_account -> openFragment(AccountFragment())
             R.id.nav_archive -> openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
