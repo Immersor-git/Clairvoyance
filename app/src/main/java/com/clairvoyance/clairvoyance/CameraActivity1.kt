@@ -1,13 +1,16 @@
 package com.clairvoyance.clairvoyance
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
 import androidx.camera.core.ImageCaptureException
@@ -38,37 +41,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.projects.clairvoyance.MainViewModel
 import kotlinx.coroutines.launch
 
 
-class CameraActivity1 : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class CameraActivity1 : Fragment() {
+    private lateinit var mainActivity : MainActivity;
+    private lateinit var applicationContext : Context
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater { //Applies theme on loading
+        val inflater = super.onGetLayoutInflater(savedInstanceState)
+        mainActivity = getActivity() as MainActivity
+        val contextThemeWrapper: Context = ContextThemeWrapper(requireContext(), mainActivity.getCustomTheme())
+        return inflater.cloneInContext(contextThemeWrapper)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+
+        val view = inflater.inflate(R.layout.fragment_weekly_view, container, false)
+        applicationContext = requireContext()
 
         if (!hasRequiredPermissions()) {
             ActivityCompat.requestPermissions(
-                this, CAMERAX_PERMISSIONS, 1
+                mainActivity, CAMERAX_PERMISSIONS, 1
             )
+            val composeView = view.findViewById<ComposeView>(R.id.composeView)
+            composeView.apply {
+                // Dispose of the Composition when the view's LifecycleOwner
+                // is destroyed
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
                     CallPhoto()
                 }
-
+            }
         }
-
-
-
-
-
-
-
+        return view
     }
 
 
@@ -78,7 +96,7 @@ class CameraActivity1 : AppCompatActivity() {
 fun CallPhoto() {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val applicationContext = LocalContext.current
+    //LocalContext.current
     val controller = remember {
         LifecycleCameraController(applicationContext).apply {
             setEnabledUseCases(
