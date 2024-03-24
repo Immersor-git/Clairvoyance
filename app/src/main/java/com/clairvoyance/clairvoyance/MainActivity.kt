@@ -80,7 +80,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
             R.id.bottom_todo -> openFragment(ToDoListFragment())
-            R.id.bottom_calendar -> openFragment(DailyView())
+            R.id.bottom_calendar -> openFragment(MonthlyView())
             R.id.nav_home -> openFragment(ToDoListFragment())
             R.id.nav_account -> openFragment(AccountFragment())
             R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
