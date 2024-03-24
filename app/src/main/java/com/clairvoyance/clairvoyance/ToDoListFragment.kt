@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -119,13 +121,14 @@ class ToDoListFragment : Fragment() {
         LazyColumn {
             items(taskList) { task ->
                 if (task.isExpanded)
-                    ExpandedTaskCard(task)
+                    ExpandedTaskCard(task, taskViewModel)
                 else
                     TaskCard(task, taskViewModel)
             }
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun TaskCard(
         task: Task,
@@ -135,6 +138,14 @@ class ToDoListFragment : Fragment() {
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             modifier = Modifier
                 .padding(5.dp)
+                .combinedClickable(
+                    onClick = {
+                        // View task
+                    },
+                    onLongClick = {
+                        // Edit this task
+                    }
+                )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -162,7 +173,10 @@ class ToDoListFragment : Fragment() {
     }
 
     @Composable
-    fun ExpandedTaskCard(task: Task) {
+    fun ExpandedTaskCard(
+        task: Task,
+        taskViewModel: TaskViewModel
+    ) {
 
     }
 
