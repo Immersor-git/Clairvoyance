@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +18,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class  MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding;
     private var currentTheme : Int = 2
@@ -67,6 +69,8 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             }
         }
 
+
+
         if (getFlag("changingTheme") == 1) {
             setFlag("changingTheme", 0)
             fragmentNavigation(R.id.nav_settings)
@@ -76,6 +80,24 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return fragmentNavigation(item.itemId)
     }
+    fun openCamera() {
+        val cameraContainer = findViewById<FrameLayout>(R.id.camera_container)
+        cameraContainer.visibility = View.VISIBLE
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.camera_container, CameraActivity1())
+        fragmentTransaction.commit()
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+    }
+
+    fun closeCamera() {
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.remove(CameraActivity1())
+        fragmentTransaction.commit()
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+        val cameraContainer = findViewById<FrameLayout>(R.id.camera_container)
+        cameraContainer.visibility = View.GONE
+    }
 
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
@@ -83,7 +105,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.bottom_calendar -> openFragment(MonthlyView())
             R.id.nav_home -> openFragment(ToDoListFragment())
             R.id.nav_account -> openFragment(AccountFragment())
-            R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
+            R.id.nav_archive -> openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
             R.id.nav_settings-> openFragment(SettingsFragment())
 
@@ -96,6 +118,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
     }
     val themes = arrayOf<Int>(R.style.DarkTheme,R.style.LightTheme)
     fun getCustomTheme() : Int {

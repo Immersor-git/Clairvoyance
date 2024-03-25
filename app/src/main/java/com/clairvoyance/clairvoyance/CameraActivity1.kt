@@ -69,13 +69,15 @@ class CameraActivity1 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        val view = inflater.inflate(R.layout.fragment_weekly_view, container, false)
+        val view = inflater.inflate(R.layout.camera_fragment, container, false)
         applicationContext = requireContext()
 
         if (!hasRequiredPermissions()) {
             ActivityCompat.requestPermissions(
                 mainActivity, CAMERAX_PERMISSIONS, 1
             )
+        }
+        if (hasRequiredPermissions()) {
             val composeView = view.findViewById<ComposeView>(R.id.composeView)
             composeView.apply {
                 // Dispose of the Composition when the view's LifecycleOwner
