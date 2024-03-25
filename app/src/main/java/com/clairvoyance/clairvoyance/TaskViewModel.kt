@@ -14,7 +14,7 @@ import java.util.UUID
 
 class TaskViewModel : ViewModel()
 {
-    val taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf(Task("My First Task")))
+    val taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf<Task>())
     var tasks = MutableLiveData<MutableList<Task>?>()
 
     fun updateTaskList(task: Task) {
@@ -23,7 +23,7 @@ class TaskViewModel : ViewModel()
         }
     }
 
-    fun updateTaskItem(task: Task) {
+    fun updateTaskItem(task: Task, name: String, desc: String) {
         taskList.update {
             taskList.value.toMutableList().apply {
                 // Create copy of task item
@@ -31,7 +31,8 @@ class TaskViewModel : ViewModel()
                 val copy = currTask.copy()
 
                 // Edit fields
-                copy.name = "hoopla"
+                copy.name = name
+                copy.desc = desc
 
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy
@@ -63,7 +64,7 @@ class TaskViewModel : ViewModel()
     }
 
     // Updates a task
-    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?, dataFields: MutableLiveData<MutableList<DataField<*>>>) {
+    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?, dataFields: MutableLiveData<MutableList<DataField>>) {
         val list = tasks.value
         val task = list!!.find {it.id == id}!!
         task.name = name
@@ -71,8 +72,6 @@ class TaskViewModel : ViewModel()
         task.startTime = startTime
         task.endTime = endTime
         task.date = date
-        task.dataFields.value = dataFields.value
-        println(task.dataFields.value!!.size)
         tasks.postValue(list)
     }
 

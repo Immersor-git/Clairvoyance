@@ -14,19 +14,12 @@ data class Task (
     var endTime: LocalTime?,
     var date: LocalDate?,
     var completedDate: LocalDate?,
-    var children: ArrayList<Task>,
-
+    var children: ArrayList<Task> = ArrayList<Task>(),
     var isExpanded: Boolean = false,
     var isCompleted: Boolean = false,
     var id: UUID = UUID.randomUUID(),
-    var dataFields: MutableLiveData<MutableList<DataField<*>>> = MutableLiveData<MutableList<DataField<*>>>(),
-    var parents: MutableLiveData<MutableList<Task>> = MutableLiveData<MutableList<Task>>(),
+    var dataFields: ArrayList<DataField> = ArrayList<DataField>(),
 ) {
-
-    init {
-        dataFields.value = mutableListOf()
-        parents.value = mutableListOf()
-    }
 
     // Empty constructor
     constructor(name: String) : this(name, "", null, null, null, null, ArrayList<Task>())
@@ -43,9 +36,5 @@ data class Task (
             context,
             if (this.isCompleted) androidx.appcompat.R.color.material_grey_100 else R.color.white
         )
-    }
-
-    fun addDataFields(dataFields: MutableLiveData<MutableList<DataField<*>>>) {
-        this.dataFields = dataFields
     }
 }
