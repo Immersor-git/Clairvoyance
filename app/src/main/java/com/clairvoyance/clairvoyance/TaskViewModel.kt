@@ -23,7 +23,7 @@ class TaskViewModel : ViewModel()
         }
     }
 
-    fun updateTaskItem(task: Task, name: String, desc: String) {
+    fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
         taskList.update {
             taskList.value.toMutableList().apply {
                 // Create copy of task item
@@ -33,6 +33,7 @@ class TaskViewModel : ViewModel()
                 // Edit fields
                 copy.name = name
                 copy.desc = desc
+                copy.dataFields = dataFields
 
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy

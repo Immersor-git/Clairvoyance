@@ -14,11 +14,11 @@ data class Task (
     var endTime: LocalTime?,
     var date: LocalDate?,
     var completedDate: LocalDate?,
-    var children: ArrayList<Task> = ArrayList<Task>(),
+    var children: MutableList<Task> = mutableListOf(),
     var isExpanded: Boolean = false,
     var isCompleted: Boolean = false,
     var id: UUID = UUID.randomUUID(),
-    var dataFields: ArrayList<DataField> = ArrayList<DataField>(),
+    var dataFields: MutableList<DataField> = mutableListOf()
 ) {
 
     // Empty constructor

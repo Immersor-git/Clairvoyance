@@ -247,7 +247,14 @@ class ToDoListFragment : Fragment() {
 
         if (showBottomSheet) {
             ModalBottomSheet(
-                onDismissRequest = onDismiss,
+                onDismissRequest = {
+                    // Reset states
+                    name = ""
+                    desc = ""
+                    dataFieldList.clear()
+
+                    onDismiss()
+                },
                 sheetState = sheetState,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -346,7 +353,8 @@ class ToDoListFragment : Fragment() {
                                 taskViewModel.updateTaskItem(
                                     task,
                                     name,
-                                    desc
+                                    desc,
+                                    dataFieldList.toMutableList()
                                 )
                             }
 
