@@ -13,14 +13,6 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.clairvoyance.clairvoyance.AccountFragment
-import com.clairvoyance.clairvoyance.ArchiveFragment
-import com.clairvoyance.clairvoyance.CalendarFragment
-import com.clairvoyance.clairvoyance.HelpFragment
-import com.clairvoyance.clairvoyance.SettingsFragment
-import com.clairvoyance.clairvoyance.ToDoFragment
-import com.clairvoyance.clairvoyance.ViewTask
-import com.clairvoyance.clairvoyance.ToDoListFragment
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
@@ -88,10 +80,10 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
             R.id.bottom_todo -> openFragment(ToDoListFragment())
-            R.id.bottom_calendar -> openFragment(DailyView())
+            R.id.bottom_calendar -> openFragment(MonthlyView())
             R.id.nav_home -> openFragment(ToDoListFragment())
             R.id.nav_account -> openFragment(AccountFragment())
-            R.id.nav_archive -> openFragment(ArchiveFragment())
+            R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
             R.id.nav_settings-> openFragment(SettingsFragment())
 
