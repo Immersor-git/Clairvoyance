@@ -35,6 +35,10 @@ class AccountManager {
         }
     }
 
+    fun getUserName() : String {
+        return firebaseAuth.currentUser?.email.orEmpty();
+    }
+
     fun signOut() {
         signedIn = false
         firebaseAuth.signOut()

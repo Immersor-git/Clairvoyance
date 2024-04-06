@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +45,10 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
         binding = ActivityMainBinding.inflate(newLayoutInflater)
+
+        binding.btnDisplayclose.setOnClickListener {
+            binding.taskdisplay.setVisibility(View.GONE)
+        }
 
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
@@ -94,6 +101,23 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun displayTask(task : Task) {
+        val holder = this.findViewById<LinearLayout>(R.id.taskdisplay)
+        holder.visibility = View.VISIBLE
+
+        val tvTaskTitle = this.findViewById<TextView>(R.id.tvTaskTitle) //Gets all Text tags in the task template
+        val tvTaskCategory = this.findViewById<TextView>(R.id.tvTaskCategory)
+        val tvTaskTime = this.findViewById<TextView>(R.id.tvTaskTime)
+        val tvTaskReminder = this.findViewById<TextView>(R.id.tvTaskReminder)
+        val tvTaskIsChecklist = this.findViewById<TextView>(R.id.tvTaskIsChecklist)
+
+        tvTaskTitle.setText(task.name) //Sets each tag to be the specified value associated with the task (name, time, checklist, etc)
+        tvTaskCategory.setText(task.desc)
+        tvTaskTime.setText(task.date.toString())
+        tvTaskReminder.setText("No reminders set.")
+        tvTaskIsChecklist.setText("Checklist item")
     }
 
     fun setLoginFragment(registering : Boolean) {

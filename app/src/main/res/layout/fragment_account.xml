@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:textSize="36sp"
+        android:id = "@+id/txt_signed_in"
         android:text="Signed in" />
     <ImageView
         android:layout_width="100dp"

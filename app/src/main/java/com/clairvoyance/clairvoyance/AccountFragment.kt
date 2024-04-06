@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 
@@ -35,6 +36,8 @@ class AccountFragment : Fragment() {
             mainActivity.setLoginFragment(false)
         }
 
+        val signedName = view.findViewById<TextView>(R.id.txt_signed_in)
+        signedName.setText("Signed in as: "+accountManager.getUserName())
         return view
     }
 }
