@@ -8,21 +8,27 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class Task (
+    // Constructor items
     var name: String,
     var desc: String,
     var startTime: LocalTime?,
     var endTime: LocalTime?,
     var date: LocalDate?,
-    var completedDate: LocalDate?,
-    var children: MutableList<Task> = mutableListOf(),
+
+    // Initialized values
+    var completedDate: LocalDate? = null,
     var isExpanded: Boolean = false,
     var isCompleted: Boolean = false,
-    var id: UUID = UUID.randomUUID(),
-    var dataFields: MutableList<DataField> = mutableListOf()
+    val id: UUID = UUID.randomUUID(),
+    var children: MutableList<Task> = mutableListOf(),
+    var dataFields: MutableList<DataField> = mutableListOf(),
+    var tags: MutableList<String> = mutableListOf()
 ) {
+    // Initialized values
 
     // Empty constructor
-    constructor(name: String) : this(name, "", null, null, null, null, ArrayList<Task>())
+    constructor() : this("", "", null, null, null, null)
+
     fun imageResource(): Int = if (this.isCompleted) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete
     fun imageColor(context: Context): Int {
         return ContextCompat.getColor(

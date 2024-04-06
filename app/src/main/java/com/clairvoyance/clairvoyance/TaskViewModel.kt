@@ -15,9 +15,9 @@ import java.util.UUID
 class TaskViewModel : ViewModel()
 {
     val taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf<Task>())
-    var tasks = MutableLiveData<MutableList<Task>?>()
+//    var tasks = MutableLiveData<MutableList<Task>?>()
 
-    fun updateTaskList(task: Task) {
+    fun addTaskItem(task: Task) {
         taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
         }
@@ -34,6 +34,8 @@ class TaskViewModel : ViewModel()
                 copy.name = name
                 copy.desc = desc
                 copy.dataFields = dataFields
+
+                Log.d("TASK STUFF", dataFields.size.toString())
 
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy
@@ -57,38 +59,38 @@ class TaskViewModel : ViewModel()
         }
     }
 
-    // Adds a new task to the list
-    fun addTask(newTask: Task) {
-        val list = tasks.value
-        list!!.add(newTask)
-        tasks.postValue(list)
-    }
-
-    // Updates a task
-    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?, dataFields: MutableLiveData<MutableList<DataField>>) {
-        val list = tasks.value
-        val task = list!!.find {it.id == id}!!
-        task.name = name
-        task.desc = desc
-        task.startTime = startTime
-        task.endTime = endTime
-        task.date = date
-        tasks.postValue(list)
-    }
-
-    // Marks a task as complete
-    fun setCompleted(task: Task) {
-        val list = tasks.value
-        val currTask = list!!.find {it.id == task.id}!!
-        currTask.isCompleted = !currTask.isCompleted
-        currTask.completedDate = LocalDate.now()
-        tasks.postValue(list)
-    }
-
-    fun expandTask(task: Task) {
-        val list = tasks.value
-        val currTask = list!!.find { it.id == task.id }!!
-        currTask.isExpanded = !currTask.isExpanded
-        tasks.postValue(list)
-    }
+//    // Adds a new task to the list
+//    fun addTask(newTask: Task) {
+//        val list = tasks.value
+//        list!!.add(newTask)
+//        tasks.postValue(list)
+//    }
+//
+//    // Updates a task
+//    fun updateTask(id: UUID, name: String, desc: String, startTime: LocalTime?, endTime: LocalTime?, date: LocalDate?, dataFields: MutableLiveData<MutableList<DataField>>) {
+//        val list = tasks.value
+//        val task = list!!.find {it.id == id}!!
+//        task.name = name
+//        task.desc = desc
+//        task.startTime = startTime
+//        task.endTime = endTime
+//        task.date = date
+//        tasks.postValue(list)
+//    }
+//
+//    // Marks a task as complete
+//    fun setCompleted(task: Task) {
+//        val list = tasks.value
+//        val currTask = list!!.find {it.id == task.id}!!
+//        currTask.isCompleted = !currTask.isCompleted
+//        currTask.completedDate = LocalDate.now()
+//        tasks.postValue(list)
+//    }
+//
+//    fun expandTask(task: Task) {
+//        val list = tasks.value
+//        val currTask = list!!.find { it.id == task.id }!!
+//        currTask.isExpanded = !currTask.isExpanded
+//        tasks.postValue(list)
+//    }
 }

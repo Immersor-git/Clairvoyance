@@ -3,7 +3,9 @@ package com.clairvoyance.clairvoyance
 import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Paint.Align
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -66,9 +69,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,6 +81,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Date
 
 class ToDoListFragment : Fragment() {
     private lateinit var mainActivity : MainActivity;
@@ -129,7 +135,7 @@ class ToDoListFragment : Fragment() {
             Button(
                 modifier = Modifier
                     .padding(24.dp)
-                    .padding(vertical = 24.dp)
+                    .padding(vertical = 50.dp)
                     .align(Alignment.BottomEnd),
                 onClick = {
                     scope.launch {
@@ -213,7 +219,8 @@ class ToDoListFragment : Fragment() {
                 )
 
                 if (task.endTime != null) {
-                    Text(text = "")
+                    val endTime = task.endTime
+                    Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                 }
             }
         }
@@ -229,10 +236,7 @@ class ToDoListFragment : Fragment() {
         onDismiss: () -> Unit
     ) {
         // Check to see if there is a task object in focus, if not create a blank task as a field template
-        val taskState = task ?: Task("")
-
-        val dataFieldList = remember { mutableStateListOf<DataField>() }
-        dataFieldList.addAll(taskState.dataFields)
+        val taskState = task ?: Task()
 
         // Init states
         var name by remember { mutableStateOf("") }
@@ -241,9 +245,8 @@ class ToDoListFragment : Fragment() {
         var desc by remember { mutableStateOf("") }
         desc = taskState.desc
 
-        var dropDownExpanded by remember { mutableStateOf(false) }
-        val dropDownOptions = resources.getStringArray(R.array.datafields)
-        var selectedOptionText by remember { mutableStateOf(dropDownOptions[0]) }
+        val dataFieldList = remember { mutableStateListOf<DataField>() }
+        dataFieldList.addAll(taskState.dataFields)
 
         if (showBottomSheet) {
             ModalBottomSheet(
@@ -278,77 +281,31 @@ class ToDoListFragment : Fragment() {
 
                     )
                     // Display Data Field List
-                    LazyColumn {
-                        items(dataFieldList) { dataField ->
-                            when(dataField.dataType) {
-                                DataType.TEXT -> Text(dataField.data as String)
-                                DataType.DATE -> TODO()
-                                DataType.NUMBER -> TODO()
-                                DataType.IMAGE -> TODO()
-                                DataType.AUDIO -> TODO()
-                                DataType.EXCEPTION -> TODO()
-                            }
-                        }
-                    }
-                    Row (
-                        modifier = Modifier
-                            .padding(horizontal = 3.dp)
-                            .align(Alignment.CenterHorizontally)
-                    ){
-                        // Add Text Datafield
-                        Button(
-                            onClick = {
-                                val df = DataField(DataType.TEXT, "go")
-                                dataFieldList.add(df)
-                            }
-                        ) {
-                            Text(text = "TXT")
-                        }
-                        // Add Date Datafield
-                        Button(
-                            onClick = {
-                                /*TODO*/
-                            }
-                        ) {
-                            Text(text = "DATE")
-                        }
-                        // Add Number Datafield
-                        Button(
-                            onClick = {
-                                /*TODO*/
-                            }
-                        ) {
-                            Text(text = "NUM")
-                        }
-                        // Add Image Datafield
-                        Button(
-                            onClick = {
-                                /*TODO*/
-                            }
-                        ) {
-                            Text(text = "IMG")
-                        }
-                        // Add Audio Datafield
-                        Button(
-                            onClick = {
-                                /*TODO*/
-                            }
-                        ) {
-                            Text(text = "AUD")
-                        }
-                    }
+                    DataFieldList(
+                        dataFieldList = dataFieldList
+                    )
+                    // Buttons to add data fields
+                    AddDataFieldButtons(
+                        dataFieldList = dataFieldList
+                    )
                     // Save button
                     Button(
                         modifier = Modifier
                             .padding(10.dp)
                             .align(Alignment.CenterHorizontally),
                         onClick = {
+                            // Create a new task if task is null
                             if (task == null) {
-                                taskViewModel.updateTaskList(
-                                    Task(
-                                        name
-                                    )
+                                val newTask = Task(
+                                    name = name,
+                                    desc = desc,
+                                    startTime = null,
+                                    endTime = null,
+                                    date = null,
+                                    dataFields = dataFieldList.toMutableList()
                                 )
+                                taskViewModel.addTaskItem(newTask)
+                            // Else update the existing given task
                             } else {
                                 taskViewModel.updateTaskItem(
                                     task,
@@ -368,6 +325,108 @@ class ToDoListFragment : Fragment() {
                     ) {
                         Text("Save Task")
                     }
+                }
+            }
+        }
+    }
+    
+    @Composable
+    fun DataFieldList(
+        dataFieldList: MutableList<DataField>
+    ) {
+        LazyColumn {
+            items(dataFieldList) { dataField ->
+                when(dataField.dataType) {
+                    DataType.TEXT -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
+                                // Trigger recomposition by replacing data field
+                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                            },
+                            label = { Text("Text") }
+                        )
+                    }
+                    DataType.DATE -> {
+                        TODO()
+                    }
+                    DataType.NUMBER -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
+                                // Only allow digits or decimals
+                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+                                    // Trigger recomposition by replacing data field
+                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            label = { Text("Number") }
+                        )
+                    }
+                    DataType.IMAGE -> {
+                        TODO()
+                    }
+                    DataType.AUDIO -> {
+                        TODO()
+                    }
+                    DataType.EXCEPTION -> {
+                        TODO()
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun AddDataFieldButtons(
+        dataFieldList: MutableList<DataField>
+    ) {
+        Column {
+            Row (
+                modifier = Modifier
+                    .padding(horizontal = 3.dp)
+                    .align(Alignment.CenterHorizontally)
+            ){
+                // Add Text DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.TEXT, "", "")) }
+                ) {
+                    Text(text = "TXT")
+                }
+                // Add Date DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.DATE, LocalDate.now(), "")) }
+                ) {
+                    Text(text = "DATE")
+                }
+                // Add Number DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "")) }
+                ) {
+                    Text(text = "NUM")
+                }
+            }
+            Row (
+                modifier = Modifier
+                    .padding(horizontal = 3.dp)
+                    .align(Alignment.CenterHorizontally)
+            ){
+                // Add Image DataField
+                Button(
+                    onClick = {
+                        /*TODO*/
+                    }
+                ) {
+                    Text(text = "IMG")
+                }
+                // Add Audio DataField
+                Button(
+                    onClick = {
+                        /*TODO*/
+                    }
+                ) {
+                    Text(text = "AUD")
                 }
             }
         }
