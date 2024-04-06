@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding;
+    private lateinit var accountManager: AccountManager
     private var currentTheme : Int = 2
     private var currentTask: Int = 0;
 
@@ -36,6 +37,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             applicationContext,
             getCustomTheme()
         )
+
+        accountManager = AccountManager()
+
         val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
         binding = ActivityMainBinding.inflate(newLayoutInflater)
 
@@ -82,7 +86,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.bottom_todo -> openFragment(ToDoListFragment())
             R.id.bottom_calendar -> openFragment(MonthlyView())
             R.id.nav_home -> openFragment(ToDoListFragment())
-            R.id.nav_account -> openFragment(AccountFragment())
+            R.id.nav_account -> openFragment(if (accountManager.isSignedIn()) AccountFragment() else LoginFragment())
             R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
             R.id.nav_settings-> openFragment(SettingsFragment())
@@ -90,6 +94,14 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun setLoginFragment(registering : Boolean) {
+        if (registering) {
+            openFragment(RegisterFragment())
+        } else {
+            openFragment(LoginFragment())
+        }
     }
 
     private fun openFragment(fragment: Fragment) { //Opens fragment
@@ -156,5 +168,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
     fun openTaskFragment() {
         openFragment(ViewTask())
+    }
+
+    fun getAccountManager() : AccountManager {
+        return accountManager
     }
 }

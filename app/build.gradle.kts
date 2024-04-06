@@ -85,4 +85,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.3")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0")) //Firebase
+    implementation("com.google.firebase:firebase-auth") //Firebase Authentication
 }
