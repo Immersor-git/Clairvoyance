@@ -14,18 +14,19 @@ import java.util.UUID
 
 class TaskViewModel : ViewModel()
 {
-    val taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf<Task>())
+    private val _taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf())
+    val taskList = _taskList.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
     fun addTaskItem(task: Task) {
-        taskList.update {
+        _taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
         }
     }
 
     fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
-        taskList.update {
-            taskList.value.toMutableList().apply {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
                 // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
                 val copy = currTask.copy()
@@ -44,8 +45,8 @@ class TaskViewModel : ViewModel()
     }
 
     fun setComplete(task: Task) {
-        taskList.update {
-            taskList.value.toMutableList().apply {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
                 // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
                 val copy = currTask.copy()
