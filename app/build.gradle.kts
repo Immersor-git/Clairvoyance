@@ -83,4 +83,10 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.3")
+
+    // Vico
+    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.14")
+
+    // YCharts
+    implementation("co.yml:ycharts:2.1.0")
 }
