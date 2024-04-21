@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services") //Firebase
 }
 
 android {
@@ -89,4 +90,7 @@ dependencies {
 
     // YCharts
     implementation("co.yml:ycharts:2.1.0")
+    
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0")) //Firebase
+    implementation("com.google.firebase:firebase-auth") //Firebase Authentication
 }

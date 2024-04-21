@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:textSize="36sp"
-        android:text="Account Page" />
+        android:id = "@+id/txt_signed_in"
+        android:text="Signed in" />
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -19,4 +20,9 @@
         app:tint = "?colorOnPrimary"
         android:layout_gravity="center"/>
 
+    <Button
+        android:id="@+id/btn_SignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out" />
 </FrameLayout>
