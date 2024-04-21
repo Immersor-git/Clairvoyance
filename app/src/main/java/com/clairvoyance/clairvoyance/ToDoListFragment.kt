@@ -86,349 +86,350 @@ class ToDoListFragment(
             }
         }
     }
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ToDoListScreen(
-    openFragment: (fragment: Fragment) -> Unit,
-    taskViewModel: TaskViewModel = viewModel()
-) {
-    val taskList = taskViewModel.taskList.collectAsStateWithLifecycle()
 
-    // Control Task Sheet Bottom Sheet
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
-    var taskFocus by remember { mutableStateOf<Task?>(null) }
-
-    Box{
-        // List of tasks
-        TaskList(
-            taskList = taskList.value,
-            taskViewModel = taskViewModel,
-            updateTaskFocus = { taskFocus = it },
-            openFragment = openFragment,
-            onLongClick = {
-                scope.launch {
-                    showBottomSheet = true
-                    sheetState.expand()
-                }
-            }
-        )
-        // New Task
-        Button(
-            modifier = Modifier
-                .padding(24.dp)
-                .padding(vertical = 50.dp)
-                .align(Alignment.BottomEnd),
-            onClick = {
-                scope.launch {
-                    showBottomSheet = true
-                    taskFocus = null
-                    sheetState.expand()
-                }
-            }
-        ) {
-            Text(text = "New Task")
-        }
-        TaskSheet(
-            task = taskFocus,
-            taskViewModel = taskViewModel,
-            showBottomSheet = showBottomSheet,
-            sheetState = sheetState,
-            onDismiss = {
-                scope.launch { sheetState.hide() }
-                    .invokeOnCompletion { showBottomSheet = false; taskFocus = null }
-            }
-        )
-    }
-}
-
-@Composable
-fun TaskList(
-    taskList: MutableList<Task>,
-    taskViewModel: TaskViewModel,
-    onLongClick: () -> Unit,
-    updateTaskFocus: (task: Task) -> Unit,
-    openFragment: (fragment: Fragment) -> Unit
-) {
-    LazyColumn {
-        items(taskList) { task ->
-            TaskCard(task, taskViewModel, onLongClick, updateTaskFocus, openFragment)
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun TaskCard(
-    task: Task,
-    taskViewModel: TaskViewModel,
-    onLongClick: () ->  Unit,
-    updateTaskFocus: (task: Task) -> Unit,
-    openFragment: (fragment: Fragment) -> Unit
-) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        modifier = Modifier
-            .padding(5.dp)
-            .combinedClickable(
-                onClick = {
-                    // View task
-                    mainActivity.displayTask(task)
-                    //openFragment(GraphViewFragment(task))
-                },
-                onLongClick = {
-                    updateTaskFocus(task)
-                    onLongClick()
-                }
-            )
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun ToDoListScreen(
+        openFragment: (fragment: Fragment) -> Unit,
+        taskViewModel: TaskViewModel = viewModel()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(12.dp) // Outer padding
-                .padding(12.dp), // Inner padding
-        ) {
-            Image(
-                painter = painterResource(id = task.imageResource()),
-                contentDescription = "",
-                modifier = Modifier.clickable {
-                    taskViewModel.setComplete(task)
+        val taskList = taskViewModel.taskList.collectAsStateWithLifecycle()
+
+        // Control Task Sheet Bottom Sheet
+        val sheetState = rememberModalBottomSheetState()
+        val scope = rememberCoroutineScope()
+        var showBottomSheet by remember { mutableStateOf(false) }
+        var taskFocus by remember { mutableStateOf<Task?>(null) }
+
+        Box{
+            // List of tasks
+            TaskList(
+                taskList = taskList.value,
+                taskViewModel = taskViewModel,
+                updateTaskFocus = { taskFocus = it },
+                openFragment = openFragment,
+                onLongClick = {
+                    scope.launch {
+                        showBottomSheet = true
+                        sheetState.expand()
+                    }
                 }
             )
-
-            Text(
-                modifier = Modifier.padding(start = 10.dp),
-                text = task.name,
-                fontSize = 24.sp
-            )
-
-            if (task.endTime != null) {
-                val endTime = task.endTime
-                Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TaskSheet(
-    task: Task?,
-    taskViewModel: TaskViewModel,
-    showBottomSheet: Boolean,
-    sheetState: SheetState,
-    onDismiss: () -> Unit
-) {
-    // Check to see if there is a task object in focus, if not create a blank task as a field template
-    val taskState = task ?: Task()
-
-    // Init states
-    var name by remember { mutableStateOf("") }
-    name = taskState.name
-
-    var desc by remember { mutableStateOf("") }
-    desc = taskState.desc
-
-    val dataFieldList = remember { mutableStateListOf<DataField>() }
-    dataFieldList.addAll(taskState.dataFields)
-
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                // Reset states
-                name = ""
-                desc = ""
-                dataFieldList.clear()
-
-                onDismiss()
-            },
-            sheetState = sheetState,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Column(
+            // New Task
+            Button(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                // Name text field
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = {name = it},
-                    label = { Text("Name") },
-                )
-                // Desc text field
-                OutlinedTextField(
-                    value = desc,
-                    onValueChange = {desc = it},
-                    label = { Text("Desc") }
-
-                )
-                // Display Data Field List
-                DataFieldList(
-                    dataFieldList = dataFieldList
-                )
-                // Buttons to add data fields
-                AddDataFieldButtons(
-                    dataFieldList = dataFieldList
-                )
-                // Save button
-                Button(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .align(Alignment.CenterHorizontally),
-                    onClick = {
-                        // Create a new task if task is null
-                        if (task == null) {
-                            val newTask = Task(
-                                name = name,
-                                desc = desc,
-                                startTime = null,
-                                endTime = null,
-                                date = null,
-                                dataFields = dataFieldList.toMutableList()
-                            )
-                            taskViewModel.addTaskItem(newTask)
-                        // Else update the existing given task
-                        } else {
-                            taskViewModel.updateTaskItem(
-                                task = task,
-                                name = name,
-                                desc = desc,
-                                dataFields = dataFieldList.toMutableList()
-                            )
-                        }
-
-                        // Reset states
-                        name = ""
-                        desc = ""
-                        dataFieldList.clear()
-
-                        onDismiss()
+                    .padding(24.dp)
+                    .padding(vertical = 50.dp)
+                    .align(Alignment.BottomEnd),
+                onClick = {
+                    scope.launch {
+                        showBottomSheet = true
+                        taskFocus = null
+                        sheetState.expand()
                     }
-                ) {
-                    Text("Save Task")
+                }
+            ) {
+                Text(text = "New Task")
+            }
+            TaskSheet(
+                task = taskFocus,
+                taskViewModel = taskViewModel,
+                showBottomSheet = showBottomSheet,
+                sheetState = sheetState,
+                onDismiss = {
+                    scope.launch { sheetState.hide() }
+                        .invokeOnCompletion { showBottomSheet = false; taskFocus = null }
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun TaskList(
+        taskList: MutableList<Task>,
+        taskViewModel: TaskViewModel,
+        onLongClick: () -> Unit,
+        updateTaskFocus: (task: Task) -> Unit,
+        openFragment: (fragment: Fragment) -> Unit
+    ) {
+        LazyColumn {
+            items(taskList) { task ->
+                TaskCard(task, taskViewModel, onLongClick, updateTaskFocus, openFragment)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    fun TaskCard(
+        task: Task,
+        taskViewModel: TaskViewModel,
+        onLongClick: () ->  Unit,
+        updateTaskFocus: (task: Task) -> Unit,
+        openFragment: (fragment: Fragment) -> Unit
+    ) {
+        ElevatedCard(
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            modifier = Modifier
+                .padding(5.dp)
+                .combinedClickable(
+                    onClick = {
+                        // View task
+                        mainActivity.displayTask(task)
+                        //openFragment(GraphViewFragment(task))
+                    },
+                    onLongClick = {
+                        updateTaskFocus(task)
+                        onLongClick()
+                    }
+                )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(12.dp) // Outer padding
+                    .padding(12.dp), // Inner padding
+            ) {
+                Image(
+                    painter = painterResource(id = task.imageResource()),
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                        taskViewModel.setComplete(task)
+                    }
+                )
+
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = task.name,
+                    fontSize = 24.sp
+                )
+
+                if (task.endTime != null) {
+                    val endTime = task.endTime
+                    Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                 }
             }
         }
     }
-}
 
-@Composable
-fun DataFieldList(
-    dataFieldList: MutableList<DataField>
-) {
-    LazyColumn {
-        items(dataFieldList) { dataField ->
-            when(dataField.dataType) {
-                DataType.TEXT -> {
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun TaskSheet(
+        task: Task?,
+        taskViewModel: TaskViewModel,
+        showBottomSheet: Boolean,
+        sheetState: SheetState,
+        onDismiss: () -> Unit
+    ) {
+        // Check to see if there is a task object in focus, if not create a blank task as a field template
+        val taskState = task ?: Task()
+
+        // Init states
+        var name by remember { mutableStateOf("") }
+        name = taskState.name
+
+        var desc by remember { mutableStateOf("") }
+        desc = taskState.desc
+
+        val dataFieldList = remember { mutableStateListOf<DataField>() }
+        dataFieldList.addAll(taskState.dataFields)
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    // Reset states
+                    name = ""
+                    desc = ""
+                    dataFieldList.clear()
+
+                    onDismiss()
+                },
+                sheetState = sheetState,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    // Name text field
                     OutlinedTextField(
-                        value = dataField.data as String,
-                        onValueChange = {
-                            // Trigger recomposition by replacing data field
-                            dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-                        },
-                        label = { Text("Text") }
+                        value = name,
+                        onValueChange = {name = it},
+                        label = { Text("Name") },
                     )
-                }
-                DataType.DATE -> {
+                    // Desc text field
+                    OutlinedTextField(
+                        value = desc,
+                        onValueChange = {desc = it},
+                        label = { Text("Desc") }
+
+                    )
+                    // Display Data Field List
+                    DataFieldList(
+                        dataFieldList = dataFieldList
+                    )
+                    // Buttons to add data fields
+                    AddDataFieldButtons(
+                        dataFieldList = dataFieldList
+                    )
+                    // Save button
                     Button(
-                        onClick = { /*TODO*/ }
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.CenterHorizontally),
+                        onClick = {
+                            // Create a new task if task is null
+                            if (task == null) {
+                                val newTask = Task(
+                                    name = name,
+                                    desc = desc,
+                                    startTime = null,
+                                    endTime = null,
+                                    date = null,
+                                    dataFields = dataFieldList.toMutableList()
+                                )
+                                taskViewModel.addTaskItem(newTask)
+                                // Else update the existing given task
+                            } else {
+                                taskViewModel.updateTaskItem(
+                                    task = task,
+                                    name = name,
+                                    desc = desc,
+                                    dataFields = dataFieldList.toMutableList()
+                                )
+                            }
+
+                            // Reset states
+                            name = ""
+                            desc = ""
+                            dataFieldList.clear()
+
+                            onDismiss()
+                        }
                     ) {
-                        Text(text = (dataField.data as LocalDate).toString() )
+                        Text("Save Task")
                     }
                 }
-                DataType.NUMBER -> {
-                    OutlinedTextField(
-                        value = dataField.data as String,
-                        onValueChange = {
-                            // Only allow digits or decimals
-                            if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+            }
+        }
+    }
+
+    @Composable
+    fun DataFieldList(
+        dataFieldList: MutableList<DataField>
+    ) {
+        LazyColumn {
+            items(dataFieldList) { dataField ->
+                when(dataField.dataType) {
+                    DataType.TEXT -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
                                 // Trigger recomposition by replacing data field
                                 dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        label = { Text("Number") }
-                    )
-                }
-                DataType.IMAGE -> {
-                    TODO()
-                }
-                DataType.AUDIO -> {
-                    TODO()
-                }
-                DataType.EXCEPTION -> {
-                    TODO()
+                            },
+                            label = { Text("Text") }
+                        )
+                    }
+                    DataType.DATE -> {
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = (dataField.data as LocalDate).toString() )
+                        }
+                    }
+                    DataType.NUMBER -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
+                                // Only allow digits or decimals
+                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+                                    // Trigger recomposition by replacing data field
+                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            label = { Text("Number") }
+                        )
+                    }
+                    DataType.IMAGE -> {
+                        TODO()
+                    }
+                    DataType.AUDIO -> {
+                        TODO()
+                    }
+                    DataType.EXCEPTION -> {
+                        TODO()
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-fun AddDataFieldButtons(
-    dataFieldList: MutableList<DataField>
-) {
-    Column {
-        Row (
-            modifier = Modifier
-                .padding(horizontal = 3.dp)
-                .align(Alignment.CenterHorizontally)
-        ){
-            // Add Text DataField
-            Button(
-                onClick = { dataFieldList.add(DataField(DataType.TEXT, "", "")) }
-            ) {
-                Text(text = "TXT")
-            }
-            // Add Date DataField
-            Button(
-                onClick = { dataFieldList.add(DataField(DataType.DATE, LocalDate.now(), "")) }
-            ) {
-                Text(text = "DATE")
-            }
-            // Add Number DataField
-            Button(
-                onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "")) }
-            ) {
-                Text(text = "NUM")
-            }
-        }
-        Row (
-            modifier = Modifier
-                .padding(horizontal = 3.dp)
-                .align(Alignment.CenterHorizontally)
-        ){
-            // Add Image DataField
-            Button(
-                onClick = {
-                    /*TODO*/
+    @Composable
+    fun AddDataFieldButtons(
+        dataFieldList: MutableList<DataField>
+    ) {
+        Column {
+            Row (
+                modifier = Modifier
+                    .padding(horizontal = 3.dp)
+                    .align(Alignment.CenterHorizontally)
+            ){
+                // Add Text DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.TEXT, "", "")) }
+                ) {
+                    Text(text = "TXT")
                 }
-            ) {
-                Text(text = "IMG")
-            }
-            // Add Audio DataField
-            Button(
-                onClick = {
-                    /*TODO*/
+                // Add Date DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.DATE, LocalDate.now(), "")) }
+                ) {
+                    Text(text = "DATE")
                 }
-            ) {
-                Text(text = "AUD")
+                // Add Number DataField
+                Button(
+                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "")) }
+                ) {
+                    Text(text = "NUM")
+                }
+            }
+            Row (
+                modifier = Modifier
+                    .padding(horizontal = 3.dp)
+                    .align(Alignment.CenterHorizontally)
+            ){
+                // Add Image DataField
+                Button(
+                    onClick = {
+                        /*TODO*/
+                    }
+                ) {
+                    Text(text = "IMG")
+                }
+                // Add Audio DataField
+                Button(
+                    onClick = {
+                        /*TODO*/
+                    }
+                ) {
+                    Text(text = "AUD")
+                }
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-
-    }
-//    ToDoListScreen()
+//    @Preview(showBackground = true)
+//    @Composable
+//    fun Preview() {
+//        Surface(modifier = Modifier.fillMaxSize()) {
+//
+//        }
+//        ToDoListScreen()
+//    }
 }

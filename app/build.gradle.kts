@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.3.2")
     implementation("androidx.camera:camera-view:1.3.2")
     implementation("androidx.compose.material:material-icons-extended-android:1.6.4")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
