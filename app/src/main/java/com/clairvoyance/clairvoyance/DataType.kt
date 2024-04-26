@@ -1,5 +1,5 @@
 package com.clairvoyance.clairvoyance
 
 enum class DataType {
-    TEXT, DATE, NUMBER, IMAGE, AUDIO, EXCEPTION
+    TEXT, NUMBER, CHECKBOX, DATE, IMAGE, AUDIO, EXCEPTION
 }

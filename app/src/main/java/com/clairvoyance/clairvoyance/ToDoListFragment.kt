@@ -1,6 +1,5 @@
 package com.clairvoyance.clairvoyance
 
-import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Paint.Align
 import android.os.Bundle
@@ -14,12 +13,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -69,6 +69,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -287,6 +292,7 @@ class ToDoListFragment : Fragment() {
                                 DataType.IMAGE -> TODO()
                                 DataType.AUDIO -> TODO()
                                 DataType.EXCEPTION -> TODO()
+                                DataType.CHECKBOX -> TODO()
                             }
                         }
                     }
@@ -377,7 +383,60 @@ class ToDoListFragment : Fragment() {
     @Composable
     fun Preview() {
         Surface(modifier = Modifier.fillMaxSize()) {
-
+            @Composable
+    fun DataFieldList(
+        dataFieldList: MutableList<DataField>
+    ) {
+        LazyColumn {
+            items(dataFieldList) { dataField ->
+                when(dataField.dataType) {
+                    DataType.TEXT -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
+                                // Trigger recomposition by replacing data field
+                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                            },
+                            label = { Text("Text") }
+                        )
+                    }
+                    DataType.DATE -> {
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = (dataField.data as LocalDate).toString() )
+                        }
+                    }
+                    DataType.NUMBER -> {
+                        OutlinedTextField(
+                            value = dataField.data as String,
+                            onValueChange = {
+                                // Only allow digits or decimals
+                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+                                    // Trigger recomposition by replacing data field
+                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            label = { Text("Number") }
+                        )
+                    }
+                    DataType.CHECKBOX -> {
+                        TODO();
+                    }
+                    DataType.IMAGE -> {
+                        TODO()
+                    }
+                    DataType.AUDIO -> {
+                        TODO()
+                    }
+                    DataType.EXCEPTION -> {
+                        TODO()
+                    }
+                }
+            }
+        }
+    }
         }
         MainContent()
     }

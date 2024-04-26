@@ -2,7 +2,6 @@ package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -36,5 +35,19 @@ data class Task (
             context,
             if (this.isCompleted) androidx.appcompat.R.color.material_grey_100 else R.color.white
         )
+    }
+
+    //fun getDataFields(): List<DataField> {
+
+    //}
+
+    fun verifyComplete(): Boolean {
+        var complete = true
+        for (s in dataFields) {
+            if (s.dataType == DataType.NUMBER || s.dataType == DataType.CHECKBOX) {
+                complete = false;
+            }
+        }
+        return false;
     }
 }
