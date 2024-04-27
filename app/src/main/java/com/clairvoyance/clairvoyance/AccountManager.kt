@@ -3,7 +3,7 @@ package com.clairvoyance.clairvoyance
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 
-class AccountManager {
+class AccountManager(private val appViewModel: AppViewModel) {
     private var signedIn = false
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var authCredential : AuthCredential
@@ -30,9 +30,15 @@ class AccountManager {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 signedIn = true
+                val dbManager : DatabaseManager = appViewModel.databaseManager
+                dbManager.writeDoc("Users/"+email.hashCode(),email);
             }
             callback(it.isSuccessful)
         }
+    }
+
+    fun getDatabaseReference() : String {
+        return "Users/"+email.hashCode();
     }
 
     fun getUserName() : String {

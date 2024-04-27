@@ -2,7 +2,6 @@ package com.clairvoyance.clairvoyance
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -28,6 +27,18 @@ data class Task (
 
     // Empty constructor
     constructor() : this("", "", null, null, null, null)
+
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "name" to name,
+            "desc" to desc,
+            "startTime" to startTime,
+            "endTime" to endTime,
+            "date" to date,
+            "completedDate" to completedDate,
+            "dataFields" to dataFields
+        )
+    }
 
     fun imageResource(): Int = if (this.isCompleted) R.drawable.checkmark_complete else R.drawable.checkmark_uncomplete
     fun imageColor(context: Context): Int {

@@ -2,17 +2,12 @@ package com.clairvoyance.clairvoyance
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.UUID
 
-class TaskViewModel : ViewModel()
+class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
 {
     private val _taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf())
     val taskList = _taskList.asStateFlow()
@@ -22,6 +17,7 @@ class TaskViewModel : ViewModel()
         _taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
         }
+        saveTaskToDatabase(task)
     }
 
     fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
@@ -37,11 +33,17 @@ class TaskViewModel : ViewModel()
                 copy.dataFields = dataFields
 
                 Log.d("TASK STUFF", dataFields.size.toString())
-
+                saveTaskToDatabase(copy)
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy
             }
         }
+    }
+
+    fun saveTaskToDatabase(task : Task) {
+        val account = appViewModel.accountManager.getDatabaseReference();
+        val db = appViewModel.databaseManager
+        db.writeDoc(account+"/Tasks/${task.name}",task);
     }
 
     fun setComplete(task: Task) {
@@ -58,6 +60,7 @@ class TaskViewModel : ViewModel()
                 this[indexOf(currTask)] = copy
             }
         }
+        saveTaskToDatabase(task)
     }
 
 //    // Adds a new task to the list

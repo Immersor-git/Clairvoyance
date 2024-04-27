@@ -23,6 +23,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private lateinit var fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding;
     private lateinit var accountManager: AccountManager
+    private lateinit var appViewModel : AppViewModel;
     private var currentTheme : Int = 2
     private var currentTask: Int = 0;
 
@@ -41,7 +42,11 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             getCustomTheme()
         )
 
-        accountManager = AccountManager()
+        appViewModel = AppViewModel();
+        accountManager = appViewModel.accountManager
+        Log.d("ViewModel Test","MainActivity: " + appViewModel.getTestString());
+        appViewModel.setTestString("Test String Updated");
+        Log.d("ViewModel Test","MainActivity 2: " + appViewModel.getTestString());
 
         val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
         binding = ActivityMainBinding.inflate(newLayoutInflater)
@@ -84,6 +89,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
     }
 
+    fun getAppViewModel() : AppViewModel {
+        return appViewModel;
+    }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return fragmentNavigation(item.itemId)
     }
