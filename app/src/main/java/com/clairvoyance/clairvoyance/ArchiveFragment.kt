@@ -1,15 +1,9 @@
 package com.clairvoyance.clairvoyance
 
-import android.content.Context
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.view.ContextThemeWrapper
 
 class ArchiveFragment : Fragment() {
-    lateinit var mainActivity : MainActivity;
+    /*lateinit var mainActivity : MainActivity;
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
         val inflater = super.onGetLayoutInflater(savedInstanceState)
         mainActivity = getActivity() as MainActivity
@@ -26,4 +20,6 @@ class ArchiveFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_archive, container, false)
     }
+    ?
+     */
 }
