@@ -42,18 +42,36 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         }
     }
 
-    fun saveTask(task : Task) {
+    fun saveTask(task : Task, callback : ()->Unit = {}) {
         val user = accountManager.user
         if (user.userID != "X") {
             database.collection("Users").document(user.userID).collection("Tasks").document(task.id).set(task)
         }
     }
+    fun archiveTask(task : Task, callback : ()->Unit = {}) {
+        val user = accountManager.user
+        if (user.userID != "X") {
+            database.collection("Users").document(user.userID).collection("Tasks").document(task.id).delete()
+            database.collection("Users").document(user.userID).collection("TaskArchive").document(task.id).set(task)
+        }
+    }
 
+    fun getTaskArchive(callback : (List<Task>) -> Unit) {
+        val user = accountManager.user
+        database.collection("Users").document(user.userID).collection("TaskArchive").get().addOnSuccessListener { documents ->
+            val archiveList = ArrayList<Task>()
+            for (s in documents) {
+                archiveList.add(s.toObject<Task>())
+            }
+            callback(archiveList)
+        }
+    }
     fun writeUserData(user : UserAccount) {
         database.collection("Users").document(user.userID).set(user)
     }
 
-    fun getTasks(user : UserAccount, callback : (List<Task>) -> Unit) {
+    fun getTasks(callback : (List<Task>) -> Unit) {
+        val user = accountManager.user
         database.collection("Users").document(user.userID).collection("Tasks").get().addOnSuccessListener { documents ->
             val taskList = ArrayList<Task>()
             for (s in documents) {

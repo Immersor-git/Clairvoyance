@@ -21,7 +21,8 @@ data class Task (
     val id: String = UUID.randomUUID().toString(),
     var children: MutableList<Task> = mutableListOf(),
     var dataFields: MutableList<DataField> = mutableListOf(),
-    var tags: MutableList<String> = mutableListOf()
+    var tags: MutableList<String> = mutableListOf(),
+    var templateName : String = ""
 ) {
     // Initialized values
 

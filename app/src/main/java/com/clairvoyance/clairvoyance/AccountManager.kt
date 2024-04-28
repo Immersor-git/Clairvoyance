@@ -37,16 +37,16 @@ class AccountManager(private val appViewModel: AppViewModel) {
                 signedIn = true
                 databaseManager.loadUser(it.result.user!!.uid) { useraccount ->
                     if (useraccount == null) {
-                        user = UserAccount(it.result.user!!.uid,email, password)
+                        user = UserAccount(it.result.user!!.uid, email, password)
                         databaseManager.writeUserData(user)
                     } else
                         user = useraccount
                         appViewModel.taskViewModel.getUserTasks()
-                    if (user.userID == "X") {
-                        safeInitializeAccount(it.result.user!!.uid, email, password)
+                        if (user.userID == "X") {
+                            safeInitializeAccount(it.result.user!!.uid, email, password)
+                        }
                     }
                 }
-            }
             callback(it.isSuccessful)
         }
     }

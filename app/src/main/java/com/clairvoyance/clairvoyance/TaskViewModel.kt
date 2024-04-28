@@ -11,14 +11,18 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
 {
     private val _taskList: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf())
     val taskList = _taskList.asStateFlow()
+
+    private val _taskArchive: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf())
+    val taskArchive = _taskArchive.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
     fun getUserTasks() {
         val accountManager = appViewModel.accountManager
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
-            databaseManager.getTasks(accountManager.user) { userTaskList ->
+            databaseManager.getTasks() { userTaskList ->
                 _taskList.update {
+                    taskList.value.toMutableList().clear()
                     taskList.value.toMutableList().apply {
                         for (t in userTaskList) {
                             this.add(t)
@@ -29,11 +33,46 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
+    fun getArchivedTasks() {
+        val accountManager = appViewModel.accountManager
+        val databaseManager = appViewModel.databaseManager
+        if (accountManager.user.userID != "X") {
+            databaseManager.getTaskArchive() { userTaskList ->
+                _taskArchive.update {
+                    taskArchive.value.toMutableList().clear()
+                    taskArchive.value.toMutableList().apply {
+                        for (t in userTaskList) {
+                            this.add(t)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun archiveTask(task : Task) {
+        val accountManager = appViewModel.accountManager
+        val databaseManager = appViewModel.databaseManager
+        databaseManager.archiveTask(task) {
+            getUserTasks()
+            getArchivedTasks()
+        }
+        _taskList.update {
+            taskList.value.toMutableList().apply { this.remove(task) }
+        }
+    }
+
     fun addTaskItem(task: Task) {
         _taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
         }
         saveTaskToDatabase(task)
+    }
+
+    fun archiveTaskItem(task: Task) {
+        val accountManager = appViewModel.accountManager
+        val databaseManager = appViewModel.databaseManager
+        databaseManager.archiveTask(task)
     }
 
     fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
@@ -75,7 +114,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 this[indexOf(currTask)] = copy
             }
         }
-        saveTaskToDatabase(task)
+        archiveTask(task)
     }
 
 //    // Adds a new task to the list
