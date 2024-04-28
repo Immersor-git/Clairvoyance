@@ -95,6 +95,14 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
+    fun deleteTaskItem(task:Task) {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
+                this.remove(task)
+            }
+        }
+    }
+
     fun saveTaskToDatabase(task : Task) {
         val db = appViewModel.databaseManager
         db.saveTask(task);
