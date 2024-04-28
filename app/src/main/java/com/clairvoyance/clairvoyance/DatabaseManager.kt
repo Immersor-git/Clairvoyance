@@ -48,6 +48,22 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
             database.collection("Users").document(user.userID).collection("Tasks").document(task.id).set(task)
         }
     }
+    fun saveTemplate(task : TaskTemplate, callback : ()->Unit = {}) {
+        val user = accountManager.user
+        if (user.userID != "X") {
+            database.collection("Users").document(user.userID).collection("Templates").document(task.id).set(task)
+        }
+    }
+    fun getTemplates(callback : (List<TaskTemplate>) -> Unit) {
+        val user = accountManager.user
+        database.collection("Users").document(user.userID).collection("Templates").get().addOnSuccessListener { documents ->
+            val tempList = ArrayList<TaskTemplate>()
+            for (s in documents) {
+                tempList.add(s.toObject<TaskTemplate>())
+            }
+            callback(tempList)
+        }
+    }
     fun archiveTask(task : Task, callback : ()->Unit = {}) {
         val user = accountManager.user
         if (user.userID != "X") {

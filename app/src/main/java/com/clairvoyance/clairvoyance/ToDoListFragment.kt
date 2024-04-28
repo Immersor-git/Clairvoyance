@@ -211,7 +211,7 @@ class ToDoListFragment(
                 )
 
                 if (task.endTime != null) {
-                    val endTime = task.endTime
+                    val endTime = task.Time(task.endTime!!)
                     Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                 }
 
@@ -246,11 +246,11 @@ class ToDoListFragment(
         var desc by remember { mutableStateOf("") }
         desc = taskState.desc
 
-        var startTime by remember { mutableStateOf(LocalTime.now()) }
-        startTime = taskState.startTime
+        var startTime by remember { mutableStateOf(LocalTime.now().toString()) }
+        startTime = taskState.startTime.orEmpty()
 
-        var endTime by remember { mutableStateOf(LocalTime.now()) }
-        endTime = taskState.endTime
+        var endTime by remember { mutableStateOf(LocalTime.now().toString()) }
+        endTime = taskState.endTime.orEmpty()
 
         val dataFieldList = remember { mutableStateListOf<DataField>() }
         dataFieldList.addAll(taskState.dataFields)
@@ -303,7 +303,7 @@ class ToDoListFragment(
                             isStartTime = true
                         }
                     ) {
-                        Text(text = if (startTime == null) "Start Time" else (startTime).toString() )
+                        Text(text = if (startTime == "") "Start Time" else (startTime) )
                     }
                     // End time button
                     Button(
@@ -313,7 +313,7 @@ class ToDoListFragment(
                             isStartTime = false
                         }
                     ){
-                        Text(text = if (endTime == null) "End Time" else (endTime).toString() )
+                        Text(text = if (endTime == "") "End Time" else (endTime) )
                     }
                     // Display Data Field List
                     DataFieldList(
@@ -374,7 +374,7 @@ class ToDoListFragment(
 
                             val time = LocalTime.of(timePickerState.hour, timePickerState.minute)
                             Log.d("TIME EVENT", isStartTime.toString())
-                            if (isStartTime) startTime = time else endTime = time
+                            if (isStartTime) startTime = time.toString() else endTime = time.toString()
                             Log.d("TIME EVENT", startTime.toString() + " " + endTime.toString())
                         }
                     ) { Text("OK") }

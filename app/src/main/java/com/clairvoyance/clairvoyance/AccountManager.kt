@@ -42,11 +42,13 @@ class AccountManager(private val appViewModel: AppViewModel) {
                     } else
                         user = useraccount
                         appViewModel.taskViewModel.getUserTasks()
+                        appViewModel.taskViewModel.getTemplates()
+                        appViewModel.taskViewModel.getArchivedTasks()
                         if (user.userID == "X") {
                             safeInitializeAccount(it.result.user!!.uid, email, password)
                         }
                     }
-                }
+            }
             callback(it.isSuccessful)
         }
     }

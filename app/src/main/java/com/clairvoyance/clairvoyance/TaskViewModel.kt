@@ -14,9 +14,12 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
 
     private val _taskArchive: MutableStateFlow<MutableList<Task>> = MutableStateFlow(mutableStateListOf())
     val taskArchive = _taskArchive.asStateFlow()
+
+    private val _templates: MutableStateFlow<MutableList<TaskTemplate>> = MutableStateFlow(mutableStateListOf())
+    val templates = _templates.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
-    fun getUserTasks() {
+    fun getUserTasks() { //Pulls the tasks for the current user from the database and populates the taskList with them. Clears the list before pulling
         val accountManager = appViewModel.accountManager
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
@@ -33,7 +36,24 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
-    fun getArchivedTasks() {
+    fun getTemplates() { //Pulls all templates from the database
+        val accountManager = appViewModel.accountManager
+        val databaseManager = appViewModel.databaseManager
+        if (accountManager.user.userID != "X") {
+            databaseManager.getTemplates() { templateList ->
+                _templates.update {
+                    templates.value.toMutableList().clear()
+                    templates.value.toMutableList().apply {
+                        for (t in templateList) {
+                            this.add(t)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getArchivedTasks() { //Pulls all archive tasks from the database
         val accountManager = appViewModel.accountManager
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
@@ -50,7 +70,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
-    fun archiveTask(task : Task) {
+    fun archiveTask(task : Task) { //Archives a task in the database - once the database is updated, it re-pulls all user tasks and archived tasks (sucks ass for efficiency but it works)
         val accountManager = appViewModel.accountManager
         val databaseManager = appViewModel.databaseManager
         databaseManager.archiveTask(task) {
@@ -67,12 +87,6 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
             taskList.value.toMutableList().apply { this.add(task) }
         }
         saveTaskToDatabase(task)
-    }
-
-    fun archiveTaskItem(task: Task) {
-        val accountManager = appViewModel.accountManager
-        val databaseManager = appViewModel.databaseManager
-        databaseManager.archiveTask(task)
     }
 
     fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
@@ -101,11 +115,17 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 this.remove(task)
             }
         }
+        archiveTask(task)
     }
 
-    fun saveTaskToDatabase(task : Task) {
+    fun saveTaskToDatabase(task : Task) { //Saves a task to the database - does not update local MutableList
         val db = appViewModel.databaseManager
         db.saveTask(task);
+    }
+
+    fun saveTemplateToDatabase(taskTemplate: TaskTemplate) { //Saves a template to the database - does not update local MutableList
+        val db = appViewModel.databaseManager
+        db.saveTemplate(taskTemplate);
     }
 
     fun setComplete(task: Task) {
@@ -122,7 +142,17 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 this[indexOf(currTask)] = copy
             }
         }
-        archiveTask(task)
+        saveTaskToDatabase(task)
+    }
+
+    fun taskToTemplate(task : Task,templateName : String) : TaskTemplate { //Converts a task to a TaskTemplate
+        val temp = TaskTemplate(templateName,task.dataFields.toMutableList())
+        return temp
+    }
+
+    fun applyTemplate(task : Task, template : TaskTemplate) { //Applies a TaskTemplate to a task
+        task.dataFields = template.dataFields.toMutableList()
+        saveTaskToDatabase(task)
     }
 
 //    // Adds a new task to the list

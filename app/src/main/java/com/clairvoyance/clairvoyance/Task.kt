@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 data class Task (
     // Constructor items
     var name: String,
     var desc: String,
-    var startTime: LocalTime?,
-    var endTime: LocalTime?,
+    var startTime: String?, //LocalTime?,
+    var endTime: String?, //LocalTime?,
     var date: LocalDate?,
 
     // Initialized values
@@ -22,7 +23,7 @@ data class Task (
     var children: MutableList<Task> = mutableListOf(),
     var dataFields: MutableList<DataField> = mutableListOf(),
     var tags: MutableList<String> = mutableListOf(),
-    var templateName : String = ""
+    var templateName : String = "",
 ) {
     // Initialized values
 
@@ -54,5 +55,13 @@ data class Task (
             context,
             if (this.isCompleted) androidx.appcompat.R.color.material_grey_100 else R.color.white
         )
+    }
+
+    fun Time(time : String) : LocalTime {
+        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME)
+    }
+
+    fun Date(date : String) : LocalDate {
+        return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE)
     }
 }
