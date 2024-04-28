@@ -19,6 +19,69 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     val templates = _templates.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
+    fun addTaskItem(task: Task) {
+        _taskList.update {
+            taskList.value.toMutableList().apply { this.add(task) }
+        }
+        saveTaskToDatabase(task)
+    }
+
+    fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
+                // Create copy of task item
+                val currTask = this.find { it.id == task.id }!!
+                val copy = currTask.copy()
+
+                // Edit fields
+                copy.name = name
+                copy.desc = desc
+                copy.dataFields = dataFields
+
+                Log.d("TASK STUFF", dataFields.size.toString())
+                saveTaskToDatabase(copy)
+                // Replace task with updated copy to trigger recomposition
+                this[indexOf(currTask)] = copy
+            }
+        }
+    }
+
+    fun deleteTaskItem(task:Task) {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
+                this.remove(task)
+            }
+        }
+        archiveTask(task)
+    }
+
+    fun setComplete(task: Task) {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
+                // Create copy of task item
+                val currTask = this.find { it.id == task.id }!!
+                val copy = currTask.copy()
+
+                // Edit fields
+                copy.isCompleted = !currTask.isCompleted
+
+                // Replace task with updated copy to trigger recomposition
+                this[indexOf(currTask)] = copy
+            }
+        }
+        saveTaskToDatabase(task)
+    }
+
+    fun saveTaskToDatabase(task : Task) { //Saves a task to the database - does not update local MutableList
+        val db = appViewModel.databaseManager
+        db.saveTask(task);
+    }
+
+    fun saveTemplateToDatabase(taskTemplate: TaskTemplate) { //Saves a template to the database - does not update local MutableList
+        val db = appViewModel.databaseManager
+        db.saveTemplate(taskTemplate);
+    }
+
     fun getUserTasks() { //Pulls the tasks for the current user from the database and populates the taskList with them. Clears the list before pulling
         val accountManager = appViewModel.accountManager
         val databaseManager = appViewModel.databaseManager
@@ -82,68 +145,6 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
-    fun addTaskItem(task: Task) {
-        _taskList.update {
-            taskList.value.toMutableList().apply { this.add(task) }
-        }
-        saveTaskToDatabase(task)
-    }
-
-    fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
-        _taskList.update {
-            _taskList.value.toMutableList().apply {
-                // Create copy of task item
-                val currTask = this.find { it.id == task.id }!!
-                val copy = currTask.copy()
-
-                // Edit fields
-                copy.name = name
-                copy.desc = desc
-                copy.dataFields = dataFields
-
-                Log.d("TASK STUFF", dataFields.size.toString())
-                saveTaskToDatabase(copy)
-                // Replace task with updated copy to trigger recomposition
-                this[indexOf(currTask)] = copy
-            }
-        }
-    }
-
-    fun deleteTaskItem(task:Task) {
-        _taskList.update {
-            _taskList.value.toMutableList().apply {
-                this.remove(task)
-            }
-        }
-        archiveTask(task)
-    }
-
-    fun saveTaskToDatabase(task : Task) { //Saves a task to the database - does not update local MutableList
-        val db = appViewModel.databaseManager
-        db.saveTask(task);
-    }
-
-    fun saveTemplateToDatabase(taskTemplate: TaskTemplate) { //Saves a template to the database - does not update local MutableList
-        val db = appViewModel.databaseManager
-        db.saveTemplate(taskTemplate);
-    }
-
-    fun setComplete(task: Task) {
-        _taskList.update {
-            _taskList.value.toMutableList().apply {
-                // Create copy of task item
-                val currTask = this.find { it.id == task.id }!!
-                val copy = currTask.copy()
-
-                // Edit fields
-                copy.isCompleted = !currTask.isCompleted
-
-                // Replace task with updated copy to trigger recomposition
-                this[indexOf(currTask)] = copy
-            }
-        }
-        saveTaskToDatabase(task)
-    }
 
     fun taskToTemplate(task : Task,templateName : String) : TaskTemplate { //Converts a task to a TaskTemplate
         val temp = TaskTemplate(templateName,task.dataFields.toMutableList())

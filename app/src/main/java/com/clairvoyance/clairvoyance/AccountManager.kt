@@ -31,7 +31,7 @@ class AccountManager(private val appViewModel: AppViewModel) {
         databaseManager.writeUserData(tempUser);
     }
 
-    fun loginAccount(email : String, password : String, callback: (Boolean) -> Unit) {
+    fun loginAccount(email: String, password: String, callback: (Boolean) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 signedIn = true
@@ -39,7 +39,7 @@ class AccountManager(private val appViewModel: AppViewModel) {
                     if (useraccount == null) {
                         user = UserAccount(it.result.user!!.uid, email, password)
                         databaseManager.writeUserData(user)
-                    } else
+                    } else {
                         user = useraccount
                         appViewModel.taskViewModel.getUserTasks()
                         appViewModel.taskViewModel.getTemplates()
@@ -48,6 +48,7 @@ class AccountManager(private val appViewModel: AppViewModel) {
                             safeInitializeAccount(it.result.user!!.uid, email, password)
                         }
                     }
+                }
             }
             callback(it.isSuccessful)
         }
