@@ -214,6 +214,15 @@ class ToDoListFragment(
                     val endTime = task.endTime
                     Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                 }
+
+                Image(
+                    painter = painterResource(id = R.drawable.delete),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clickable {
+                            taskViewModel.deleteTaskItem(task)
+                        }
+                )
             }
         }
     }
