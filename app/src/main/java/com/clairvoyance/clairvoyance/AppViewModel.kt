@@ -1,8 +1,6 @@
 package com.clairvoyance.clairvoyance
 
-import androidx.lifecycle.ViewModel
-
-class AppViewModel : ViewModel() {
+class AppViewModel {
     var accountManager : AccountManager;
     var taskViewModel : TaskViewModel;
     var databaseManager : DatabaseManager;
@@ -11,6 +9,7 @@ class AppViewModel : ViewModel() {
         accountManager = AccountManager(this)
         taskViewModel = TaskViewModel(this)
         databaseManager = DatabaseManager(this)
+        accountManager.appViewModelLoaded()
     }
 
     fun setTestString (s : String) {

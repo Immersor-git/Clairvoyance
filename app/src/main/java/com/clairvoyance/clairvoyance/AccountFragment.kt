@@ -37,7 +37,7 @@ class AccountFragment : Fragment() {
         }
 
         val signedName = view.findViewById<TextView>(R.id.txt_signed_in)
-        signedName.setText("Signed in as: "+accountManager.getUserName())
+        signedName.setText("Signed in as: "+accountManager.user.toString())
         return view
     }
 }

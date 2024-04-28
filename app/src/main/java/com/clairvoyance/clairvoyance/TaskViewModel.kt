@@ -13,6 +13,22 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     val taskList = _taskList.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
+    fun getUserTasks() {
+        val accountManager = appViewModel.accountManager
+        val databaseManager = appViewModel.databaseManager
+        if (accountManager.user.userID != "X") {
+            databaseManager.getTasks(accountManager.user) { userTaskList ->
+                _taskList.update {
+                    taskList.value.toMutableList().apply {
+                        for (t in userTaskList) {
+                            this.add(t)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     fun addTaskItem(task: Task) {
         _taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
@@ -41,9 +57,8 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     }
 
     fun saveTaskToDatabase(task : Task) {
-        val account = appViewModel.accountManager.getDatabaseReference();
         val db = appViewModel.databaseManager
-        db.writeDoc(account+"/Tasks/${task.name}",task);
+        db.saveTask(task);
     }
 
     fun setComplete(task: Task) {

@@ -43,8 +43,8 @@ class RegisterFragment : Fragment() {
 
             if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                 if (password == confirmPassword) {
-                    accountManager.setCredentials(email, password)
-                    accountManager.registerAccount { successful ->
+                    //accountManager.setCredentials(email, password)
+                    accountManager.registerAccount(email, password) { successful ->
                         if (successful) {
                             mainActivity.fragmentNavigation(R.id.nav_account)
                         } else {

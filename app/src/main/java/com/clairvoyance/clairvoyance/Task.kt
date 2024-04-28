@@ -18,7 +18,7 @@ data class Task (
     var completedDate: LocalDate? = null,
     var isExpanded: Boolean = false,
     var isCompleted: Boolean = false,
-    val id: UUID = UUID.randomUUID(),
+    val id: String = UUID.randomUUID().toString(),
     var children: MutableList<Task> = mutableListOf(),
     var dataFields: MutableList<DataField> = mutableListOf(),
     var tags: MutableList<String> = mutableListOf()

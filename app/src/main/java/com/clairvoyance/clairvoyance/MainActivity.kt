@@ -36,13 +36,14 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return inflater.cloneInContext(contextThemeWrapper)
         //return super.getLayoutInflater()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
             applicationContext,
             getCustomTheme()
         )
 
-        appViewModel = AppViewModel();
+        appViewModel = AppViewModel()
         accountManager = appViewModel.accountManager
         Log.d("ViewModel Test","MainActivity: " + appViewModel.getTestString());
         appViewModel.setTestString("Test String Updated");

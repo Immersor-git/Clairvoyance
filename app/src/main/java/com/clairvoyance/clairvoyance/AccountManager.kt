@@ -7,44 +7,61 @@ class AccountManager(private val appViewModel: AppViewModel) {
     private var signedIn = false
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var authCredential : AuthCredential
+    var user : UserAccount
+    private lateinit var databaseManager: DatabaseManager
 
-    private var email : String = ""
-    private var password : String = ""
-
-
-
-    fun setCredentials(email : String, password : String) {
-        this.email = email
-        this.password = password
+    init {
+        databaseManager = appViewModel.databaseManager
+        user = UserAccount()
     }
-    fun loginAccount(callback: (Boolean) -> Unit) {
+
+    fun appViewModelLoaded() {
+        databaseManager = appViewModel.databaseManager
+    }
+    fun loadAccount() {
+        databaseManager.loadUser(firebaseAuth.uid!!) {
+            if (it != null) {
+                user = it
+            }
+        }
+    }
+
+    fun safeInitializeAccount(userID : String, email : String, password : String) {
+        val tempUser : UserAccount = UserAccount(userID, email, password)
+        databaseManager.writeUserData(tempUser);
+    }
+
+    fun loginAccount(email : String, password : String, callback: (Boolean) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 signedIn = true
+                databaseManager.loadUser(it.result.user!!.uid) { useraccount ->
+                    if (useraccount == null) {
+                        user = UserAccount(it.result.user!!.uid,email, password)
+                        databaseManager.writeUserData(user)
+                    } else
+                        user = useraccount
+                        appViewModel.taskViewModel.getUserTasks()
+                    if (user.userID == "X") {
+                        safeInitializeAccount(it.result.user!!.uid, email, password)
+                    }
+                }
             }
             callback(it.isSuccessful)
         }
     }
 
-    fun registerAccount(callback: (Boolean) -> Unit) {
+    fun registerAccount(email : String, password : String, callback: (Boolean) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 signedIn = true
                 val dbManager : DatabaseManager = appViewModel.databaseManager
-                dbManager.writeDoc("Users/"+email.hashCode(),email);
+                user = UserAccount(it.result.user!!.uid,email, password)
+                dbManager.writeUserData(user)
             }
             callback(it.isSuccessful)
         }
     }
-
-    fun getDatabaseReference() : String {
-        return "Users/"+email.hashCode();
-    }
-
-    fun getUserName() : String {
-        return firebaseAuth.currentUser?.email.orEmpty();
-    }
-
     fun signOut() {
         signedIn = false
         firebaseAuth.signOut()

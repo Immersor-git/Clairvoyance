@@ -41,8 +41,7 @@ class LoginFragment : Fragment() {
             val password = view.findViewById<TextInputEditText>(R.id.password).text.toString();
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                accountManager.setCredentials(email, password)
-                accountManager.loginAccount { successful ->
+                accountManager.loginAccount(email, password) { successful ->
                     if (successful) {
                         mainActivity.fragmentNavigation(R.id.nav_account)
                     } else {

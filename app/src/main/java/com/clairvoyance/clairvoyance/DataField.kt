@@ -5,7 +5,7 @@ data class DataField (
     val dataType: DataType,
     var data: Any?,
     val tag: String,
-    var id: UUID = UUID.randomUUID(),
+    var id: String = UUID.randomUUID().toString(),
 ) {
-
+    constructor() : this(DataType.EXCEPTION,null,"","")
 }
