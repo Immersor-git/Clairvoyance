@@ -9,6 +9,7 @@ class AccountManager(private val appViewModel: AppViewModel) {
     private lateinit var authCredential : AuthCredential
     var user : UserAccount
     private lateinit var databaseManager: DatabaseManager
+    var deviceUserID : String = ""
 
     init {
         databaseManager = appViewModel.databaseManager
@@ -65,9 +66,17 @@ class AccountManager(private val appViewModel: AppViewModel) {
             callback(it.isSuccessful)
         }
     }
+    fun defaultUser() {
+
+
+    }
     fun signOut() {
         signedIn = false
         firebaseAuth.signOut()
+        user = UserAccount(deviceUserID)
+        appViewModel.taskViewModel.getUserTasks()
+        appViewModel.taskViewModel.getArchivedTasks()
+        appViewModel.taskViewModel.getTemplates()
     }
     fun isSignedIn() : Boolean {
         return signedIn;
