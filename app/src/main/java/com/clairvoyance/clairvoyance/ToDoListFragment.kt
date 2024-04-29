@@ -190,8 +190,8 @@ class ToDoListFragment(
                 .combinedClickable(
                     onClick = {
                         // View task
-                        mainActivity.displayTask(task)
-                        //openFragment(GraphViewFragment(task))
+                        //mainActivity.displayTask(task)
+                        openFragment(GraphViewFragment(task))
                     },
                     onLongClick = {
                         updateTaskFocus(task)
@@ -687,7 +687,9 @@ class ToDoListFragment(
         val list = templates.value
 
         if (list.size == 0) {
+            val emptyTemplate = TaskTemplate(name = "Empty Task")
             taskViewModel.addTaskTemplate(TaskTemplate(name = "Empty Task"))
+            list.add(emptyTemplate)
         }
 
         var selected by remember {mutableStateOf(list[0])}
