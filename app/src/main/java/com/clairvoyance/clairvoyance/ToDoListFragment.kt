@@ -289,98 +289,159 @@ class ToDoListFragment(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .wrapContentHeight()
                         .padding(15.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    // Task template items
-                    Column {
+                    item {
+                        // Task template items
                         LoadTaskTemplate(
                             taskViewModel = taskViewModel,
                             dataFieldList = dataFieldList
                         )
-                    }
-                    // Name text field
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = name,
-                        onValueChange = {name = it},
-                        label = { Text("Name") },
-                    )
-                    // Desc text field
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = desc,
-                        onValueChange = {desc = it},
-                        label = { Text("Desc") }
+                        // Name text field
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = name,
+                            onValueChange = { name = it },
+                            label = { Text("Name") },
+                        )
+                        // Desc text field
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = desc,
+                            onValueChange = { desc = it },
+                            label = { Text("Desc") }
 
-                    )
-                    // Start time button
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            showTimePicker = true
-                            isStartTime = true
+                        )
+                        // Start time button
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                showTimePicker = true
+                                isStartTime = true
+                            }
+                        ) {
+                            Text(text = if (startTime == "") "Start Time" else (startTime))
                         }
-                    ) {
-                        Text(text = if (startTime == "") "Start Time" else (startTime) )
-                    }
-                    // End time button
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            showTimePicker = true
-                            isStartTime = false
+                        // End time button
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                showTimePicker = true
+                                isStartTime = false
+                            }
+                        ) {
+                            Text(text = if (endTime == "") "End Time" else (endTime))
                         }
-                    ){
-                        Text(text = if (endTime == "") "End Time" else (endTime) )
                     }
                     // Display Data Field List
-                    DataFieldList(
-                        dataFieldList = dataFieldList
-                    )
-                    // Buttons to add data fields
-                    AddDataFieldButtons(
-                        dataFieldList = dataFieldList
-                    )
-                    // Save button
-                    FloatingActionButton(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .align(Alignment.CenterHorizontally),
-                        onClick = {
-                            // Create a new task if task is null
-                            if (task == null) {
-                                val newTask = Task(
-                                    name = name,
-                                    desc = desc,
-                                    startTime = null,
-                                    endTime = null,
-                                    date = null,
-                                    dataFields = dataFieldList.toMutableList()
-                                )
-                                taskViewModel.addTaskItem(newTask)
-                                // Else update the existing given task
-                            } else {
-                                taskViewModel.updateTaskItem(
-                                    task = task,
-                                    name = name,
-                                    desc = desc,
-                                    dataFields = dataFieldList.toMutableList()
+                    items(dataFieldList) { dataField ->
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = dataField.tag,
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                            onValueChange = {
+                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
+                            }
+                        )
+
+                        when(dataField.dataType) {
+                            DataType.TEXT -> {
+                                OutlinedTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    value = dataField.data as String,
+                                    onValueChange = {
+                                        // Trigger recomposition by replacing data field
+                                        dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                                    },
+                                    label = { Text("Text") }
                                 )
                             }
-
-                            // Reset states
-                            name = ""
-                            desc = ""
-                            dataFieldList.clear()
-
-                            onDismiss()
+                            DataType.DATE -> {
+                                Button(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onClick = { /*TODO*/ }
+                                ) {
+                                    Text(text = (dataField.data as LocalDate).toString() )
+                                }
+                            }
+                            DataType.NUMBER -> {
+                                OutlinedTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    value = dataField.data as String,
+                                    onValueChange = {
+                                        // Only allow digits or decimals
+                                        if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+                                            // Trigger recomposition by replacing data field
+                                            dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+                                        }
+                                    },
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                                    label = { Text("Number") }
+                                )
+                            }
+                            DataType.IMAGE -> {
+                                TODO()
+                            }
+                            DataType.AUDIO -> {
+                                TODO()
+                            }
+                            DataType.EXCEPTION -> {
+                                TODO()
+                            }
                         }
-                    ) {
-                        Text("Save Task")
+                    }
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // Buttons to add data fields
+                            AddDataFieldButtons(
+                                dataFieldList = dataFieldList
+                            )
+                            // Save button
+                            FloatingActionButton(
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .align(Alignment.CenterHorizontally),
+                                onClick = {
+                                    // Create a new task if task is null
+                                    if (task == null) {
+                                        val newTask = Task(
+                                            name = name,
+                                            desc = desc,
+                                            startTime = null,
+                                            endTime = null,
+                                            date = null,
+                                            dataFields = dataFieldList.toMutableList()
+                                        )
+                                        taskViewModel.addTaskItem(newTask)
+                                        // Else update the existing given task
+                                    } else {
+                                        taskViewModel.updateTaskItem(
+                                            task = task,
+                                            name = name,
+                                            desc = desc,
+                                            dataFields = dataFieldList.toMutableList()
+                                        )
+                                    }
+
+                                    // Reset states
+                                    name = ""
+                                    desc = ""
+                                    dataFieldList.clear()
+
+                                    onDismiss()
+                                }
+                            ) {
+                                Text("Save Task")
+                            }
+                        }
                     }
                 }
             }
@@ -419,12 +480,11 @@ class ToDoListFragment(
     fun DataFieldList(
         dataFieldList: MutableList<DataField>
     ) {
-        LazyColumn(
+        LazyColumn (
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
+        ){
             items(dataFieldList) { dataField ->
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -498,7 +558,9 @@ class ToDoListFragment(
                 text = "ADD DATAFIELDS..."
             )
             HorizontalDivider(
-                modifier = Modifier.fillMaxWidth().padding(5.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
             )
             Row (
                 modifier = Modifier
@@ -605,7 +667,7 @@ class ToDoListFragment(
         val templates = taskViewModel.templates.collectAsStateWithLifecycle()
         val list = templates.value
 
-        var selected by remember {mutableStateOf(TaskTemplate())}
+        var selected by remember {mutableStateOf(TaskTemplate(name = "Empty Task"))}
 
         var isExpanded by remember {mutableStateOf(false)}
 
@@ -651,12 +713,20 @@ class ToDoListFragment(
             }
             Button(
                 onClick = {
-
+                    dataFieldList.clear()
+                    dataFieldList.addAll(selected.dataFields)
                 }
             ){
                 Text(text = "Load Template")
             }
-
         }
+    }
+
+    @Composable
+    fun SaveTaskTemplate(
+        dataFieldList: MutableList<DataField>,
+        taskViewModel: TaskViewModel,
+    ) {
+        
     }
 }
