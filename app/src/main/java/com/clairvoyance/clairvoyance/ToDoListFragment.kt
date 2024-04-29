@@ -296,24 +296,29 @@ class ToDoListFragment(
                         .align(Alignment.CenterHorizontally)
                 ) {
                     item {
-                        // Task template items
+                        // Load task template
                         LoadTaskTemplate(
                             taskViewModel = taskViewModel,
                             dataFieldList = dataFieldList
+                        )
+                        // Save task template
+                        SaveTaskTemplate(
+                            dataFieldList = dataFieldList,
+                            taskViewModel = taskViewModel
                         )
                         // Name text field
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = name,
                             onValueChange = { name = it },
-                            label = { Text("Name") },
+                            label = { Text("Task Name") },
                         )
                         // Desc text field
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = desc,
                             onValueChange = { desc = it },
-                            label = { Text("Desc") }
+                            label = { Text("Task Description") }
 
                         )
                         // Start time button
@@ -339,14 +344,27 @@ class ToDoListFragment(
                     }
                     // Display Data Field List
                     items(dataFieldList) { dataField ->
-                        TextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = dataField.tag,
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-                            onValueChange = {
-                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
-                            }
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextField(
+                                modifier = Modifier.weight(1f),
+                                value = dataField.tag,
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                                onValueChange = {
+                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
+                                }
+                            )
+
+                            Image(
+                                painter = painterResource(id = R.drawable.delete),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .clickable {
+                                        dataFieldList.remove(dataField)
+                                    }
+                            )
+                        }
 
                         when(dataField.dataType) {
                             DataType.TEXT -> {
@@ -486,6 +504,7 @@ class ToDoListFragment(
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             items(dataFieldList) { dataField ->
+
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = dataField.tag,
@@ -667,12 +686,16 @@ class ToDoListFragment(
         val templates = taskViewModel.templates.collectAsStateWithLifecycle()
         val list = templates.value
 
-        var selected by remember {mutableStateOf(TaskTemplate(name = "Empty Task"))}
+        if (list.size == 0) {
+            taskViewModel.addTaskTemplate(TaskTemplate(name = "Empty Task"))
+        }
+
+        var selected by remember {mutableStateOf(list[0])}
 
         var isExpanded by remember {mutableStateOf(false)}
 
         Row(
-
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier.weight(1f),
@@ -727,6 +750,28 @@ class ToDoListFragment(
         dataFieldList: MutableList<DataField>,
         taskViewModel: TaskViewModel,
     ) {
-        
+        var templateName by remember { mutableStateOf("") }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                modifier = Modifier.weight(1f),
+                value = templateName,
+                onValueChange = { templateName = it },
+                label = { Text("Template Name") },
+            )
+            Button(
+                onClick = {
+                    val template = TaskTemplate(name = templateName, dataFields = dataFieldList.toMutableList())
+                    taskViewModel.addTaskTemplate(template)
+
+                    // Reset name state
+                    templateName = ""
+                }
+            ){
+                Text(text = "Save Template")
+            }
+        }
     }
 }

@@ -72,6 +72,14 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         saveTaskToDatabase(task)
     }
 
+    fun addTaskTemplate(template: TaskTemplate) {
+        _templates.update {
+            templates.value.toMutableList().apply { this.add(template) }
+        }
+
+        saveTemplateToDatabase(template)
+    }
+
     fun saveTaskToDatabase(task : Task) { //Saves a task to the database - does not update local MutableList
         val db = appViewModel.databaseManager
         db.saveTask(task);
@@ -143,17 +151,6 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         _taskList.update {
             taskList.value.toMutableList().apply { this.remove(task) }
         }
-    }
-
-
-    fun taskToTemplate(task : Task,templateName : String) : TaskTemplate { //Converts a task to a TaskTemplate
-        val temp = TaskTemplate(templateName,task.dataFields.toMutableList())
-        return temp
-    }
-
-    fun applyTemplate(task : Task, template : TaskTemplate) { //Applies a TaskTemplate to a task
-        task.dataFields = template.dataFields.toMutableList()
-        saveTaskToDatabase(task)
     }
 
 //    // Adds a new task to the list
