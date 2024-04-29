@@ -33,7 +33,7 @@ class SettingsFragment() : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val btnNotification = view.findViewById<Button>(R.id.btnNotification)
         btnNotification.setOnClickListener {
-
+            onNotificationClick(view)
         }
         createSettingsSpinner(view)
         return view

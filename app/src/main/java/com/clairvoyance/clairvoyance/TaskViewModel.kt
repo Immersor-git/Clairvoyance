@@ -1,16 +1,16 @@
 package com.clairvoyance.clairvoyance
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.MutableLiveData
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.UUID
 
 class TaskViewModel : ViewModel()
 {
@@ -59,6 +59,32 @@ class TaskViewModel : ViewModel()
             }
         }
     }
+
+
+
+     fun createNotification(context: Context, taskName: String) {
+        val notificationManager = ContextCompat.getSystemService(
+            context,
+            NotificationManager::class.java
+        ) as NotificationManager
+
+        // Create a notification channel (required for Android Oreo and higher)
+         val channel = NotificationChannel(
+             "task_notification_channel",
+             "Task Notifications",
+             NotificationManager.IMPORTANCE_DEFAULT
+         )
+         notificationManager.createNotificationChannel(channel)
+
+         val notification = NotificationCompat.Builder(context, "task_notification_channel")
+             .setContentTitle("Task Reminder")
+             .setContentText("Don't forget to complete task: $taskName")
+             .build()
+
+         notificationManager.notify(1, notification)
+     }
+
+
 
 //    // Adds a new task to the list
 //    fun addTask(newTask: Task) {

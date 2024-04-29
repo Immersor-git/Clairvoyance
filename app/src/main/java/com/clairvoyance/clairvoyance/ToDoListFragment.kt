@@ -255,6 +255,27 @@ class ToDoListFragment(
                         label = { Text("Desc") }
 
                     )
+
+                    Row(){
+
+                        var showTimePicker by remember { mutableStateOf(false) }
+
+
+                        Button(
+                            onClick = {  }
+                        ) {
+                            Text(text = "Start Time")
+                        }
+
+                        Button(
+                            onClick = { }
+                        ) {
+                            Text(text = "End Time")
+                        }
+
+
+                    }
+
                     // Display Data Field List
                     DataFieldList(
                         dataFieldList = dataFieldList
@@ -303,6 +324,10 @@ class ToDoListFragment(
                 }
             }
         }
+    }
+
+
+
     }
 
     @Composable
@@ -411,12 +436,4 @@ class ToDoListFragment(
         }
     }
 
-//    @Preview(showBackground = true)
-//    @Composable
-//    fun Preview() {
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//
-//        }
-//        ToDoListScreen()
-//    }
-}
+

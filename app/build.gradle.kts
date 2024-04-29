@@ -73,6 +73,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation-android:1.6.3")
     implementation("androidx.compose.compiler:compiler:1.5.10")
     //implementation("androidx.compose.ui:ui-desktop:1.6.3")
+    implementation("androidx.compose.material:material:1.6.6")
+
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
