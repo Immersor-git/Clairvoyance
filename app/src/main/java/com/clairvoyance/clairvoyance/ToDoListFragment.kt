@@ -12,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -24,11 +25,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -36,6 +45,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
@@ -53,6 +63,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -188,41 +199,45 @@ class ToDoListFragment(
                     }
                 )
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(12.dp) // Outer padding
-                    .padding(12.dp), // Inner padding
-            ) {
-                Image(
-                    painter = painterResource(id = task.imageResource()),
-                    contentDescription = "",
-                    modifier = Modifier.clickable {
-                        taskViewModel.setComplete(task)
-                    }
-                )
-
-                Text(
-                    modifier = Modifier.padding(start = 10.dp),
-                    text = task.name,
-                    fontSize = 24.sp
-                )
-
-                if (task.endTime != null) {
-                    val endTime = task.Time(task.endTime!!)
-                    Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
-                }
-
-                Image(
-                    painter = painterResource(id = R.drawable.delete),
-                    contentDescription = "",
+            Row() {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .clickable {
-                            taskViewModel.deleteTaskItem(task)
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(12.dp) // Outer padding
+                        .padding(12.dp), // Inner padding
+                ) {
+                    Image(
+                        painter = painterResource(id = task.imageResource()),
+                        contentDescription = "",
+                        modifier = Modifier.clickable {
+                            taskViewModel.setComplete(task)
                         }
-                )
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = task.name,
+                        fontSize = 24.sp
+                    )
+
+                    if (task.endTime != null) {
+                        val endTime = task.Time(task.endTime!!)
+                        Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
+                    }
+
+                    Spacer(Modifier.weight(1f))
+
+                    Image(
+                        painter = painterResource(id = R.drawable.delete),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable {
+                                taskViewModel.deleteTaskItem(task)
+                            }
+                    )
+                }
             }
         }
     }
@@ -280,6 +295,13 @@ class ToDoListFragment(
                         .padding(15.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
+                    // Task template items
+                    Column {
+                        LoadTaskTemplate(
+                            taskViewModel = taskViewModel,
+                            dataFieldList = dataFieldList
+                        )
+                    }
                     // Name text field
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -324,7 +346,7 @@ class ToDoListFragment(
                         dataFieldList = dataFieldList
                     )
                     // Save button
-                    Button(
+                    FloatingActionButton(
                         modifier = Modifier
                             .padding(10.dp)
                             .align(Alignment.CenterHorizontally),
@@ -397,11 +419,26 @@ class ToDoListFragment(
     fun DataFieldList(
         dataFieldList: MutableList<DataField>
     ) {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
             items(dataFieldList) { dataField ->
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = dataField.tag,
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                    onValueChange = {
+                        dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
+                    }
+                )
+
                 when(dataField.dataType) {
                     DataType.TEXT -> {
                         OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
                             value = dataField.data as String,
                             onValueChange = {
                                 // Trigger recomposition by replacing data field
@@ -412,6 +449,7 @@ class ToDoListFragment(
                     }
                     DataType.DATE -> {
                         Button(
+                            modifier = Modifier.fillMaxWidth(),
                             onClick = { /*TODO*/ }
                         ) {
                             Text(text = (dataField.data as LocalDate).toString() )
@@ -419,6 +457,7 @@ class ToDoListFragment(
                     }
                     DataType.NUMBER -> {
                         OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
                             value = dataField.data as String,
                             onValueChange = {
                                 // Only allow digits or decimals
@@ -449,38 +488,43 @@ class ToDoListFragment(
     fun AddDataFieldButtons(
         dataFieldList: MutableList<DataField>
     ) {
-        Column {
+        Column (
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(10.dp),
+                text = "ADD DATAFIELDS..."
+            )
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth().padding(5.dp)
+            )
             Row (
                 modifier = Modifier
-                    .padding(horizontal = 3.dp)
+                    .padding(horizontal = 5.dp)
                     .align(Alignment.CenterHorizontally)
             ){
                 // Add Text DataField
-                Button(
-                    onClick = { dataFieldList.add(DataField(DataType.TEXT, "", "")) }
+                FloatingActionButton(
+                    onClick = { dataFieldList.add(DataField(DataType.TEXT, "", "TEXT")) }
                 ) {
                     Text(text = "TXT")
                 }
                 // Add Date DataField
-                Button(
-                    onClick = { dataFieldList.add(DataField(DataType.DATE, LocalDate.now(), "")) }
+                FloatingActionButton(
+                    onClick = { dataFieldList.add(DataField(DataType.DATE, LocalDate.now(), "DATE")) }
                 ) {
                     Text(text = "DATE")
                 }
                 // Add Number DataField
-                Button(
-                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "")) }
+                FloatingActionButton(
+                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "NUMBER")) }
                 ) {
                     Text(text = "NUM")
                 }
-            }
-            Row (
-                modifier = Modifier
-                    .padding(horizontal = 3.dp)
-                    .align(Alignment.CenterHorizontally)
-            ){
                 // Add Image DataField
-                Button(
+                FloatingActionButton(
                     onClick = {
                         /*TODO*/
                     }
@@ -488,7 +532,7 @@ class ToDoListFragment(
                     Text(text = "IMG")
                 }
                 // Add Audio DataField
-                Button(
+                FloatingActionButton(
                     onClick = {
                         /*TODO*/
                     }
@@ -549,6 +593,70 @@ class ToDoListFragment(
                     }
                 }
             }
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun LoadTaskTemplate(
+        dataFieldList: MutableList<DataField>,
+        taskViewModel: TaskViewModel,
+    ) {
+        val templates = taskViewModel.templates.collectAsStateWithLifecycle()
+        val list = templates.value
+
+        var selected by remember {mutableStateOf(TaskTemplate())}
+
+        var isExpanded by remember {mutableStateOf(false)}
+
+        Row(
+
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ExposedDropdownMenuBox(
+                    expanded = isExpanded,
+                    onExpandedChange = {isExpanded = !isExpanded}
+                ) {
+                    TextField(
+                        modifier = Modifier.menuAnchor(),
+                        value = selected.name,
+                        onValueChange = {
+
+                        },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                        }
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = isExpanded,
+                        onDismissRequest = { isExpanded = false }
+                    ) {
+                        list.forEachIndexed { index, text ->
+                            DropdownMenuItem(
+                                text = { Text(text = text.name) },
+                                onClick = {
+                                    selected = list[index]
+                                    isExpanded = false
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
+                        }
+                    }
+                }
+            }
+            Button(
+                onClick = {
+
+                }
+            ){
+                Text(text = "Load Template")
+            }
+
         }
     }
 }
