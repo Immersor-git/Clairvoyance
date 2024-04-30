@@ -126,7 +126,7 @@ fun SimpleFilledTextFieldSample() {
     var mins by remember { mutableStateOf("0") }
 
     TextField(
-        value = "Minutes",
+        value = mins,
         onValueChange = { mins = it }
     )
 }
