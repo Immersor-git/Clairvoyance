@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.clairvoyance.clairvoyance.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import java.util.UUID
 
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
@@ -43,11 +44,20 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             getCustomTheme()
         )
 
+        if (getFlagString("DeviceUserId") == "") {
+            setFlag("DeviceUserId", UUID.randomUUID().toString())
+        }
         appViewModel = AppViewModel()
         accountManager = appViewModel.accountManager
+        accountManager.deviceUserID = getFlagString("DeviceUserId")
+        accountManager.user = UserAccount(getFlagString("DeviceUserId"))
         Log.d("ViewModel Test","MainActivity: " + appViewModel.getTestString());
         appViewModel.setTestString("Test String Updated");
         Log.d("ViewModel Test","MainActivity 2: " + appViewModel.getTestString());
+
+        appViewModel.taskViewModel.getUserTasks()
+        appViewModel.taskViewModel.getTemplates()
+        appViewModel.taskViewModel.getArchivedTasks()
 
         val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
         binding = ActivityMainBinding.inflate(newLayoutInflater)
@@ -178,11 +188,20 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         editor.putInt(flag,flagValue)
         editor.apply()
     }
+    fun setFlag(flag: String,flagValue : String ) {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = preferences.edit()
+        editor.putString(flag,flagValue)
+        editor.apply()
+    }
     fun getFlag(flag: String) : Int {
         val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
         return preferences.getInt(flag, 0)
     }
-
+    fun getFlagString(flag: String) : String {
+        val preferences : SharedPreferences = getSharedPreferences("MAIN_FLAGS",MODE_PRIVATE)
+        return preferences.getString(flag, "").orEmpty()
+    }
     fun refresh() {
         recreate()
     }

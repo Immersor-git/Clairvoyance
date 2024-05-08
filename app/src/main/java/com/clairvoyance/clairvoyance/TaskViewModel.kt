@@ -46,6 +46,14 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         }
     }
 
+    inline fun <reified T> clearMutableTaskList(stateFlow : MutableStateFlow<MutableList<T>>) {
+        stateFlow.update {
+            stateFlow.value.toMutableList().apply {
+                this.clear()
+            }
+        }
+    }
+
     fun deleteTaskItem(task:Task) {
         _taskList.update {
             _taskList.value.toMutableList().apply {
@@ -95,6 +103,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
             databaseManager.getTasks() { userTaskList ->
+                clearMutableTaskList(_taskList)
                 _taskList.update {
                     taskList.value.toMutableList().clear()
                     taskList.value.toMutableList().apply {
@@ -112,6 +121,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
             databaseManager.getTemplates() { templateList ->
+                clearMutableTaskList(_templates)
                 _templates.update {
                     templates.value.toMutableList().clear()
                     templates.value.toMutableList().apply {
@@ -129,6 +139,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         val databaseManager = appViewModel.databaseManager
         if (accountManager.user.userID != "X") {
             databaseManager.getTaskArchive() { userTaskList ->
+                clearMutableTaskList(_taskArchive)
                 _taskArchive.update {
                     taskArchive.value.toMutableList().clear()
                     taskArchive.value.toMutableList().apply {
