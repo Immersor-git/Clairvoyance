@@ -25,9 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -167,9 +165,16 @@ class ToDoListFragment(
         updateTaskFocus: (task: Task) -> Unit,
         openFragment: (fragment: Fragment) -> Unit
     ) {
+        var selectedTask : Task? by remember { mutableStateOf(null) }
+        fun setSelectedTask(task : Task, selected : Boolean) {
+            Log.d("Task List","Set selected: "+selected)
+            if (task == selectedTask && !selected) selectedTask = null;
+            if (task != selectedTask && selected) selectedTask = task;
+            return
+        }
         LazyColumn {
             items(taskList) { task ->
-                TaskCard(task, taskViewModel, onLongClick, updateTaskFocus, openFragment)
+                TaskCard(task, taskViewModel, onLongClick, updateTaskFocus, openFragment, task == selectedTask,::setSelectedTask)
             }
         }
     }
@@ -181,7 +186,9 @@ class ToDoListFragment(
         taskViewModel: TaskViewModel,
         onLongClick: () ->  Unit,
         updateTaskFocus: (task: Task) -> Unit,
-        openFragment: (fragment: Fragment) -> Unit
+        openFragment: (fragment: Fragment) -> Unit,
+        isSelected: Boolean,
+        setSelectedTask : (Task, Boolean) -> Unit
     ) {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -191,7 +198,8 @@ class ToDoListFragment(
                     onClick = {
                         // View task
                         //mainActivity.displayTask(task)
-                        openFragment(GraphViewFragment(task))
+                        //openFragment(GraphViewFragment(task))
+                        setSelectedTask(task, !isSelected);
                     },
                     onLongClick = {
                         updateTaskFocus(task)
@@ -236,6 +244,22 @@ class ToDoListFragment(
                             .clickable {
                                 taskViewModel.deleteTaskItem(task)
                             }
+                    )
+                }
+            }
+            if (isSelected) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(12.dp) // Outer padding
+                        .padding(12.dp), // Inner padding)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = "Test Text!",
+                        fontSize = 24.sp
                     )
                 }
             }
