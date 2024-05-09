@@ -56,7 +56,6 @@ data class Task (
             if (this.isCompleted) androidx.appcompat.R.color.material_grey_100 else R.color.white
         )
     }
-
     fun Time(time : String) : LocalTime {
         return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME)
     }

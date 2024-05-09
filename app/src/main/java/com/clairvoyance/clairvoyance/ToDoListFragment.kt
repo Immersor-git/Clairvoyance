@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -194,6 +196,7 @@ class ToDoListFragment(
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             modifier = Modifier
                 .padding(5.dp)
+                .animateContentSize()
                 .combinedClickable(
                     onClick = {
                         // View task
@@ -248,24 +251,76 @@ class ToDoListFragment(
                 }
             }
             if (isSelected) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    //verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(12.dp) // Outer padding
                         .padding(12.dp), // Inner padding)
                 ) {
-                    Text(
-                        modifier = Modifier.padding(start = 10.dp),
-                        text = "Test Text!",
-                        fontSize = 24.sp
-                    )
+                    Row() {
+                        Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = task.desc,
+                            fontSize = 16.sp
+                        )
+                    }
+                    Row() {
+                        Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = task.startTime.orEmpty(),
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = task.endTime.orEmpty(),
+                            fontSize = 16.sp
+                        )
+                    }
+                    Column {
+                        task.dataFields.forEach {
+                            DataFieldRow(it)
+                        }
+                    }
                 }
             }
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun DataFieldRow(
+        df : DataField
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentHeight()
+                .padding(5.dp)
+        ) {
+            if (df.dataType == DataType.TEXT) {
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = df.data.toString(),
+                    fontSize = 16.sp
+                )
+            }
+            else if (df.dataType == DataType.NUMBER) {
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = df.data.toString(),
+                    fontSize = 16.sp
+                )
+            }
+            else if (df.dataType == DataType.DATE) {
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = "Date Error",
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun TaskSheet(
@@ -312,6 +367,7 @@ class ToDoListFragment(
                 sheetState = sheetState,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
             ) {
                 LazyColumn(
                     modifier = Modifier
