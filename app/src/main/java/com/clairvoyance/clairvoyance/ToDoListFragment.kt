@@ -456,6 +456,39 @@ class ToDoListFragment(
                                         dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
                                     },
                                     label = { Text("Text") }
+                    DataFieldList(
+                        dataFieldList = dataFieldList
+                    )
+                    // Buttons to add data fields
+                    AddDataFieldButtons(
+                        dataFieldList = dataFieldList
+                    )
+                    // Save button
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.CenterHorizontally),
+                        onClick = {
+                            // Create a new task if task is null
+                            if (task == null) {
+                                val newTask = Task(
+                                    name = name,
+                                    desc = desc,
+                                    startTime = null,
+                                    endTime = null,
+                                    date = null,
+                                    dataFields = dataFieldList.toMutableList()
+                                )
+                                taskViewModel.addTaskItem(newTask)
+                                // Else update the existing given task
+                            } else {
+                                taskViewModel.updateTaskItem(
+                                    task = task,
+                                    name = name,
+                                    desc = desc,
+                                    startTime = startTime,
+                                    endTime = endTime,
+                                    dataFields = dataFieldList.toMutableList()
                                 )
                             }
                             DataType.DATE -> {
@@ -703,6 +736,165 @@ class ToDoListFragment(
             }
         }
     }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun TaskSheet(
+        task: Task?,
+        taskViewModel: TaskViewModel,
+        showBottomSheet: Boolean,
+        sheetState: SheetState,
+        onDismiss: () -> Unit
+    ) {
+        // Check to see if there is a task object in focus, if not create a blank task as a field template
+        val taskState = task ?: Task()
+
+        // Init states
+        var name by remember { mutableStateOf(taskState.name) }
+        var desc by remember { mutableStateOf(taskState.desc) }
+        var startTime by remember { mutableStateOf(taskState.startTime) }
+        var endTime by remember { mutableStateOf(taskState.endTime) }
+        val dataFieldList = remember { mutableStateListOf<DataField>() }
+        dataFieldList.addAll(taskState.dataFields)
+
+        val timePickerState = rememberTimePickerState()
+        var showTimePicker by remember { mutableStateOf(false) }
+        var isStartTime by remember { mutableStateOf(false) }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    // Reset states
+                    name = ""
+                    desc = ""
+                    dataFieldList.clear()
+
+                    onDismiss()
+                },
+                sheetState = sheetState,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .padding(15.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    // Name text field
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Name") },
+                    )
+                    // Desc text field
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = desc,
+                        onValueChange = { desc = it },
+                        label = { Text("Desc") }
+                    )
+                    // Start time button
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            showTimePicker = true
+                            isStartTime = true
+                        }
+                    ) {
+                        Text(text = if (startTime == null) "Start Time" else startTime.toString())
+                    }
+                    // End time button
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            showTimePicker = true
+                            isStartTime = false
+                        }
+                    ) {
+                        Text(text = if (endTime == null) "End Time" else endTime.toString())
+                    }
+                    // Display Data Field List
+                    DataFieldList(
+                        dataFieldList = dataFieldList
+                    )
+                    // Buttons to add data fields
+                    AddDataFieldButtons(
+                        dataFieldList = dataFieldList
+                    )
+                    // Save button
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.CenterHorizontally),
+                        onClick = {
+                            // Create a new task if task is null
+                            if (task == null) {
+                                val newTask = Task(
+                                    name = name,
+                                    desc = desc,
+                                    startTime = startTime,
+                                    endTime = endTime,
+                                    date = null,
+                                    dataFields = dataFieldList.toMutableList()
+                                )
+                                taskViewModel.addTaskItem(newTask)
+                            } else {
+                                startTime?.let {
+                                    endTime?.let { it1 ->
+                                        taskViewModel.updateTaskItem(
+                                            task = task,
+                                            name = name,
+                                            desc = desc,
+                                            startTime = it,
+                                            endTime = it1,
+                                            dataFields = dataFieldList.toMutableList()
+                                        )
+                                    }
+                                }
+                            }
+
+                            // Reset states
+                            name = ""
+                            desc = ""
+                            dataFieldList.clear()
+
+                            onDismiss()
+                        }
+                    ) {
+                        Text("Save Task")
+                    }
+                }
+            }
+        }
+
+        if (showTimePicker) {
+            TimePickerDialog(
+                onDismissRequest = { showTimePicker = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showTimePicker = false
+                            val time = LocalTime.of(timePickerState.hour, timePickerState.minute)
+                            if (isStartTime) {
+                                startTime = time
+                            } else {
+                                endTime = time
+                            }
+                        }
+                    ) { Text("OK") }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { showTimePicker = false }
+                    ) { Text("Cancel") }
+                }
+            ) {
+                TimePicker(state = timePickerState)
+            }
+        }
+    }
+
 
     @Composable
     fun TimePickerDialog(

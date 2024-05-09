@@ -17,18 +17,27 @@
             android:textSize="40sp"
             android:textAlignment="center"
             />
+
         <Spinner
             android:id="@+id/spinnerText"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:dropDownVerticalOffset="48dp"
+            android:elevation="10dp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/btnNotification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:dropDownVerticalOffset = "48dp"
-            android:minHeight="48dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="10dp"
-            android:elevation="10dp"
-            />
+            android:onClick="onNotificationButtonClick"
+            android:text="Notification Settings" />
+
+
     </LinearLayout>
 
 </FrameLayout>

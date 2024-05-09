@@ -1,5 +1,6 @@
 package com.clairvoyance.clairvoyance
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
@@ -24,12 +26,17 @@ class SettingsFragment() : Fragment() {
         val contextThemeWrapper: Context = ContextThemeWrapper(requireContext(), mainActivity.getCustomTheme())
         return inflater.cloneInContext(contextThemeWrapper)
     }
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val btnNotification = view.findViewById<Button>(R.id.btnNotification)
+        btnNotification.setOnClickListener {
+            onNotificationClick(view)
+        }
         createSettingsSpinner(view)
         return view
     }
@@ -56,12 +63,28 @@ class SettingsFragment() : Fragment() {
                 }
                 Log.d("Settings Buttons","Pressed" + themeOptions[position])
                 mainActivity.selectTheme(position) //Sets the theme in the main activity
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
         }
+
+
+
         Log.d("Settings Buttons","Spinner Generated")
     }
+
+    fun onNotificationClick(view: View) {
+        // Navigate to the "Task Archive" page
+        val fragmentTransaction = parentFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, NotificationSettingsFragment())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
 }
+
+
+
+
