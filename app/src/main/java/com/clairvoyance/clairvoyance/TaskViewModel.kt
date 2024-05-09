@@ -24,7 +24,7 @@ class TaskViewModel : ViewModel()
         }
     }
 
-    fun updateTaskItem(task: Task, name: String, desc: String, dataFields: MutableList<DataField>) {
+    fun updateTaskItem(task: Task, name: String, desc: String, startTime:LocalTime, endTime:LocalTime, dataFields: MutableList<DataField>) {
         _taskList.update {
             _taskList.value.toMutableList().apply {
                 // Create copy of task item
@@ -34,6 +34,8 @@ class TaskViewModel : ViewModel()
                 // Edit fields
                 copy.name = name
                 copy.desc = desc
+                copy.startTime = startTime
+                copy.endTime = endTime
                 copy.dataFields = dataFields
 
                 Log.d("TASK STUFF", dataFields.size.toString())
