@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +22,8 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding;
+    private lateinit var accountManager: AccountManager
+    private lateinit var appViewModel : AppViewModel;
     private var currentTheme : Int = 2
     private var currentTask: Int = 0;
 
@@ -31,13 +36,25 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return inflater.cloneInContext(contextThemeWrapper)
         //return super.getLayoutInflater()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val contextThemeWrapper: Context = androidx.appcompat.view.ContextThemeWrapper(
             applicationContext,
             getCustomTheme()
         )
+
+        appViewModel = AppViewModel()
+        accountManager = appViewModel.accountManager
+        Log.d("ViewModel Test","MainActivity: " + appViewModel.getTestString());
+        appViewModel.setTestString("Test String Updated");
+        Log.d("ViewModel Test","MainActivity 2: " + appViewModel.getTestString());
+
         val newLayoutInflater = layoutInflater.cloneInContext(contextThemeWrapper)
         binding = ActivityMainBinding.inflate(newLayoutInflater)
+
+        binding.btnDisplayclose.setOnClickListener {
+            binding.taskdisplay.setVisibility(View.GONE)
+        }
 
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
@@ -57,7 +74,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
 
         fragmentManager = supportFragmentManager
-        openFragment(ToDoListFragment())
+        openFragment(ToDoListFragment(::openFragment))
 
         onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -73,16 +90,19 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
     }
 
+    fun getAppViewModel() : AppViewModel {
+        return appViewModel;
+    }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return fragmentNavigation(item.itemId)
     }
 
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
-            R.id.bottom_todo -> openFragment(ToDoListFragment())
+            R.id.bottom_todo -> openFragment(ToDoListFragment(::openFragment ))
             R.id.bottom_calendar -> openFragment(MonthlyView())
-            R.id.nav_home -> openFragment(ToDoListFragment())
-            R.id.nav_account -> openFragment(AccountFragment())
+            R.id.nav_home -> openFragment(ToDoListFragment(::openFragment))
+            R.id.nav_account -> openFragment(if (accountManager.isSignedIn()) AccountFragment() else LoginFragment())
             R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
             R.id.nav_settings-> openFragment(SettingsFragment())
@@ -90,6 +110,31 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun displayTask(task : Task) {
+        val holder = this.findViewById<LinearLayout>(R.id.taskdisplay)
+        holder.visibility = View.VISIBLE
+
+        val tvTaskTitle = this.findViewById<TextView>(R.id.tvTaskTitle) //Gets all Text tags in the task template
+        val tvTaskCategory = this.findViewById<TextView>(R.id.tvTaskCategory)
+        val tvTaskTime = this.findViewById<TextView>(R.id.tvTaskTime)
+        val tvTaskReminder = this.findViewById<TextView>(R.id.tvTaskReminder)
+        val tvTaskIsChecklist = this.findViewById<TextView>(R.id.tvTaskIsChecklist)
+
+        tvTaskTitle.setText(task.name) //Sets each tag to be the specified value associated with the task (name, time, checklist, etc)
+        tvTaskCategory.setText(task.desc)
+        tvTaskTime.setText(task.date.toString())
+        tvTaskReminder.setText("No reminders set.")
+        tvTaskIsChecklist.setText("Checklist item")
+    }
+
+    fun setLoginFragment(registering : Boolean) {
+        if (registering) {
+            openFragment(RegisterFragment())
+        } else {
+            openFragment(LoginFragment())
+        }
     }
 
     private fun openFragment(fragment: Fragment) { //Opens fragment
@@ -156,5 +201,9 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
     fun openTaskFragment() {
         openFragment(ViewTask())
+    }
+
+    fun getAccountManager() : AccountManager {
+        return accountManager
     }
 }

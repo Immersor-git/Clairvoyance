@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Clairvoyance</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="checkbox">Casilla de verificación</string>
+    <string name="new_task">Nueva tarea</string>
+    <string-array name="datafields">
+        <item>TEXTO</item>
+        <item>FECHA</item>
+        <item>NÚMERO</item>
+        <item>IMAGEN</item>
+        <item>SONIDO</item>
+    </string-array>
+    <string name="select_language">Selecciona Idioma</string>
+    <string-array name="language_options">
+        <item>Inglés</item>
+        <item>Español</item>
+        <item>Francés</item>
+        <!-- Add more languages as needed -->
+    </string-array>
+
+    <!-- Task titles and descriptions -->
+    <string name="task_title_1">Título de la Tarea 1</string>
+    <string name="task_description_1">Descripción de la Tarea 1</string>
+    <string name="task_title_2">Título de la Tarea 2</string>
+    <string name="task_description_2">Descripción de la Tarea 2</string>
+    <!-- Add more tasks as needed -->
+</resources>
