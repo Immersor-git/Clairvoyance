@@ -94,7 +94,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.bottom_calendar -> openFragment(MonthlyView())
             R.id.nav_home -> openFragment(ToDoListFragment(::openFragment))
             R.id.nav_account -> openFragment(if (accountManager.isSignedIn()) AccountFragment() else LoginFragment())
-            R.id.nav_archive -> openFragment(CameraActivity1())//openFragment(ArchiveFragment())
+            R.id.nav_archive -> openFragment(TaskArchive(::openFragment))//openFragment(ArchiveFragment())
             R.id.nav_help -> openFragment(HelpFragment())
             R.id.nav_settings-> openFragment(SettingsFragment())
 
