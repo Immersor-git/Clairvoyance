@@ -617,74 +617,74 @@ class ToDoListFragment(
         }
     }
 
-    @Composable
-    fun DataFieldList(
-        dataFieldList: MutableList<DataField>
-    ) {
-        LazyColumn (
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            items(dataFieldList) { dataField ->
-
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = dataField.tag,
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-                    onValueChange = {
-                        dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
-                    }
-                )
-
-                when(dataField.dataType) {
-                    DataType.TEXT -> {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = dataField.data as String,
-                            onValueChange = {
-                                // Trigger recomposition by replacing data field
-                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-                            },
-                            label = { Text("Text") }
-                        )
-                    }
-                    DataType.DATE -> {
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = (dataField.data as LocalDate).toString() )
-                        }
-                    }
-                    DataType.NUMBER -> {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = dataField.data as String,
-                            onValueChange = {
-                                // Only allow digits or decimals
-                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
-                                    // Trigger recomposition by replacing data field
-                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            label = { Text("Number") }
-                        )
-                    }
-                    DataType.IMAGE -> {
-                        TODO()
-                    }
-                    DataType.AUDIO -> {
-                        TODO()
-                    }
-                    DataType.EXCEPTION -> {
-                        TODO()
-                    }
-                }
-            }
-        }
-    }
+//    @Composable
+//    fun DataFieldList(
+//        dataFieldList: MutableList<DataField>
+//    ) {
+//        LazyColumn (
+//            modifier = Modifier.fillMaxWidth(),
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ){
+//            items(dataFieldList) { dataField ->
+//
+//                TextField(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    value = dataField.tag,
+//                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+//                    onValueChange = {
+//                        dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
+//                    }
+//                )
+//
+//                when(dataField.dataType) {
+//                    DataType.TEXT -> {
+//                        OutlinedTextField(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            value = dataField.data as String,
+//                            onValueChange = {
+//                                // Trigger recomposition by replacing data field
+//                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+//                            },
+//                            label = { Text("Text") }
+//                        )
+//                    }
+//                    DataType.DATE -> {
+//                        Button(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            onClick = { /*TODO*/ }
+//                        ) {
+//                            Text(text = (dataField.data as LocalDate).toString() )
+//                        }
+//                    }
+//                    DataType.NUMBER -> {
+//                        OutlinedTextField(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            value = dataField.data as String,
+//                            onValueChange = {
+//                                // Only allow digits or decimals
+//                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
+//                                    // Trigger recomposition by replacing data field
+//                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
+//                                }
+//                            },
+//                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+//                            label = { Text("Number") }
+//                        )
+//                    }
+//                    DataType.IMAGE -> {
+//                        TODO()
+//                    }
+//                    DataType.AUDIO -> {
+//                        TODO()
+//                    }
+//                    DataType.EXCEPTION -> {
+//                        TODO()
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @Composable
     fun AddDataFieldButtons(
