@@ -29,6 +29,14 @@
             android:layout_marginTop="10dp"
             android:elevation="10dp"
             />
+
+        <Button
+            android:id="@+id/btnNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onNotificationButtonClick"
+            android:text="Notification Settings" />
+
     </LinearLayout>
 
 </FrameLayout>

@@ -51,9 +51,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty0
 
 
-class CameraActivity1 : Fragment() {
+class CameraActivity1(kProperty0: KProperty0<(fragment: Fragment) -> Unit>) : Fragment() {
     private lateinit var mainActivity : MainActivity;
     private lateinit var applicationContext : Context
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater { //Applies theme on loading
@@ -90,103 +91,103 @@ class CameraActivity1 : Fragment() {
     }
 
 
- //this function calls the camera feed in order for the pictures to be taken
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CallPhoto() {
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberBottomSheetScaffoldState()
-    //LocalContext.current
-    val controller = remember {
-        LifecycleCameraController(applicationContext).apply {
-            setEnabledUseCases(
-                CameraController.IMAGE_CAPTURE or
-                        CameraController.VIDEO_CAPTURE
-            )
-        }
-    }
-
-     val viewModel = viewModel<MainViewModel>()
-     val bitmaps by viewModel.bitmaps.collectAsState()
-
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetPeekHeight = 0.dp,
-        sheetContent = {
-            PhotoBottomSheetContent(
-                bitmaps = bitmaps,
-                modifier = Modifier
-                    .fillMaxSize())
-        }) { padding ->
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            CameraPreview(
-                controller = controller,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
-
-            IconButton(
-                onClick = {
-                    controller.cameraSelector =
-                        if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                            CameraSelector.DEFAULT_FRONT_CAMERA
-                        } else CameraSelector.DEFAULT_BACK_CAMERA
-                },
-                modifier = Modifier
-                    .offset(16.dp, 16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Cameraswitch,
-                    contentDescription = "Switch camera"
+    //this function calls the camera feed in order for the pictures to be taken
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun CallPhoto() {
+        val scope = rememberCoroutineScope()
+        val scaffoldState = rememberBottomSheetScaffoldState()
+        //LocalContext.current
+        val controller = remember {
+            LifecycleCameraController(applicationContext).apply {
+                setEnabledUseCases(
+                    CameraController.IMAGE_CAPTURE or
+                            CameraController.VIDEO_CAPTURE
                 )
             }
+        }
 
-            Row (
+        val viewModel = viewModel<MainViewModel>()
+        val bitmaps by viewModel.bitmaps.collectAsState()
+
+        BottomSheetScaffold(
+            scaffoldState = scaffoldState,
+            sheetPeekHeight = 0.dp,
+            sheetContent = {
+                PhotoBottomSheetContent(
+                    bitmaps = bitmaps,
+                    modifier = Modifier
+                        .fillMaxSize())
+            }) { padding ->
+
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(12.dp),
-                horizontalArrangement = Arrangement.SpaceAround
-            ){
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                CameraPreview(
+                    controller = controller,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+
                 IconButton(
                     onClick = {
-                        scope.launch {
-                            scaffoldState.bottomSheetState.expand()
-                        }
-                    }
+                        controller.cameraSelector =
+                            if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                                CameraSelector.DEFAULT_FRONT_CAMERA
+                            } else CameraSelector.DEFAULT_BACK_CAMERA
+                    },
+                    modifier = Modifier
+                        .offset(16.dp, 16.dp)
                 ) {
-                    Icon (
-                        imageVector = Icons.Default.Photo,
-                        contentDescription = "Gallery Open"
+                    Icon(
+                        imageVector = Icons.Default.Cameraswitch,
+                        contentDescription = "Switch camera"
                     )
                 }
 
-                IconButton(
-                    onClick = {
-                        takePhoto(
-                            controller = controller,
-                            onPhotoTaken = viewModel::onTakePhoto
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ){
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.expand()
+                            }
+                        }
+                    ) {
+                        Icon (
+                            imageVector = Icons.Default.Photo,
+                            contentDescription = "Gallery Open"
                         )
                     }
-                ) {
-                    Icon (
-                        imageVector = Icons.Default.PhotoCamera,
-                        contentDescription = "Take Photo"
-                    )
+
+                    IconButton(
+                        onClick = {
+                            takePhoto(
+                                controller = controller,
+                                onPhotoTaken = viewModel::onTakePhoto
+                            )
+                        }
+                    ) {
+                        Icon (
+                            imageVector = Icons.Default.PhotoCamera,
+                            contentDescription = "Take Photo"
+                        )
+                    }
+
                 }
 
+
             }
-
-
         }
-    }
 
-}
+    }
     //onPhotoTaken gives us the bitmap we can then save
     private fun takePhoto(
         controller: LifecycleCameraController,

@@ -22,9 +22,10 @@ import androidx.fragment.app.Fragment
 import com.clairvoyance.clairvoyance.playback.AndroidAudioPlayer
 import com.clairvoyance.clairvoyance.record.AndroidAudioRecorder
 import java.io.File
+import kotlin.reflect.KProperty0
 
 
-class AudioActivity : Fragment() {
+class AudioActivity(kProperty0: KProperty0<(fragment: Fragment) -> Unit>) : Fragment() {
 
 
 

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -41,7 +42,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -50,6 +53,8 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,8 +65,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,6 +78,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -167,6 +175,7 @@ class ToDoListFragment(
         updateTaskFocus: (task: Task) -> Unit,
         openFragment: (fragment: Fragment) -> Unit
     ) {
+        val taskList2 = taskViewModel.getArchivedTasks()
         var selectedTask : Task? by remember { mutableStateOf(null) }
         fun setSelectedTask(task : Task, selected : Boolean) {
             Log.d("Task List","Set selected: "+selected)
@@ -234,7 +243,7 @@ class ToDoListFragment(
                     )
 
                     if (task.endTime != null) {
-                        val endTime = task.Time(task.endTime!!)
+                        val endTime = task.Time(task.endTime!!.toString())
                         Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                     }
 
@@ -269,12 +278,12 @@ class ToDoListFragment(
                     Row() {
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = task.startTime.orEmpty(),
+                            text = task.startTime.toString(),
                             fontSize = 16.sp
                         )
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = task.endTime.orEmpty(),
+                            text = task.endTime.toString(),
                             fontSize = 16.sp
                         )
                     }
@@ -340,11 +349,8 @@ class ToDoListFragment(
         var desc by remember { mutableStateOf("") }
         desc = taskState.desc
 
-        var startTime by remember { mutableStateOf(LocalTime.now().toString()) }
-        startTime = taskState.startTime.orEmpty()
-
-        var endTime by remember { mutableStateOf(LocalTime.now().toString()) }
-        endTime = taskState.endTime.orEmpty()
+        var startTime by remember { mutableStateOf(taskState.startTime ?: null ) }
+        var endTime by remember { mutableStateOf(taskState.endTime ?: null) }
 
         val dataFieldList = remember { mutableStateListOf<DataField>() }
         dataFieldList.addAll(taskState.dataFields)
@@ -409,7 +415,7 @@ class ToDoListFragment(
                                 isStartTime = true
                             }
                         ) {
-                            Text(text = if (startTime == "") "Start Time" else (startTime))
+                            Text(text = if (startTime.toString() == "null") "Start Time" else startTime.toString())
                         }
                         // End time button
                         Button(
@@ -419,9 +425,38 @@ class ToDoListFragment(
                                 isStartTime = false
                             }
                         ) {
-                            Text(text = if (endTime == "") "End Time" else (endTime))
+                            Text(text = if (endTime == null) "End Time" else endTime.toString())
                         }
+
+                        // TextField to input number of hours
+                        var hours by remember { mutableStateOf("") }
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = hours,
+                            onValueChange = { hours = it },
+                            label = { Text("Number of Hours") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        )
+
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                //Put logic to schedule task here
+
+                            }
+
+
+                        ) {
+                            Text("Schedule Task")
+                        }
+
+
+
+
+
                     }
+
+
                     // Display Data Field List
                     items(dataFieldList) { dataField ->
                         Row(
@@ -482,10 +517,12 @@ class ToDoListFragment(
                                 )
                             }
                             DataType.IMAGE -> {
-                                TODO()
+
+                                //I'm not sure how to open the new screens from within here
+
                             }
                             DataType.AUDIO -> {
-                                TODO()
+
                             }
                             DataType.EXCEPTION -> {
                                 TODO()
@@ -521,12 +558,18 @@ class ToDoListFragment(
                                         taskViewModel.addTaskItem(newTask)
                                         // Else update the existing given task
                                     } else {
-                                        taskViewModel.updateTaskItem(
-                                            task = task,
-                                            name = name,
-                                            desc = desc,
-                                            dataFields = dataFieldList.toMutableList()
-                                        )
+                                        startTime?.let {
+                                            endTime?.let { it1 ->
+                                                taskViewModel.updateTaskItem(
+                                                    task = task,
+                                                    name = name,
+                                                    desc = desc,
+                                                    startTime = it,
+                                                    endTime = it1,
+                                                    dataFields = dataFieldList.toMutableList()
+                                                )
+                                            }
+                                        }
                                     }
 
                                     // Reset states
@@ -555,8 +598,8 @@ class ToDoListFragment(
 
                             val time = LocalTime.of(timePickerState.hour, timePickerState.minute)
                             Log.d("TIME EVENT", isStartTime.toString())
-                            if (isStartTime) startTime = time.toString() else endTime = time.toString()
-                            Log.d("TIME EVENT", startTime.toString() + " " + endTime.toString())
+                            if (isStartTime) startTime = time else endTime = time
+                            Log.d("TIME EVENT", startTime?.toString() + " " + endTime?.toString())
                         }
                     ) { Text("OK") }
                 },
@@ -687,7 +730,8 @@ class ToDoListFragment(
                 // Add Image DataField
                 FloatingActionButton(
                     onClick = {
-                        /*TODO*/
+                        openFragment(CameraActivity1(::openFragment))
+
                     }
                 ) {
                     Text(text = "IMG")
@@ -695,7 +739,7 @@ class ToDoListFragment(
                 // Add Audio DataField
                 FloatingActionButton(
                     onClick = {
-                        /*TODO*/
+                        openFragment(AudioActivity(::openFragment))
                     }
                 ) {
                     Text(text = "AUD")
@@ -756,6 +800,7 @@ class ToDoListFragment(
             }
         }
     }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -856,4 +901,43 @@ class ToDoListFragment(
             }
         }
     }
+
+
+    fun findAvailableTimeSlot(taskList: List<Task>, duration: Int): Pair<LocalTime, LocalTime>? {
+        val sortedTasks = taskList.sortedBy { it.startTime }
+
+        var newTaskStartTime = LocalTime.of(0, 0)
+
+        for (i in 0 until sortedTasks.size - 1) {
+            val currentTask = sortedTasks[i]
+            val nextTask = sortedTasks[i + 1]
+
+            if (currentTask.startTime == null ||
+                currentTask.endTime == null ||
+                nextTask.startTime == null ||
+                nextTask.endTime == null
+            ) {
+                continue
+            }
+
+            val currentTaskEndTime = currentTask.endTime
+            val nextTaskStartTime = nextTask.startTime
+            val gapDuration = Duration.between(currentTaskEndTime, nextTaskStartTime)
+
+            if (gapDuration.toMinutes() >= (duration * 60)) {
+                newTaskStartTime = currentTaskEndTime
+                break
+            }
+        }
+
+        if (newTaskStartTime != LocalTime.of(0, 0)) {
+            val newTaskEndTime = newTaskStartTime.plusHours(duration.toLong())
+            return Pair(newTaskStartTime, newTaskEndTime)
+        }
+
+        return null
+    }
+
+
+
 }

@@ -39,7 +39,7 @@ class TaskViewHolder(
 
         // Checks to see if task end time is set
         if (task.endTime != null)
-            binding.endTime.text = timeFormat.format(task.Time(task.endTime.orEmpty()))
+            binding.endTime.text = timeFormat.format(task.Time(task.endTime.toString()))
         else
             binding.endTime.text = ""
 
