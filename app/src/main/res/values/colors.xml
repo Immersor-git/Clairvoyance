@@ -61,7 +61,7 @@
 
     <!-- Light Mode Colors for Pink Theme -->
     <color name="lightPinkPrimary">#FFC0CB</color>
-    <color name="lightPinkPrimaryDark">#E91E63</color>
+    <color name="lightPinkPrimaryDark">#FF79A6</color>
     <color name="lightPinkSecondary">#FFB6C1</color>
     <color name="lightPinkBackground">#FFFFFF</color>
     <color name="lightPinkOnPrimary">#FFFFFF</color>
