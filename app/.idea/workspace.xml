@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd75d608-dd89-4a1c-8caa-9244c963c889" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/migrations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/clairvoyance/clairvoyance/DailyView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/clairvoyance/clairvoyance/DailyView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/clairvoyance/clairvoyance/MonthlyView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/clairvoyance/clairvoyance/MonthlyView.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +52,7 @@
     "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "create-task-merge",
+    "git-widget-placeholder": "calendar-view-new-",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Productivity/Documents/GitHub/Clairvoyance"
   }
