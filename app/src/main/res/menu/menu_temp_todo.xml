@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/LightTheme"
+    android:theme="@style/LightThemeBlue"
     android:background="?colorSurface">
     <group
         android:checkableBehavior="single">
