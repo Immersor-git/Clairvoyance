@@ -242,12 +242,12 @@ class ToDoListFragment(
                         fontSize = 24.sp
                     )
 
+                    Spacer(Modifier.weight(1f))
+
                     if (task.endTime != null) {
                         val endTime = task.Time(task.endTime!!.toString())
                         Text(text = String.format("%02d:%02d", endTime!!.hour, endTime.minute))
                     }
-
-                    Spacer(Modifier.weight(1f))
 
                     Image(
                         painter = painterResource(id = R.drawable.delete),
@@ -524,6 +524,34 @@ class ToDoListFragment(
                             DataType.AUDIO -> {
 
                             }
+                            DataType.CHECKBOX -> {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = (dataField.data as Checkbox).imageResource()),
+                                        contentDescription = "",
+                                        modifier = Modifier.clickable {
+                                            val oldData = dataField.data as Checkbox
+                                            val newData = oldData.copy(isCompleted = !oldData.isCompleted)
+                                            dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = newData)
+                                        }
+                                    )
+                                    OutlinedTextField(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        value = (dataField.data as Checkbox).desc,
+                                        onValueChange = {
+                                            val newData = (dataField.data as Checkbox).copy(desc = it)
+                                            // Trigger recomposition by replacing data field
+                                            dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = newData)
+                                        },
+                                        label = { Text("Text") }
+                                    )
+                                }
+                            }
                             DataType.EXCEPTION -> {
                                 TODO()
                             }
@@ -743,6 +771,12 @@ class ToDoListFragment(
                     }
                 ) {
                     Text(text = "AUD")
+                }
+                // Add Checkbox DataField
+                FloatingActionButton(
+                    onClick = { dataFieldList.add(DataField(DataType.CHECKBOX, Checkbox(false, ""), "SUBTASK")) }
+                ) {
+                    Text(text = "BOX")
                 }
             }
         }
