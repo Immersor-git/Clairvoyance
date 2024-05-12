@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -404,30 +403,9 @@ class CalendarViewFragment : Fragment() {
                             )
                         }
 
-                        // Add a box for class from 3:00 PM to 4:00 PM on the current day
-                        if (index == hoursOfDay.indexOf("3:00 PM") && currentDate == LocalDate.now()) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(horizontal = 8.dp)
-                                    .fillMaxHeight()
-                                    .fillMaxWidth()
-                                    .background(Color.Cyan)
-                                    .padding(vertical = 2.dp)
-                                    .clickable {
-                                        isClassBoxVisible.value = true
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "Class",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
                     }
                     // Add a horizontal line between rows
-                    Divider(color = Color.Gray, thickness = 1.dp)
+                    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
                 }
             }
 
