@@ -110,7 +110,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     fun fragmentNavigation(item : Int): Boolean { //Loads desired fragment from list
         when(item){
             R.id.bottom_todo -> openFragment(ToDoListFragment(::openFragment ))
-            R.id.bottom_calendar -> openFragment(MonthlyView())
+            R.id.bottom_calendar -> openFragment(CalendarViewFragment())
             R.id.nav_home -> openFragment(ToDoListFragment(::openFragment))
             R.id.nav_account -> openFragment(if (accountManager.isSignedIn()) AccountFragment() else LoginFragment())
             R.id.nav_archive -> openFragment(ArchiveFragment())
@@ -152,7 +152,10 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
     }
-    val themes = arrayOf<Int>(R.style.DarkTheme,R.style.LightTheme)
+    val themes = arrayOf<Int>(R.style.DarkThemeBlue,R.style.LightThemeBlue, R.style.DarkModePink,
+        R.style.LightModePink, R.style.DarkModePurple, R.style.LightModePurple, R.style.DarkModeTeal,
+        R.style.LightModeTeal, R.style.DarkModeGreen, R.style.LightModeGreen, R.style.DarkModeYellow,
+        R.style.LightModeYellow)
     fun getCustomTheme() : Int {
         return themes[loadTheme()]
     }

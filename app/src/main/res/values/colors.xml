@@ -31,12 +31,12 @@
     <color name="colorOnSurface">#000000</color>
     <color name="colorOnBackground">#000000</color>
 
-    <color name="darkcolorPrimary">#FF6200EE</color>
-    <color name="darkcolorPrimaryVariant">#A4A0F5</color>
+    <color name="darkcolorPrimary">#466EFF</color>
+    <color name="darkcolorPrimaryVariant">#4466CD</color>
     <color name="darkcolorOnPrimary">#FFFFFF</color>
     <color name="darkcolorSecondary">#FF3700B3</color>
     <color name="darkcolorOnSecondary">#CCCCFF</color>
-    <color name="darkcolorSurface">#000000</color>
+    <color name="darkcolorSurface">#000635</color>
     <color name="darkcolorOnSurface">#FFFFFF</color>
     <color name="darkcolorOnBackground">#FFFFFF</color>
 
@@ -57,4 +57,106 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lavender">#8692f7</color>
+
+
+    <!-- Light Mode Colors for Pink Theme -->
+    <color name="lightPinkPrimary">#FFC1D6</color> <!-- top and bottom wrapper -->
+    <color name="lightPinkPrimaryDark">#FFB2CC</color> <!-- navigation menu -->
+    <color name="lightPinkSecondary">#FFB6C1</color> <!-- isn't used -->
+    <color name="lightPinkBackground">#FFFFFF</color>
+    <color name="lightPinkOnPrimary">#FFFFFF</color>
+    <color name="lightPinkOnSecondary">#000000</color>
+    <color name="lightPinkSurface">#FCE4EC</color> <!-- background color -->
+    <color name="lightPinkOnSurface">#000000</color>
+
+    <!-- Dark Mode Colors for Pink Theme -->
+    <color name="darkPinkPrimary">#FF63A7</color> <!-- top and bottom wrapper -->
+    <color name="darkPinkPrimaryContainer">#FF2D89</color>
+    <color name="darkPinkSecondary">#EC407A</color>
+    <color name="darkPinkBackground">#121212</color>
+    <color name="darkPinkOnPrimary">#FFFFFF</color>
+    <color name="darkPinkOnSecondary">#000000</color>
+    <color name="darkPinkSurface">#FF3C91</color>
+    <color name="darkPinkOnSurface">#FFFFFF</color>
+
+    <!-- Light Mode Colors for Purple Theme -->
+    <color name="lightPurplePrimary">#C073E1</color>
+    <color name="lightPurplePrimaryDark">#D36CFF</color>
+    <color name="lightPurpleSecondary">#CE93D8</color>
+    <color name="lightPurpleBackground">#FFFFFF</color>
+    <color name="lightPurpleOnPrimary">#FFFFFF</color>
+    <color name="lightPurpleOnSecondary">#000000</color>
+    <color name="lightPurpleSurface">#CFA6DA</color>
+    <color name="lightPurpleOnSurface">#000000</color>
+
+    <!-- Dark Mode Colors for Purple Theme -->
+    <color name="darkPurplePrimary">#9D2DFF</color>
+    <color name="darkPurplePrimaryContainer">#A128E1</color>
+    <color name="darkPurpleSecondary">#9575CD</color>
+    <color name="darkPurpleBackground">#121212</color>
+    <color name="darkPurpleOnPrimary">#FFFFFF</color>
+    <color name="darkPurpleOnSecondary">#000000</color>
+    <color name="darkPurpleSurface">#8D02D6</color>
+    <color name="darkPurpleOnSurface">#FFFFFF</color>
+
+    <!-- Light Mode Colors for Teal Theme -->
+    <color name="lightTealPrimary">#5BF2F3</color> <!-- top and bottom wrapper -->
+    <color name="lightTealPrimaryDark">#32D0D1</color> <!-- navigation menu -->
+    <color name="lightTealSecondary">#CE93D8</color>
+    <color name="lightTealBackground">#FFFFFF</color>
+    <color name="lightTealOnPrimary">#FFFFFF</color>
+    <color name="lightTealOnSecondary">#000000</color>
+    <color name="lightTealSurface">#ACF2F3</color> <!-- background color -->
+    <color name="lightTealOnSurface">#000000</color>
+
+    <!-- Dark Mode Colors for Teal Theme -->
+    <color name="darkTealPrimary">#59D5D6</color>
+    <color name="darkTealPrimaryContainer">#59DEDF</color>
+    <color name="darkTealSecondary">#9575CD</color>
+    <color name="darkTealBackground">#121212</color>
+    <color name="darkTealOnPrimary">#FFFFFF</color>
+    <color name="darkTealOnSecondary">#000000</color>
+    <color name="darkTealSurface">#03C9CA</color>
+    <color name="darkTealOnSurface">#FFFFFF</color>
+
+    <!-- Light Mode Colors for Green Theme -->
+    <color name="lightGreenPrimary">#9AFA9C</color>
+    <color name="lightGreenPrimaryDark">#8FF691</color>
+    <color name="lightGreenSecondary">#CE93D8</color>
+    <color name="lightGreenBackground">#FFFFFF</color>
+    <color name="lightGreenOnPrimary">#FFFFFF</color>
+    <color name="lightGreenOnSecondary">#000000</color>
+    <color name="lightGreenSurface">#B9EFB3</color>
+    <color name="lightGreenOnSurface">#000000</color>
+
+    <!-- Dark Mode Colors for Green Theme -->
+    <color name="darkGreenPrimary">#33CD37</color>
+    <color name="darkGreenPrimaryContainer">#1FB122</color>
+    <color name="darkGreenSecondary">#9575CD</color>
+    <color name="darkGreenBackground">#121212</color>
+    <color name="darkGreenOnPrimary">#FFFFFF</color>
+    <color name="darkGreenOnSecondary">#000000</color>
+    <color name="darkGreenSurface">#28A52B</color>
+    <color name="darkGreenOnSurface">#FFFFFF</color>
+
+    <!-- Light Mode Colors for Yellow Theme -->
+    <color name="lightYellowPrimary">#F1FD74</color>
+    <color name="lightYellowPrimaryDark">#E9F660</color>
+    <color name="lightYellowSecondary">#CE93D8</color>
+    <color name="lightYellowBackground">#FFFFFF</color>
+    <color name="lightYellowOnPrimary">#FFFFFF</color>
+    <color name="lightYellowOnSecondary">#000000</color>
+    <color name="lightYellowSurface">#F4FAB4</color>
+    <color name="lightYellowOnSurface">#000000</color>
+
+    <!-- Dark Mode Colors for Yellow Theme -->
+    <color name="darkYellowPrimary">#FFFB00</color>
+    <color name="darkYellowPrimaryContainer">#FFFB00</color>
+    <color name="darkYellowSecondary">#9575CD</color>
+    <color name="darkYellowBackground">#121212</color>
+    <color name="darkYellowOnPrimary">#FFFFFF</color>
+    <color name="darkYellowOnSecondary">#000000</color>
+    <color name="darkYellowSurface">#F1FD74</color>
+    <color name="darkYellowOnSurface">#FFFFFF</color>
+
 </resources>
