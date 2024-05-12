@@ -91,6 +91,81 @@
         <item name="colorOnSurface">@color/darkPurpleOnSurface</item>
         <item name="colorOnBackground">@color/darkPurpleBackground</item>
     </style>
+
+    <!-- Light Mode Pink -->
+    <style name="LightModeTeal" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightTealPrimary</item>
+        <item name="colorPrimaryVariant">@color/lightTealPrimaryDark</item>
+        <item name="colorSecondary">@color/lightTealSecondary</item>
+        <item name="colorOnPrimary">@color/lightTealOnPrimary</item>
+        <item name="colorOnSecondary">@color/lightTealOnSecondary</item>
+        <item name="colorSurface">@color/lightTealSurface</item>
+        <item name="colorOnSurface">@color/lightTealOnSurface</item>
+        <item name="colorOnBackground">@color/lightTealBackground</item>
+
+    </style>
+
+
+    <!-- Dark Mode Pink -->
+    <style name="DarkModeTeal" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkTealPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkTealPrimaryContainer</item>
+        <item name="colorSecondary">@color/darkTealSecondary</item>
+        <item name="colorOnPrimary">@color/darkTealOnPrimary</item>
+        <item name="colorOnSecondary">@color/darkTealOnSecondary</item>
+        <item name="colorSurface">@color/darkTealSurface</item>
+        <item name="colorOnSurface">@color/darkTealOnSurface</item>
+        <item name="colorOnBackground">@color/darkTealBackground</item>
+    </style>
+
+    <!-- Light Mode Green -->
+    <style name="LightModeGreen" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightGreenPrimary</item>
+        <item name="colorPrimaryVariant">@color/lightGreenPrimaryDark</item>
+        <item name="colorSecondary">@color/lightGreenSecondary</item>
+        <item name="colorOnPrimary">@color/lightGreenOnPrimary</item>
+        <item name="colorOnSecondary">@color/lightGreenOnSecondary</item>
+        <item name="colorSurface">@color/lightGreenSurface</item>
+        <item name="colorOnSurface">@color/lightGreenOnSurface</item>
+        <item name="colorOnBackground">@color/lightGreenBackground</item>
+    </style>
+
+    <!-- Dark Mode Green -->
+    <style name="DarkModeGreen" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkGreenPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkGreenPrimaryContainer</item>
+        <item name="colorSecondary">@color/darkGreenSecondary</item>
+        <item name="colorOnPrimary">@color/darkGreenOnPrimary</item>
+        <item name="colorOnSecondary">@color/darkGreenOnSecondary</item>
+        <item name="colorSurface">@color/darkGreenSurface</item>
+        <item name="colorOnSurface">@color/darkGreenOnSurface</item>
+        <item name="colorOnBackground">@color/darkGreenBackground</item>
+    </style>
+
+    <!-- Light Mode Yellow -->
+    <style name="LightModeYellow" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightYellowPrimary</item>
+        <item name="colorPrimaryVariant">@color/lightYellowPrimaryDark</item>
+        <item name="colorSecondary">@color/lightYellowSecondary</item>
+        <item name="colorOnPrimary">@color/lightYellowOnPrimary</item>
+        <item name="colorOnSecondary">@color/lightYellowOnSecondary</item>
+        <item name="colorSurface">@color/lightYellowSurface</item>
+        <item name="colorOnSurface">@color/lightYellowOnSurface</item>
+        <item name="colorOnBackground">@color/lightYellowBackground</item>
+    </style>
+
+    <!-- Dark Mode Yellow -->
+    <style name="DarkModeYellow" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkYellowPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkYellowPrimaryContainer</item>
+        <item name="colorSecondary">@color/darkYellowSecondary</item>
+        <item name="colorOnPrimary">@color/darkYellowOnPrimary</item>
+        <item name="colorOnSecondary">@color/darkYellowOnSecondary</item>
+        <item name="colorSurface">@color/darkYellowSurface</item>
+        <item name="colorOnSurface">@color/darkYellowOnSurface</item>
+        <item name="colorOnBackground">@color/darkYellowBackground</item>
+    </style>
+
     <style name="textLight" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorOnPrimary</item>
         <item name="android:textColorPrimary">@color/colorOnPrimary</item>

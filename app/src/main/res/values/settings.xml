@@ -7,5 +7,11 @@
         <item>Light Mode (Pink)</item>
         <item>Dark Mode (Purple) </item>
         <item>Light Mode (Purple)</item>
+        <item>Dark Mode (Teal)</item>
+        <item>Light Mode (Teal)</item>
+        <item>Dark Mode (Green)</item>
+        <item>Light Mode (Green)</item>
+        <item>Dark Mode (Yellow)</item>
+        <item>Light Mode (Yellow)</item>
     </string-array>
 </resources>
