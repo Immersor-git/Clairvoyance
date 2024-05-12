@@ -12,7 +12,7 @@
         <item name="colorOnBackground">@color/colorOnBackground</item>
     </style>
 
-    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textAppearance">@style/textLight</item>
         <item name="android:textViewStyle">@style/textLight</item>
         <item name="android:spinnerItemStyle">@style/spinnerLight</item>
@@ -27,7 +27,7 @@
         <item name="colorOnBackground">@color/colorOnBackground</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="DarkThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
         <item name="android:textAppearance">@style/textDark</item>
         <item name="android:textViewStyle">@style/textDark</item>
@@ -40,6 +40,56 @@
         <item name="colorSurface">@color/darkcolorSurface</item>
         <item name="colorOnSurface">@color/darkcolorOnSurface</item>
         <item name="colorOnBackground">@color/darkcolorOnBackground</item>
+    </style>
+
+    <!-- Light Mode Pink -->
+    <style name="LightModePink" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightPinkPrimary</item>
+        <item name="colorPrimaryVariant">@color/lightPinkPrimaryDark</item>
+        <item name="colorSecondary">@color/lightPinkSecondary</item>
+        <item name="colorOnPrimary">@color/lightPinkOnPrimary</item>
+        <item name="colorOnSecondary">@color/lightPinkOnSecondary</item>
+        <item name="colorSurface">@color/lightPinkSurface</item>
+        <item name="colorOnSurface">@color/lightPinkOnSurface</item>
+        <item name="colorOnBackground">@color/lightPinkBackground</item>
+
+    </style>
+
+
+    <!-- Dark Mode Pink -->
+    <style name="DarkModePink" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkPinkPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkPinkPrimaryContainer</item>
+        <item name="colorSecondary">@color/darkPinkSecondary</item>
+        <item name="colorOnPrimary">@color/darkPinkOnPrimary</item>
+        <item name="colorOnSecondary">@color/darkPinkOnSecondary</item>
+        <item name="colorSurface">@color/darkPinkSurface</item>
+        <item name="colorOnSurface">@color/darkPinkOnSurface</item>
+        <item name="colorOnBackground">@color/darkPinkBackground</item>
+    </style>
+
+    <!-- Light Mode Purple -->
+    <style name="LightModePurple" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightPurplePrimary</item>
+        <item name="colorPrimaryVariant">@color/lightPurplePrimaryDark</item>
+        <item name="colorSecondary">@color/lightPurpleSecondary</item>
+        <item name="colorOnPrimary">@color/lightPurpleOnPrimary</item>
+        <item name="colorOnSecondary">@color/lightPurpleOnSecondary</item>
+        <item name="colorSurface">@color/lightPurpleSurface</item>
+        <item name="colorOnSurface">@color/lightPurpleOnSurface</item>
+        <item name="colorOnBackground">@color/lightPurpleBackground</item>
+    </style>
+
+    <!-- Dark Mode Purple -->
+    <style name="DarkModePurple" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkPurplePrimary</item>
+        <item name="colorPrimaryVariant">@color/darkPurplePrimaryContainer</item>
+        <item name="colorSecondary">@color/darkPurpleSecondary</item>
+        <item name="colorOnPrimary">@color/darkPurpleOnPrimary</item>
+        <item name="colorOnSecondary">@color/darkPurpleOnSecondary</item>
+        <item name="colorSurface">@color/darkPurpleSurface</item>
+        <item name="colorOnSurface">@color/darkPurpleOnSurface</item>
+        <item name="colorOnBackground">@color/darkPurpleBackground</item>
     </style>
     <style name="textLight" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorOnPrimary</item>

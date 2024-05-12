@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="theme_settings">
-        <item>Dark</item>
-        <item>Light</item>
+        <item>Dark Mode (Blue) </item>
+        <item>Light Mode (Blue)</item>
+        <item>Dark Mode (Pink) </item>
+        <item>Light Mode (Pink)</item>
+        <item>Dark Mode (Purple) </item>
+        <item>Light Mode (Purple)</item>
     </string-array>
 </resources>

@@ -152,7 +152,8 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
     }
-    val themes = arrayOf<Int>(R.style.DarkTheme,R.style.LightTheme)
+    val themes = arrayOf<Int>(R.style.DarkThemeBlue,R.style.LightThemeBlue, R.style.DarkModePink,
+        R.style.LightModePink, R.style.DarkModePurple, R.style.LightModePurple)
     fun getCustomTheme() : Int {
         return themes[loadTheme()]
     }
