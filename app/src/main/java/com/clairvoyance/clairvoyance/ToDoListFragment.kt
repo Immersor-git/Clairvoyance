@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -78,9 +80,13 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Calendar
+import java.util.Locale
+import java.util.UUID
 
 class ToDoListFragment(
     val openFragment: (fragment: Fragment) -> Unit
@@ -330,6 +336,7 @@ class ToDoListFragment(
             }
         }
     }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun TaskSheet(
@@ -344,21 +351,29 @@ class ToDoListFragment(
 
         // Init states
         var name by remember { mutableStateOf("") }
-        name = taskState.name
-
         var desc by remember { mutableStateOf("") }
-        desc = taskState.desc
-
-        var startTime by remember { mutableStateOf(taskState.startTime ?: null ) }
-        var endTime by remember { mutableStateOf(taskState.endTime ?: null) }
-
+        var startTime by remember { mutableStateOf(taskState.startTime) }
+        var endTime by remember { mutableStateOf(taskState.endTime) }
         val dataFieldList = remember { mutableStateListOf<DataField>() }
-        dataFieldList.addAll(taskState.dataFields)
+        var date by remember { mutableStateOf(taskState.date) }
+
+        if (task != null) {
+            name = taskState.name
+            desc = taskState.desc
+            startTime = taskState.startTime
+            endTime = taskState.endTime
+            dataFieldList.addAll(taskState.dataFields)
+            date = taskState.date
+        }
 
         val timePickerState = rememberTimePickerState()
         var showTimePicker by remember { mutableStateOf(false) }
-
         var isStartTime by remember { mutableStateOf(false) }
+
+        val datePickerState = rememberDatePickerState()
+        var showDatePicker by remember { mutableStateOf(false) }
+        var isDataFieldDate by remember { mutableStateOf(false) }
+        var dataFieldFocusID by remember { mutableStateOf("")}
 
         if (showBottomSheet) {
             ModalBottomSheet(
@@ -426,6 +441,15 @@ class ToDoListFragment(
                             }
                         ) {
                             Text(text = if (endTime == null) "End Time" else endTime.toString())
+                        }
+                        // Date button
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                showDatePicker = true
+                            }
+                        ) {
+                            Text(text = if (date == null) "Date" else date.toString())
                         }
 
                         // TextField to input number of hours
@@ -496,7 +520,11 @@ class ToDoListFragment(
                             DataType.DATE -> {
                                 Button(
                                     modifier = Modifier.fillMaxWidth(),
-                                    onClick = { /*TODO*/ }
+                                    onClick = {
+                                        isDataFieldDate = true
+                                        dataFieldFocusID = dataField.id
+                                        showDatePicker = true
+                                    }
                                 ) {
                                     Text(text = (dataField.data as LocalDate).toString() )
                                 }
@@ -578,9 +606,9 @@ class ToDoListFragment(
                                         val newTask = Task(
                                             name = name,
                                             desc = desc,
-                                            startTime = null,
-                                            endTime = null,
-                                            date = null,
+                                            startTime = startTime,
+                                            endTime = endTime,
+                                            date = date,
                                             dataFields = dataFieldList.toMutableList()
                                         )
                                         taskViewModel.addTaskItem(newTask)
@@ -594,6 +622,7 @@ class ToDoListFragment(
                                                     desc = desc,
                                                     startTime = it,
                                                     endTime = it1,
+                                                    date = date,
                                                     dataFields = dataFieldList.toMutableList()
                                                 )
                                             }
@@ -603,6 +632,9 @@ class ToDoListFragment(
                                     // Reset states
                                     name = ""
                                     desc = ""
+                                    startTime = null
+                                    endTime = null
+                                    date = null
                                     dataFieldList.clear()
 
                                     onDismiss()
@@ -643,76 +675,45 @@ class ToDoListFragment(
                 TimePicker(state = timePickerState)
             }
         }
-    }
 
-//    @Composable
-//    fun DataFieldList(
-//        dataFieldList: MutableList<DataField>
-//    ) {
-//        LazyColumn (
-//            modifier = Modifier.fillMaxWidth(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ){
-//            items(dataFieldList) { dataField ->
-//
-//                TextField(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    value = dataField.tag,
-//                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-//                    onValueChange = {
-//                        dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(tag = it)
-//                    }
-//                )
-//
-//                when(dataField.dataType) {
-//                    DataType.TEXT -> {
-//                        OutlinedTextField(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            value = dataField.data as String,
-//                            onValueChange = {
-//                                // Trigger recomposition by replacing data field
-//                                dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-//                            },
-//                            label = { Text("Text") }
-//                        )
-//                    }
-//                    DataType.DATE -> {
-//                        Button(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            onClick = { /*TODO*/ }
-//                        ) {
-//                            Text(text = (dataField.data as LocalDate).toString() )
-//                        }
-//                    }
-//                    DataType.NUMBER -> {
-//                        OutlinedTextField(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            value = dataField.data as String,
-//                            onValueChange = {
-//                                // Only allow digits or decimals
-//                                if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
-//                                    // Trigger recomposition by replacing data field
-//                                    dataFieldList[dataFieldList.indexOf(dataField)] = dataField.copy(data = it)
-//                                }
-//                            },
-//                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-//                            label = { Text("Number") }
-//                        )
-//                    }
-//                    DataType.IMAGE -> {
-//                        TODO()
-//                    }
-//                    DataType.AUDIO -> {
-//                        TODO()
-//                    }
-//                    DataType.EXCEPTION -> {
-//                        TODO()
-//                    }
-//                }
-//            }
-//        }
-//    }
+        if (showDatePicker) {
+            androidx.compose.material3.DatePickerDialog(
+                onDismissRequest = { /*TODO*/ },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            // Weird conversion
+                            // Go from Calendar instance to formatted date string to LocalDate
+                            val selectedDate = Calendar.getInstance().apply {
+                                timeInMillis = datePickerState.selectedDateMillis!!
+                            }
+                            val dateFormatter = SimpleDateFormat("yyy-MM-dd", Locale.getDefault())
+                            val myDate = LocalDate.parse(dateFormatter.format(selectedDate.time))
+
+                            if (isDataFieldDate) {
+                                isDataFieldDate = false
+                                val df = dataFieldList.find {it.id == dataFieldFocusID}
+                                dataFieldList[dataFieldList.indexOf(df)] = df!!.copy(data = myDate)
+                            } else {
+                                date = myDate
+                            }
+                            showDatePicker = false
+                        }
+                    ) { Text("OK") }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            showDatePicker = false
+                        }
+                    ) { Text("Cancel") }
+                }
+            )
+            {
+                DatePicker(state = datePickerState)
+            }
+        }
+    }
 
     @Composable
     fun AddDataFieldButtons(
@@ -833,6 +834,11 @@ class ToDoListFragment(
                 }
             }
         }
+    }
+
+    @Composable
+    fun DatePickerDialog() {
+
     }
 
 

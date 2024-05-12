@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalTime
 
 class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
@@ -28,7 +29,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         saveTaskToDatabase(task)
     }
 
-    fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime, endTime:LocalTime, dataFields: MutableList<DataField>) {
+    fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime, endTime:LocalTime, date: LocalDate?, dataFields: MutableList<DataField>) {
         _taskList.update {
             _taskList.value.toMutableList().apply {
                 // Create copy of task item
@@ -40,6 +41,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 copy.desc = desc
                 copy.startTime = startTime
                 copy.endTime = endTime
+                copy.date = date
                 copy.dataFields = dataFields
 
                 Log.d("TASK STUFF", dataFields.size.toString())
