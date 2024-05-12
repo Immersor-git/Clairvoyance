@@ -73,9 +73,10 @@ class CameraActivity1(kProperty0: KProperty0<(fragment: Fragment) -> Unit>) : Fr
         val view = inflater.inflate(R.layout.fragment_weekly_view, container, false)
         applicationContext = requireContext()
 
+
         if (!hasRequiredPermissions()) {
             ActivityCompat.requestPermissions(
-                mainActivity, CAMERAX_PERMISSIONS, 1
+                mainActivity, CAMERAX_PERMISSIONS, 7
             )
             val composeView = view.findViewById<ComposeView>(R.id.composeView)
             composeView.apply {
@@ -87,14 +88,109 @@ class CameraActivity1(kProperty0: KProperty0<(fragment: Fragment) -> Unit>) : Fr
                 }
             }
         }
+
         return view
     }
+
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun CallPhoto() {
+        val scope = rememberCoroutineScope()
+        val scaffoldState = rememberBottomSheetScaffoldState()
+        val controller = remember {
+            LifecycleCameraController(applicationContext).apply {
+                setEnabledUseCases(
+                    CameraController.IMAGE_CAPTURE or CameraController.VIDEO_CAPTURE
+                )
+            }
+        }
+
+        val viewModel = viewModel<MainViewModel>()
+        val bitmaps by viewModel.bitmaps.collectAsState()
+
+        if (hasRequiredPermissions()) {
+            BottomSheetScaffold(
+                scaffoldState = scaffoldState,
+                sheetPeekHeight = 0.dp,
+                sheetContent = {
+                    PhotoBottomSheetContent(
+                        bitmaps = bitmaps,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }) { padding ->
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                ) {
+                    CameraPreview(
+                        controller = controller,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    IconButton(
+                        onClick = {
+                            controller.cameraSelector =
+                                if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                                    CameraSelector.DEFAULT_FRONT_CAMERA
+                                } else CameraSelector.DEFAULT_BACK_CAMERA
+                        },
+                        modifier = Modifier
+                            .offset(16.dp, 16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Cameraswitch,
+                            contentDescription = "Switch camera"
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    scaffoldState.bottomSheetState.expand()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Photo,
+                                contentDescription = "Gallery Open"
+                            )
+                        }
+
+                        IconButton(
+                            onClick = {
+                                takePhoto(
+                                    controller = controller,
+                                    onPhotoTaken = viewModel::onTakePhoto
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PhotoCamera,
+                                contentDescription = "Take Photo"
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
     //this function calls the camera feed in order for the pictures to be taken
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun CallPhoto() {
+    fun CallPhoto1() {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberBottomSheetScaffoldState()
         //LocalContext.current
@@ -226,7 +322,7 @@ class CameraActivity1(kProperty0: KProperty0<(fragment: Fragment) -> Unit>) : Fr
 
     }
     //ensures that the user gave the app proper permissions
-    fun hasRequiredPermissions(): Boolean {
+    private fun hasRequiredPermissions(): Boolean {
         return CAMERAX_PERMISSIONS.all {
             ContextCompat.checkSelfPermission(
                 applicationContext,
