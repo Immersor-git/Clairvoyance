@@ -11,7 +11,7 @@ data class Task (
     // Constructor items
     var name: String,
     var desc: String,
-    var startTime: LocalTime?, //LocalTime?,
+    var startTime: String?, //LocalTime?,
     var endTime: LocalTime?, //LocalTime?,
     var date: LocalDate?,
 

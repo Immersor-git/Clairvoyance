@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.Duration
 import java.time.LocalTime
 
 class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
@@ -21,6 +20,13 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     val templates = _templates.asStateFlow()
 //    var tasks = MutableLiveData<MutableList<Task>?>()
 
+
+    fun sortTaskList() {
+        _taskList.value.sortBy { it.startTime } // Assuming 'date' is a property of Task by which you want to sort
+        _taskList.value = _taskList.value.toMutableList() // Emit a new state
+    }
+
+
     fun addTaskItem(task: Task) {
         _taskList.update {
             taskList.value.toMutableList().apply { this.add(task) }
@@ -28,7 +34,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         saveTaskToDatabase(task)
     }
 
-    fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime, endTime:LocalTime, dataFields: MutableList<DataField>) {
+    fun updateTaskItem(task: Task, name: String, desc: String, startTime: String, endTime:LocalTime, dataFields: MutableList<DataField>) {
         _taskList.update {
             _taskList.value.toMutableList().apply {
                 // Create copy of task item

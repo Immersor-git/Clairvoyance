@@ -38,7 +38,7 @@ class ViewTask : Fragment() {
 
         tvTaskTitle.setText(taskData[0]) //Sets each tag to be the specified value associated with the task (name, time, checklist, etc)
         tvTaskCategory.setText(taskData[1])
-        tvTaskTime.setText(taskData[2])
+        tvTaskTime.setText(taskData[2].toString())
         tvTaskReminder.setText(taskData[3])
         tvTaskIsChecklist.setText(taskData[4])
 
