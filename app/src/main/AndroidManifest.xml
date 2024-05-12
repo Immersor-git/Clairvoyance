@@ -31,6 +31,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".HelpItems.NotificationInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.TaskInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.CalendarInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.ContactUs"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.GraphInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.TaskArchiveInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity android:name=".HelpItems.ThemeInfo"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+
+
+
     </application>
 
 </manifest>
