@@ -31,7 +31,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime?, endTime:LocalTime?, date: LocalDate?, dataFields: MutableList<DataField>) {
         Log.d("TASK STUFF", name + " 3")
         _taskList.update {
-            _taskList.value.toMutableList().apply {
+            taskList.value.toMutableList().apply {
                 // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
                 val copy = currTask.copy()
@@ -52,7 +52,7 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
     }
     fun updateCheckbox(task: Task, dataField : DataField, isChecked : Boolean) {
         _taskList.update {
-            _taskList.value.toMutableList().apply {
+            taskList.value.toMutableList().apply {
                 // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
                 val copy = currTask.copy()
@@ -92,16 +92,36 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
 
     fun deleteTaskItem(task:Task) {
         _taskList.update {
-            _taskList.value.toMutableList().apply {
+            taskList.value.toMutableList().apply {
                 this.remove(task)
             }
+        }
+
+        _taskArchive.update {
+            taskArchive.value.toMutableList().apply { this.add(task) }
         }
         archiveTask(task)
     }
 
+    fun deleteTaskFromArchive(task:Task) {
+        _taskArchive.update {
+            taskArchive.value.toMutableList().apply {
+                this.remove(task)
+            }
+        }
+
+        val db = appViewModel.databaseManager
+        db.deleteTask(task)
+    }
+
+    fun restoreFromArchive(task: Task) {
+        addTaskItem(task)
+        deleteTaskFromArchive(task)
+    }
+
     fun setComplete(task: Task) {
         _taskList.update {
-            _taskList.value.toMutableList().apply {
+            taskList.value.toMutableList().apply {
                 // Create copy of task item
                 val currTask = this.find { it.id == task.id }!!
                 val copy = currTask.copy()

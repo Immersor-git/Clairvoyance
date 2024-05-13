@@ -88,8 +88,7 @@ class ToDoListFragment(
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater { //Applies theme on loading
         val inflater = super.onGetLayoutInflater(savedInstanceState)
         mainActivity = activity as MainActivity
-        val contextThemeWrapper: Context =
-            ContextThemeWrapper(requireContext(), mainActivity.getCustomTheme())
+        val contextThemeWrapper: Context = ContextThemeWrapper(requireContext(), mainActivity.getCustomTheme())
         return inflater.cloneInContext(contextThemeWrapper)
     }
 
@@ -388,15 +387,15 @@ class ToDoListFragment(
         var desc by remember { mutableStateOf(taskState.desc) }
         var startTime by remember { mutableStateOf(taskState.startTime) }
         var endTime by remember { mutableStateOf(taskState.endTime) }
-        var dataFieldList = remember { mutableStateListOf<DataField>() }
+        val dataFieldList = remember { mutableStateListOf<DataField>() }
         var date by remember { mutableStateOf(LocalDate.now()) }
 
         name = taskState.name
         desc = taskState.desc
 //        startTime = taskState.startTime
 //        endTime = taskState.endTime
-        //if (dataFieldList.size == 0) dataFieldList.addAll(taskState.dataFields)
-        dataFieldList = taskState.dataFields.toMutableStateList()
+        if (dataFieldList.size == 0) dataFieldList.addAll(taskState.dataFields)
+        //dataFieldList = taskState.dataFields.toMutableStateList()
 //        date = taskState.date
 
         val timePickerState = rememberTimePickerState()
