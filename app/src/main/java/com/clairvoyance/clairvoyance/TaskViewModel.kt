@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -45,6 +44,37 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 copy.dataFields = dataFields
 
                 Log.d("TASK STUFF", dataFields.size.toString())
+                saveTaskToDatabase(copy)
+                // Replace task with updated copy to trigger recomposition
+                this[indexOf(currTask)] = copy
+            }
+        }
+    }
+    fun updateCheckbox(task: Task, dataField : DataField, isChecked : Boolean) {
+        _taskList.update {
+            _taskList.value.toMutableList().apply {
+                // Create copy of task item
+                val currTask = this.find { it.id == task.id }!!
+                val copy = currTask.copy()
+
+
+                // Edit fields
+                //copy.name = name
+                //copy.desc = desc
+                //copy.startTime = startTime
+                //copy.endTime = endTime
+                //copy.date = date
+                var dfIndex = -1
+                task.dataFields.forEachIndexed { index, element ->
+                    if (element.id == dataField.id) {
+                        dfIndex = index
+                    }
+                }
+                if (dfIndex > -1) {
+                    copy.dataFields[dfIndex] = DataField(DataType.CHECKBOX, Checkbox(isChecked, (dataField.data as Checkbox).desc), dataField.tag, dataField.id)
+                }
+
+                //Log.d("TASK STUFF", dataFields.size.toString())
                 saveTaskToDatabase(copy)
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy

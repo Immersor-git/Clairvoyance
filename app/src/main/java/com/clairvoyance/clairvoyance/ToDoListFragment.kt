@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -43,9 +42,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -55,8 +52,6 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -67,10 +62,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -86,7 +79,6 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Calendar
 import java.util.Locale
-import java.util.UUID
 
 class ToDoListFragment(
     val openFragment: (fragment: Fragment) -> Unit
@@ -274,28 +266,34 @@ class ToDoListFragment(
                         .padding(12.dp) // Outer padding
                         .padding(12.dp), // Inner padding)
                 ) {
-                    Row() {
-                        Text(
-                            modifier = Modifier.padding(start = 10.dp),
-                            text = task.desc,
-                            fontSize = 16.sp
-                        )
+                    if (task.desc != "") {
+                        Row() {
+                            Text(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = task.desc,
+                                fontSize = 16.sp
+                            )
+                        }
                     }
                     Row() {
-                        Text(
-                            modifier = Modifier.padding(start = 10.dp),
-                            text = task.startTime.toString(),
-                            fontSize = 16.sp
-                        )
-                        Text(
-                            modifier = Modifier.padding(start = 10.dp),
-                            text = task.endTime.toString(),
-                            fontSize = 16.sp
-                        )
+                        if (task.startTime != null) {
+                            Text(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = "Starts: "+(task.startTime).toString(),
+                                fontSize = 16.sp
+                            )
+                        }
+                        if (task.endTime != null) {
+                            Text(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = "Ends: "+(task.endTime).toString(),
+                                fontSize = 16.sp
+                            )
+                        }
                     }
                     Column {
                         task.dataFields.forEach {
-                            DataFieldRow(it)
+                            DataFieldRow(task, it, taskViewModel)
                         }
                     }
                     Button(
@@ -313,13 +311,16 @@ class ToDoListFragment(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun DataFieldRow(
-        df : DataField
+        task : Task,
+        df : DataField,
+        taskViewModel: TaskViewModel
     ) {
         Row(
             modifier = Modifier
                 .wrapContentHeight()
                 .padding(5.dp)
         ) {
+
             if (df.dataType == DataType.TEXT) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
@@ -337,7 +338,19 @@ class ToDoListFragment(
             else if (df.dataType == DataType.DATE) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = "Date Error",
+                    text = (df.data as LocalDate).toString(),
+                    fontSize = 16.sp
+                )
+            } else if (df.dataType == DataType.CHECKBOX) {
+                Image(
+                    painter = painterResource(id = (df.data as Checkbox).imageResource()),
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                    }
+                )
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = (df.data as Checkbox).desc,
                     fontSize = 16.sp
                 )
             }
