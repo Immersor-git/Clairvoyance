@@ -12,9 +12,12 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -41,7 +44,8 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class GraphViewFragment(
-    val task: Task
+    val task: Task,
+    val openFragment: (fragment: Fragment) -> Unit
 ) : Fragment() {
     private lateinit var mainActivity: MainActivity
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater { //Applies theme on loading
@@ -61,7 +65,7 @@ class GraphViewFragment(
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                GraphScreen(task = task, taskViewModel = appViewModel.taskViewModel)
+                GraphScreen(task = task, taskViewModel = appViewModel.taskViewModel, openFragment)
             }
         }
     }
@@ -70,15 +74,27 @@ class GraphViewFragment(
 @Composable
 fun GraphScreen(
     task: Task,
-    taskViewModel: TaskViewModel
+    taskViewModel: TaskViewModel,
+    openFragment: (fragment: Fragment) -> Unit
 ) {
+
+    Button(
+        modifier = Modifier.wrapContentHeight(),
+        onClick = { openFragment(ToDoListFragment(openFragment)) }
+    )
+    {
+        Text(text = "Back")
+    }
+
     // Find all numeric data fields and add their tags to a list
     val tags = mutableListOf<String>()
     task.dataFields.forEach {
         if (it.dataType == DataType.NUMBER) tags.add(it.tag)
     }
     LazyColumn(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
+            .wrapContentHeight()
     ) {
         items(tags) { tag ->
             GraphView(tag, taskViewModel)
@@ -126,7 +142,7 @@ fun GraphView(
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(100.dp)
-        .backgroundColor(Color.Blue)
+        .backgroundColor(Color.Transparent)
         .steps(pointsData.toList().size - 1)
         .labelData { i -> i.toString() }
         .labelAndAxisLinePadding(15.dp)
@@ -134,7 +150,7 @@ fun GraphView(
 
     val yAxisData = AxisData.Builder()
         .steps(10)
-        .backgroundColor(Color.Red)
+        .backgroundColor(Color.Transparent)
         .labelAndAxisLinePadding(20.dp)
         .labelData { i -> i.toString()
         }.build()

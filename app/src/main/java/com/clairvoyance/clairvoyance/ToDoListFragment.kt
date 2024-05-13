@@ -300,7 +300,7 @@ class ToDoListFragment(
                     }
                     Button(
                         onClick = {
-                            openFragment(GraphViewFragment(task))
+                            openFragment(GraphViewFragment(task, openFragment))
                         }
                     ) {
                         Text(text = "View Data Graphs")
