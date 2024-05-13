@@ -68,7 +68,7 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         val user = accountManager.user
         if (user.userID != "X") {
             database.collection("Users").document(user.userID).collection("Tasks").document(task.id).delete()
-            database.collection("Users").document(user.userID).collection("TaskArchive").document(task.id).set(task)
+            database.collection("Users").document(user.userID).collection("TaskArchive").document(task.id).set(FirebaseTask(task))
         }
     }
 
