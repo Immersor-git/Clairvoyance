@@ -318,7 +318,8 @@ class ToDoListFragment(
         Row(
             modifier = Modifier
                 .wrapContentHeight()
-                .padding(5.dp)
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             if (df.dataType == DataType.TEXT) {
@@ -353,6 +354,18 @@ class ToDoListFragment(
                     text = (df.data as Checkbox).desc,
                     fontSize = 16.sp
                 )
+            }
+            else if (df.dataType == DataType.CHECKBOX) {
+                Row {
+                    Image(
+                        painter = painterResource(id = (df.data as Checkbox).imageResource()),
+                        contentDescription = "",
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = (df.data as Checkbox).desc
+                    )
+                }
             }
         }
     }
@@ -632,19 +645,16 @@ class ToDoListFragment(
                                         taskViewModel.addTaskItem(newTask)
                                         // Else update the existing given task
                                     } else {
-                                        startTime?.let {
-                                            endTime?.let { it1 ->
-                                                taskViewModel.updateTaskItem(
-                                                    task = task,
-                                                    name = name,
-                                                    desc = desc,
-                                                    startTime = it,
-                                                    endTime = it1,
-                                                    date = date,
-                                                    dataFields = dataFieldList.toMutableList()
-                                                )
-                                            }
-                                        }
+
+                                        taskViewModel.updateTaskItem(
+                                            task = task,
+                                            name = name,
+                                            desc = desc,
+                                            startTime = startTime,
+                                            endTime = endTime,
+                                            date = date,
+                                            dataFields = dataFieldList.toMutableList()
+                                        )
                                     }
 
                                     // Reset states
