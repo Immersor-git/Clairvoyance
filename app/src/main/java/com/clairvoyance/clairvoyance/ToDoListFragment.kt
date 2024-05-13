@@ -58,6 +58,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -383,18 +384,19 @@ class ToDoListFragment(
         val taskState = task ?: Task()
 
         // Init states
-        var name by remember { mutableStateOf("") }
-        var desc by remember { mutableStateOf("") }
+        var name by remember { mutableStateOf(taskState.name) }
+        var desc by remember { mutableStateOf(taskState.desc) }
         var startTime by remember { mutableStateOf(taskState.startTime) }
         var endTime by remember { mutableStateOf(taskState.endTime) }
-        val dataFieldList = remember { mutableStateListOf<DataField>() }
+        var dataFieldList = remember { mutableStateListOf<DataField>() }
         var date by remember { mutableStateOf(LocalDate.now()) }
 
         name = taskState.name
         desc = taskState.desc
 //        startTime = taskState.startTime
 //        endTime = taskState.endTime
-        dataFieldList.addAll(taskState.dataFields)
+        //if (dataFieldList.size == 0) dataFieldList.addAll(taskState.dataFields)
+        dataFieldList = taskState.dataFields.toMutableStateList()
 //        date = taskState.date
 
         val timePickerState = rememberTimePickerState()
@@ -783,7 +785,7 @@ class ToDoListFragment(
                 }
                 // Add Number DataField
                 FloatingActionButton(
-                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "", "NUMBER")) }
+                    onClick = { dataFieldList.add(DataField(DataType.NUMBER, "0", "NUMBER")) }
                 ) {
                     Text(text = "NUM")
                 }
