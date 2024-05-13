@@ -390,8 +390,8 @@ class ToDoListFragment(
         val dataFieldList = remember { mutableStateListOf<DataField>() }
         var date by remember { mutableStateOf(LocalDate.now()) }
 
-        name = taskState.name
-        desc = taskState.desc
+        if (name == "") name = taskState.name
+        if (desc == "") desc = taskState.desc
 //        startTime = taskState.startTime
 //        endTime = taskState.endTime
         if (dataFieldList.size == 0) dataFieldList.addAll(taskState.dataFields)
