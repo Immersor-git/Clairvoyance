@@ -326,21 +326,21 @@ class ToDoListFragment(
             if (df.dataType == DataType.TEXT) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = df.data.toString(),
+                    text = df.tag + ": "+df.data.toString(),
                     fontSize = 16.sp
                 )
             }
             else if (df.dataType == DataType.NUMBER) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = df.data.toString(),
+                    text = df.tag + ": "+df.data.toString(),
                     fontSize = 16.sp
                 )
             }
             else if (df.dataType == DataType.DATE) {
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = (df.data as LocalDate).toString(),
+                    text = df.tag + ": "+(df.data as LocalDate).toString(),
                     fontSize = 16.sp
                 )
             } else if (df.dataType == DataType.CHECKBOX) {
@@ -352,7 +352,7 @@ class ToDoListFragment(
                 )
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = (df.data as Checkbox).desc,
+                    text = df.tag + ": "+(df.data as Checkbox).desc,
                     fontSize = 16.sp
                 )
             }
