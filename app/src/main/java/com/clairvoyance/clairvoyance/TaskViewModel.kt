@@ -29,7 +29,8 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
         saveTaskToDatabase(task)
     }
 
-    fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime, endTime:LocalTime, date: LocalDate?, dataFields: MutableList<DataField>) {
+    fun updateTaskItem(task: Task, name: String, desc: String, startTime: LocalTime?, endTime:LocalTime?, date: LocalDate?, dataFields: MutableList<DataField>) {
+        Log.d("TASK STUFF", name + " 3")
         _taskList.update {
             _taskList.value.toMutableList().apply {
                 // Create copy of task item
@@ -44,7 +45,6 @@ class TaskViewModel(private val appViewModel: AppViewModel) : ViewModel()
                 copy.date = date
                 copy.dataFields = dataFields
 
-                Log.d("TASK STUFF", dataFields.size.toString())
                 saveTaskToDatabase(copy)
                 // Replace task with updated copy to trigger recomposition
                 this[indexOf(currTask)] = copy
