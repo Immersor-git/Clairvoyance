@@ -77,15 +77,6 @@ fun GraphScreen(
     taskViewModel: TaskViewModel,
     openFragment: (fragment: Fragment) -> Unit
 ) {
-
-    Button(
-        modifier = Modifier.wrapContentHeight(),
-        onClick = { openFragment(ToDoListFragment(openFragment)) }
-    )
-    {
-        Text(text = "Back")
-    }
-
     // Find all numeric data fields and add their tags to a list
     val tags = mutableListOf<String>()
     task.dataFields.forEach {
