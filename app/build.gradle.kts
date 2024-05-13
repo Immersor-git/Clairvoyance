@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables{
             useSupportLibrary = true
         }
@@ -61,6 +61,11 @@ android {
             exclude("androidx.compose.ui:ui-desktop")
         }
     }
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute(module("org.hamcrest:hamcrest-core:1.1"))
+        }
+    }
 }
 
 dependencies {
@@ -83,6 +88,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation("com.google.firebase:firebase-database-ktx:20.3.1")
     implementation("com.google.ar:core:1.42.0")
+    implementation("org.testng:testng:6.9.6")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -97,4 +103,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0")) //Firebase
     implementation("com.google.firebase:firebase-auth") //Firebase Authentication
     implementation("com.google.firebase:firebase-firestore-ktx")
+
+    configurations.implementation {
+        exclude("junit", "junit")
+    }
 }

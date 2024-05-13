@@ -22,7 +22,7 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bindTask(tasks[position])
 
-        val childAdapter = TaskAdapter(tasks[position].children, clickListener)
-        holder.subTaskRecyclerView.adapter = childAdapter
+        //val childAdapter = TaskAdapter(tasks[position].children, clickListener)
+        //holder.subTaskRecyclerView.adapter = childAdapter
     }
 }

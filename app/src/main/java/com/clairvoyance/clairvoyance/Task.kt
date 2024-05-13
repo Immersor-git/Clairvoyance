@@ -20,7 +20,7 @@ data class Task (
     var isExpanded: Boolean = false,
     var isCompleted: Boolean = false,
     val id: String = UUID.randomUUID().toString(),
-    var children: MutableList<Task> = mutableListOf(),
+    //var children: MutableList<Task> = mutableListOf(),
     var dataFields: MutableList<DataField> = mutableListOf(),
     var tags: MutableList<String> = mutableListOf(),
     var templateName : String = "",

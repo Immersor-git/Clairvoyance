@@ -45,13 +45,13 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
     fun saveTask(task : Task, callback : ()->Unit = {}) {
         val user = accountManager.user
         if (user.userID != "X") {
-            database.collection("Users").document(user.userID).collection("Tasks").document(task.id).set(task)
+            database.collection("Users").document(user.userID).collection("Tasks").document(task.id).set(FirebaseTask(task))
         }
     }
-    fun saveTemplate(task : TaskTemplate, callback : ()->Unit = {}) {
+    fun saveTemplate(template : TaskTemplate, callback : ()->Unit = {}) {
         val user = accountManager.user
         if (user.userID != "X") {
-            database.collection("Users").document(user.userID).collection("Templates").document(task.id).set(task)
+            database.collection("Users").document(user.userID).collection("Templates").document(template.id).set(FirebaseTemplate(template))
         }
     }
     fun getTemplates(callback : (List<TaskTemplate>) -> Unit) {
@@ -59,7 +59,7 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         database.collection("Users").document(user.userID).collection("Templates").get().addOnSuccessListener { documents ->
             val tempList = ArrayList<TaskTemplate>()
             for (s in documents) {
-                tempList.add(s.toObject<TaskTemplate>())
+                tempList.add(FirebaseTemplate.asTemplate(s.toObject<FirebaseTemplate>()))
             }
             callback(tempList)
         }
@@ -77,7 +77,7 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         database.collection("Users").document(user.userID).collection("TaskArchive").get().addOnSuccessListener { documents ->
             val archiveList = ArrayList<Task>()
             for (s in documents) {
-                archiveList.add(s.toObject<Task>())
+                archiveList.add(FirebaseTask.asTask(s.toObject<FirebaseTask>()))
             }
             callback(archiveList)
         }
@@ -91,7 +91,7 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         database.collection("Users").document(user.userID).collection("Tasks").get().addOnSuccessListener { documents ->
             val taskList = ArrayList<Task>()
             for (s in documents) {
-                taskList.add(s.toObject<Task>())
+                taskList.add(FirebaseTask.asTask(s.toObject<FirebaseTask>()))
             }
             callback(taskList)
         }
