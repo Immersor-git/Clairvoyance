@@ -318,7 +318,8 @@ class ToDoListFragment(
         Row(
             modifier = Modifier
                 .wrapContentHeight()
-                .padding(5.dp)
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (df.dataType == DataType.TEXT) {
                 Text(
@@ -340,6 +341,18 @@ class ToDoListFragment(
                     text = "Date Error",
                     fontSize = 16.sp
                 )
+            }
+            else if (df.dataType == DataType.CHECKBOX) {
+                Row {
+                    Image(
+                        painter = painterResource(id = (df.data as Checkbox).imageResource()),
+                        contentDescription = "",
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = (df.data as Checkbox).desc
+                    )
+                }
             }
         }
     }
