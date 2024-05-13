@@ -298,6 +298,13 @@ class ToDoListFragment(
                             DataFieldRow(it)
                         }
                     }
+                    Button(
+                        onClick = {
+                            openFragment(GraphViewFragment(task))
+                        }
+                    ) {
+                        Text(text = "View Data Graphs")
+                    }
                 }
             }
         }
@@ -355,16 +362,14 @@ class ToDoListFragment(
         var startTime by remember { mutableStateOf(taskState.startTime) }
         var endTime by remember { mutableStateOf(taskState.endTime) }
         val dataFieldList = remember { mutableStateListOf<DataField>() }
-        var date by remember { mutableStateOf(taskState.date) }
+        var date by remember { mutableStateOf(LocalDate.now()) }
 
-        if (task != null) {
-            name = taskState.name
-            desc = taskState.desc
-            startTime = taskState.startTime
-            endTime = taskState.endTime
-            dataFieldList.addAll(taskState.dataFields)
-            date = taskState.date
-        }
+        name = taskState.name
+        desc = taskState.desc
+//        startTime = taskState.startTime
+//        endTime = taskState.endTime
+        dataFieldList.addAll(taskState.dataFields)
+//        date = taskState.date
 
         val timePickerState = rememberTimePickerState()
         var showTimePicker by remember { mutableStateOf(false) }
@@ -634,7 +639,7 @@ class ToDoListFragment(
                                     desc = ""
                                     startTime = null
                                     endTime = null
-                                    date = null
+                                    date = LocalDate.now()
                                     dataFieldList.clear()
 
                                     onDismiss()
@@ -678,7 +683,7 @@ class ToDoListFragment(
 
         if (showDatePicker) {
             androidx.compose.material3.DatePickerDialog(
-                onDismissRequest = { /*TODO*/ },
+                onDismissRequest = { isDataFieldDate = false },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -687,17 +692,19 @@ class ToDoListFragment(
                             val selectedDate = Calendar.getInstance().apply {
                                 timeInMillis = datePickerState.selectedDateMillis!!
                             }
-                            val dateFormatter = SimpleDateFormat("yyy-MM-dd", Locale.getDefault())
-                            val myDate = LocalDate.parse(dateFormatter.format(selectedDate.time))
+                            val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            val myDate : LocalDate? = LocalDate.parse(dateFormatter.format(selectedDate.time))
 
+                            Log.d("DATE STUFF", isDataFieldDate.toString())
+                            Log.d("DATE STUFF", myDate.toString())
                             if (isDataFieldDate) {
-                                isDataFieldDate = false
                                 val df = dataFieldList.find {it.id == dataFieldFocusID}
                                 dataFieldList[dataFieldList.indexOf(df)] = df!!.copy(data = myDate)
                             } else {
                                 date = myDate
                             }
                             showDatePicker = false
+                            isDataFieldDate = false
                         }
                     ) { Text("OK") }
                 },
@@ -705,6 +712,7 @@ class ToDoListFragment(
                     TextButton(
                         onClick = {
                             showDatePicker = false
+                            isDataFieldDate = false
                         }
                     ) { Text("Cancel") }
                 }

@@ -3,6 +3,7 @@ package com.clairvoyance.clairvoyance
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,9 @@ import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +36,9 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import java.time.Duration
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class GraphViewFragment(
     val task: Task
@@ -50,34 +57,77 @@ class GraphViewFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val appViewModel = mainActivity.getAppViewModel();
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-//                GraphView(task = task)
-                val pointsData: List<Point> =
-                    listOf(Point(0f, 40f), Point(1f, 90f), Point(2f, 0f), Point(3f, 60f), Point(4f, 10f))
-                StraightLinechart(pointsData = pointsData)
+                GraphScreen(task = task, taskViewModel = appViewModel.taskViewModel)
             }
         }
     }
 }
 
 @Composable
-fun GraphView(
+fun GraphScreen(
     task: Task,
-    taskViewModel: TaskViewModel = viewModel(),
+    taskViewModel: TaskViewModel
+) {
+    // Find all numeric data fields and add their tags to a list
+    val tags = mutableListOf<String>()
+    task.dataFields.forEach {
+        if (it.dataType == DataType.NUMBER) tags.add(it.tag)
+    }
+    LazyColumn(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        items(tags) { tag ->
+            GraphView(tag, taskViewModel)
+        }
+    }
+}
+
+@Composable
+fun GraphView(
+    tag: String,
+    taskViewModel: TaskViewModel
 ) {
     val taskList = taskViewModel.taskList.collectAsStateWithLifecycle().value
+    val filteredTaskList =  mutableListOf<Task>()
+    var oldestDate = taskList[0].date
 
-    var filteredList = mutableListOf(task)
+    // Iterate through lists to find the oldest date as a baseline compare value
+    // and find all tasks that contain df with same tag
+    taskList.forEach { task ->
+        if (task.date != null) {
+            task.dataFields.forEach {df ->
+                if (df.dataType == DataType.NUMBER && df.tag == tag) {
+                    if (task.date!! < oldestDate) oldestDate = task.date
+                    filteredTaskList.add(task)
+                }
+            }
+        }
+    }
 
-    val pointsData: List<Point> =
-        listOf(Point(0f, 40f), Point(1f, 90f), Point(2f, 0f), Point(3f, 60f), Point(4f, 10f))
+    Log.d("GRAPHS", taskList.size.toString())
+    Log.d("GRAPHS", filteredTaskList.size.toString())
+
+    //val pointsData: List<Point> =
+    //   listOf(Point(0f, 40f), Point(1f, 90f), Point(2f, 0f), Point(3f, 60f), Point(4f, 10f))
+    val pointsData = mutableListOf<Point>()
+
+    filteredTaskList.forEach { task ->
+        val df = task.dataFields.find {it.tag == tag}
+        val dx = ChronoUnit.DAYS.between(oldestDate, task.date)
+        Log.d("GRAPH STUFF", dx.toString())
+        val point = Point(dx.toFloat(), (df!!.data as String).toFloat())
+        Log.d("GRAPH STUFF", point.x.toString() + " " + point.y.toString())
+        pointsData.add(point)
+    }
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(100.dp)
         .backgroundColor(Color.Blue)
-        .steps(pointsData.size - 1)
+        .steps(pointsData.toList().size - 1)
         .labelData { i -> i.toString() }
         .labelAndAxisLinePadding(15.dp)
         .build()
@@ -93,7 +143,7 @@ fun GraphView(
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
-                    dataPoints = pointsData,
+                    dataPoints = pointsData.toList(),
                     LineStyle(),
                     IntersectionPoint(),
                     SelectionHighlightPoint(),
@@ -111,7 +161,8 @@ fun GraphView(
     LineChart(
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp),
+            .height(300.dp)
+            .padding(10.dp),
         lineChartData = lineChartData
     )
 }
