@@ -72,6 +72,13 @@ class DatabaseManager(private val appViewModel: AppViewModel) {
         }
     }
 
+    fun deleteTask(task: Task) {
+        val user = accountManager.user
+        if (user.userID != "X") {
+            database.collection("Users").document(user.userID).collection("TaskArchive").document(task.id).delete()
+        }
+    }
+
     fun getTaskArchive(callback : (List<Task>) -> Unit) {
         val user = accountManager.user
         database.collection("Users").document(user.userID).collection("TaskArchive").get().addOnSuccessListener { documents ->
