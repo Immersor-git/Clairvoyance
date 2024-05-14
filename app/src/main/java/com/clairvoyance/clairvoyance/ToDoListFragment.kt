@@ -563,7 +563,7 @@ class ToDoListFragment(
                             DataType.NUMBER -> {
                                 OutlinedTextField(
                                     modifier = Modifier.fillMaxWidth(),
-                                    value = dataField.data as String,
+                                    value = dataField.data.toString(),
                                     onValueChange = {
                                         // Only allow digits or decimals
                                         if (it.isEmpty() || it.matches("[0-9]{1,13}(\\.[0-9]*)?".toRegex())) {
