@@ -19,7 +19,7 @@ data class DataField (
             var ndata : Any?;
             ndata = when (nType) {
                 DataType.DATE -> DateTimeConverter.stringToDate(rawdata);
-                DataType.NUMBER -> rawdata.toInt()
+                DataType.NUMBER -> rawdata
                 DataType.TEXT -> rawdata
                 DataType.CHECKBOX -> Checkbox(rawdata.toBoolean(),hs["desc"]!!)
                 else -> null
